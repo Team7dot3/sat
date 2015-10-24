@@ -1,6 +1,33 @@
+/*******************************************************************************************
+ * AUTHOR :     Andrew Hendrix
+ * AUTHOR :     Jared Potter
+ * AUTHOR :     Leland Stenquist
+ * AUTHOR :     Taylor Wilson
+ *
+ * DATE :       October 24, 2015
+ *
+ * PURPOSE :    Written for CS 5959 Writing Solid Code, Fall 2015
+ *              University of Utah
+ */
 #ifndef SOLVE_H
 #define SOLVE_H
-#include "main.h"
 
-int solve(*UNMOLESTED_INPUT, *MOLESTED_INPUT);
+#include "sat_types.h"
+
+/*******************************************************************************************
+ * NAME :             solve
+ *
+ * DESCRIPTION :      <DESCRIPTION STUBB>
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          UNMOLESTED_INPUT  *unin   input
+ *          MOLESTED_INPUT    *in     input
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                       1 on success, 0 on failure
+ */
+int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+
 #endif
