@@ -1,5 +1,8 @@
 # Ignore compiled binary
-bin
+bin/*.o
 
 # Ignored text input files
 txt/*.txt
+
+# Ignore Mac OS X icon files
+.DS_Store

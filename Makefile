@@ -14,6 +14,7 @@ solve:	bin/sat_solver.o txt/input.txt
 clean:
 	rm -f bin/*.o bin/sat_solver.o;
 	rm -f *~;
+	rm -f .*~;
 	rm -f bin/*~;
 	rm -f src/*~;
 	rm -f txt/*~
