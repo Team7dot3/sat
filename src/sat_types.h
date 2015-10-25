@@ -64,10 +64,10 @@
  */
 typedef struct UNMOLESTED_INPUT
 {
-	int** data;
-	int   nbclauses;
-	int*  clause_lengths;
-	int   nbvars;
+  int** data;
+  int   nbclauses;
+  int*  clause_lengths;
+  int   nbvars;
 } UNMOLESTED_INPUT;
 
 /*******************************************************************************************
@@ -77,8 +77,8 @@ typedef struct UNMOLESTED_INPUT
  */
 typedef struct MOLESTED_INPUT
 {
-	int* data;
-	int length;
+  int* data;
+  int length;
 } MOLESTED_INPUT;
 
 #include "input.h"
