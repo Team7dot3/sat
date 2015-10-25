@@ -1,5 +1,5 @@
 # Ignore compiled binary
-bin
+bin/*.o
 
 # Ignored text input files
 txt/*.txt
