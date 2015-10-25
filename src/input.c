@@ -25,15 +25,15 @@
  *      RETURN :
  *          int                       1 on success, 0 on failure
  */
-int check_args(int argc, char *argv[])
+FILE* check_args(int argc, char *argv[])
 {
   // Checks for the correct number of inputs.
   if (argc != 2)
   {
     printf("ERROR\n");
-    return 0;
+    return NULL;
   }
-  return 1;
+  return NULL;
 }
 
 /*******************************************************************************************
