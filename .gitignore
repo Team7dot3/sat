@@ -3,3 +3,6 @@ bin
 
 # Ignored text input files
 txt/*.txt
+
+# Ignore Mac OS X icon files
+.DS_Store
