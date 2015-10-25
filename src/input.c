@@ -49,14 +49,13 @@ int check_args(int argc, char *argv[])
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
  */
-int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
+FILE* input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   LOG("INPUT PARSER CALLED", 1);
 
   LOG("INPUT PARSER RETURNING", 1);
-  return 0;
+  return NULL;
 }
 
 /*******************************************************************************************

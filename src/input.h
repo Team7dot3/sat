@@ -26,9 +26,9 @@
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
+ *          
  */
-int check_args(int argc, char *argv[]);
+FILE* check_args(int argc, char *argv[]);
 
 /*******************************************************************************************
  * NAME :             input_parser
