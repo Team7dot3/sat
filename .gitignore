@@ -1,5 +1,5 @@
 # Ignore compiled binary
-sat_solver
+bin
 
 # Ignored text input files
 txt/*.txt

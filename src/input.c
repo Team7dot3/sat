@@ -31,9 +31,9 @@ int check_args(int argc, char *argv[])
   if (argc != 2)
   {
     printf("ERROR\n");
-    return 1;
+    return 0;
   }
-  return 0;
+  return 1;
 }
 
 /*******************************************************************************************
@@ -53,6 +53,9 @@ int check_args(int argc, char *argv[])
  */
 int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
+  LOG("INPUT PARSER CALLED", 1);
+
+  LOG("INPUT PARSER RETURNING", 1);
   return 0;
 }
 
@@ -73,5 +76,8 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
  */
 int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
+  LOG("INPUT FREE CALLED", 1);
+
+  LOG("INPUT FREE RETURNING", 1);
   return 0;
 }

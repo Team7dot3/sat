@@ -27,17 +27,19 @@
  */
 int main(int argc, char *argv[])
 {
-	if (!check_args(argc, argv)) { return 0; }
+  LOG("STARTING SAT SOLVER", 3);
 
-	// TODO: malloc structs
-	
-	if (!input_parser (NULL, NULL, NULL)) { return 0; } // TODO fix args
-	if (!solve        (NULL, NULL      )) { return 0; } // TODO fix args
-	if (!input_free   (NULL, NULL, NULL)) { return 0; } // TODO fix args
-
-	// TODO: call free
-
-	printf("EXITING SAT SOLVER\n"); // TODO: remove this before deadline
-
-	return 0;
+  if (!check_args(argc, argv)) { return 0; }
+  
+  // TODO: malloc structs
+  
+  if (!input_parser (NULL, NULL, NULL)) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (!solve        (NULL, NULL      )) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (!input_free   (NULL, NULL, NULL)) { printf("ERROR\n"); return 0; } // TODO fix args
+  
+  // TODO: call free
+  
+  LOG("EXITING SAT SOLVER", 3);
+  
+  return 0;
 }

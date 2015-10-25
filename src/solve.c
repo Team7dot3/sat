@@ -27,5 +27,8 @@
  */
 int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
+  LOG("SOLVE CALLED", 2);
+
+  LOG("SOLVE RETURNING", 2);
   return 0;
 }

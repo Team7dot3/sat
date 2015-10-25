@@ -16,6 +16,48 @@
 #include <assert.h>
 
 /*******************************************************************************************
+ * Color codes for printing to stdout.
+ */
+#define KGRN  "\x1b[32m"
+#define KCYN  "\x1B[36m"
+#define KRED  "\x1B[31m"
+#define RESET "\033[0m"
+
+/*******************************************************************************************
+ * NAME :             LOG
+ *
+ * DESCRIPTION :      Prints to stdout if binary was compiled with -DDEBUG. This 
+ *                    automatically appends "\n" to the input string.
+ * INPUTS :
+ *      PARAMETERS :   
+ *          char*     str         The string to print to stdout.
+ *          int       color       [1 => green], [2 => cyan], [3 => red]
+ */
+#ifdef DEBUG
+#define LOG(str, color) { \
+  switch (color)          \
+  {                       \
+    case 1:               \
+      printf(KGRN);       \
+      break;              \
+    case 2:               \
+      printf(KCYN);       \
+      break;              \
+    case 3:               \
+      printf(KRED);       \
+      break;              \
+    default:              \
+      NULL;               \
+  }                       \
+  printf(str);            \
+  printf("\n");           \
+  printf(RESET);          \
+}
+#else
+#define LOG(str, color) { /* DO NOTHING */}
+#endif
+
+/*******************************************************************************************
  * NAME :             UNMOLESTED_INPUT
  *
  * DESCRIPTION :      <DESCRIPTION STUBB>
