@@ -1,0 +1,5 @@
+# Ignore compiled binary
+sat_solver
+
+# Ignored text input files
+txt/*.txt
