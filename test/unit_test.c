@@ -1,12 +1,20 @@
 #include "units.h"
 
 int main(int argc, char *argv[]) {
-  LOG("Let's run some unit tests...", 2);
+  int fails = 0;
 
-  test_check_args();
-  test_input_parser();
-  test_solver();
+  LOG("\nRUNNING UNIT TESTS...\n", 2);
 
-  LOG("Testing complete.", 2);
+  fails += test_check_args();
+  fails += test_input_parser();
+  fails += test_solver();
+
+  if (fails) {
+    printf(KRED "%s%d tests FAILED! %s", DELIM, fails, DELIM);
+  } else {
+    printf(KGRN "%sAll tests PASSED! %s" RESET, DELIM, DELIM);
+  }
+
+  LOG("\nTESTING COMPLETE.\n", 2);
   return 0;
 }

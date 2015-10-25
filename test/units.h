@@ -12,4 +12,36 @@
 // SAT data types and macros
 #include "../src/sat_types.h"
 
+int EXP;
+int ACT;
+int RES;
+
+#define DELIM "\n==================================================\n"
+
+#define RESULT(str, passed) { \
+  if (passed) {               \
+    PASS(str);                \
+  } else {                    \
+    FAIL(str);                \
+  }                           \
+}
+
+#define PASS(str) {                 \
+  printf("  ");                     \
+  printf(str);                      \
+  printf(KGRN " PASSED. \n" RESET); \
+  return (RES = 0);                 \
+}
+
+#define FAIL(str) {              \
+  printf(RESET "  ");            \
+  printf(str);                   \
+  printf(KRED  " FAILED. ");     \
+  printf(RESET "\t Expected: "); \
+  printf(KGRN  "%d", EXP);       \
+  printf(RESET "\t Actual: ");   \
+  printf(KRED  "%d \n", ACT);    \
+  return (RES = 1);              \
+}
+
 #endif
