@@ -27,8 +27,33 @@
  */
 int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
-  LOG("SOLVE CALLED", 2);
+  LOG("solve CALLED", 2);
+  
+  LOG("solve RETURNING", 2);
+  return 0;
+}
 
-  LOG("SOLVE RETURNING", 2);
+int processOR(int* values, int* data, int datalen)
+{
+  LOG("processOR CALLED", 2);
+  int i;
+  for(i = 0; i < datalen; i++)
+  {
+    int val = data[i];
+    if(val < 0)
+    {
+      val = -val;
+      val = !values[val];
+    }else
+    {
+      val = values[val];
+    }
+    if(val)
+    {
+      LOG("processOR RETURNING",2);
+      return 1;
+    }
+  }
+  LOG("processOR RETURNING",2);
   return 0;
 }
