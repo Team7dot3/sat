@@ -33,9 +33,9 @@ int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   return 0;
 }
 
-int processOR(int* values, int* data, int datalen)
+int process_or(int* values, int* data, int datalen)
 {
-  LOG("processOR CALLED", 2);
+  LOG("process_or CALLED", 2);
   int i;
   for(i = 0; i < datalen; i++)
   {
@@ -50,10 +50,10 @@ int processOR(int* values, int* data, int datalen)
     }
     if(val)
     {
-      LOG("processOR RETURNING",2);
+      LOG("process_or RETURNING",2);
       return 1;
     }
   }
-  LOG("processOR RETURNING",2);
+  LOG("process_or RETURNING",2);
   return 0;
 }
