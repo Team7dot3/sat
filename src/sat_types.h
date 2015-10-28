@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 /*******************************************************************************************
  * Color codes for printing to stdout.
@@ -31,7 +32,7 @@
  * INPUTS :
  *      PARAMETERS :   
  *          char*     str         The string to print to stdout.
- *          int       color       [1 => green], [2 => cyan], [3 => red]
+ *          int       color       [0 => default], [1 => green], [2 => cyan], [3 => red]
  */
 #ifdef DEBUG
 #define LOG(str, color) { \
