@@ -25,4 +25,5 @@ clean:
 	del /f /s *.obj;
 	del /f /s *.idb;
 	del /f /s *.ilk;
+	del /f /s *.sdf;
 

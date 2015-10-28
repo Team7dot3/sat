@@ -28,9 +28,9 @@
 int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   LOG("solve CALLED", 2);
-  
+  int toReturn = process_and(unin, in);
   LOG("solve RETURNING", 2);
-  return 0;
+  return toReturn;
 }
 
 int process_or(int* values, int* data, int datalen)
@@ -58,24 +58,30 @@ int process_or(int* values, int* data, int datalen)
   return 0;
 }
 
-int process_and(UNMOLESTED_INPUT *unin, MOLESTED INPUT *in)
+int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   int i, j;
-  int input[UNMOLESTED_INPUT->nbvars];
-  
-  for(i = 0; i < (1<<UNMOLESTED_INPUT->nbvars); i++)
-  {
-    make_val(input, i , UNMOLESTED_INPUT->nbvars)
+  //int input[unin->nbvars];
+  int * input = (int*)malloc(sizeof(int)* unin->nbvars);
 
-    for(j = 0; j < UNMOLESTED_INPUT->nbclauses; j++)
+  
+  for(i = 0; i < (1<< unin->nbvars); i++)
+  {
+	  make_val(input, i, unin->nbvars);
+
+    for(j = 0; j < unin->nbclauses; j++)
     {
-      if(process_or(input, UNMOLESTED_INPUT->data[j], UNMOLESTED_INPUT->clause_lengths[j]) == 0)
+      if(process_or(input, unin->data[j], unin->clause_lengths[j]) == 0)
         break;
     }
 
-    if(j == UNMOLESTED_INPUT->nbclauses)
-      return 1;
+	if (j == unin->nbclauses)//If it got to the end of the for loop
+	{
+		free(input);
+		return 1;
+	}
   }
+  free(input);
   return 0;
 }
 
