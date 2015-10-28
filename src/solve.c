@@ -43,10 +43,10 @@ int process_or(int* values, int* data, int datalen)
     if(val < 0)
     {
       val = -val;
-      val = !values[val];
+      val = !values[val-1];
     }else
     {
-      val = values[val];
+      val = values[val-1];
     }
     if(val)
     {
@@ -57,3 +57,42 @@ int process_or(int* values, int* data, int datalen)
   LOG("process_or RETURNING",2);
   return 0;
 }
+
+int process_and(UNMOLESTED_INPUT *unin, MOLESTED INPUT *in)
+{
+  int i, j;
+  int input[UNMOLESTED_INPUT->nbvars];
+  
+  for(i = 0; i < (1<<UNMOLESTED_INPUT->nbvars); i++)
+  {
+    make_val(input, i , UNMOLESTED_INPUT->nbvars)
+
+    for(j = 0; j < UNMOLESTED_INPUT->nbclauses; j++)
+    {
+      if(process_or(input, UNMOLESTED_INPUT->data[j], UNMOLESTED_INPUT->clause_lengths[j]) == 0)
+        break;
+    }
+
+    if(j == UNMOLESTED_INPUT->nbclauses)
+      return 1;
+  }
+  return 0;
+}
+
+void make_val(int* vals, int input, int num_vals)
+{
+  int i;
+  for(i = num_vals - 1; i >= 0; i--)
+  {
+    if(input/(1<<i))
+    {
+      input = input - (1<<i);
+      vals[i]=1;
+    }else
+    {
+      vals[i]=0;
+    }
+  }
+}
+
+
