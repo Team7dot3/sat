@@ -1,0 +1,28 @@
+debugbuild: sat_d
+
+debugrebuild: clean sat_d
+
+releasebuild: sat
+
+releaserebuild: clean sat
+
+testbuild: sat_t
+
+testrebuild: clean sat_t
+
+sat:	src/main.c
+	cl /Wall src\main.c src\input.c src\solve.c /Febin\sat_solver.exe
+
+sat_d:	src/main.c
+	cl /Wall /DDEBUG /ZI src\main.c src\input.c src\solve.c /Febin\sat_solver.exe /Fdbin\sat_solver.pdb
+
+sat_t:	test/unit_test.c	
+	cl /Wall /DDEBUG /ZI src\input.c src\solve.c test\unit_test.c test\unit_test_check_args.c test\unit_test_input_parser.c test\unit_test_solve.c /Febin\unit_test.exe /Fdbin\unit_test.pdb
+
+clean:
+	del /f /s *.exe;
+	del /f /s *.pdb;
+	del /f /s *.obj;
+	del /f /s *.idb;
+	del /f /s *.ilk;
+
