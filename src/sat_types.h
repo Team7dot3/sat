@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 /*******************************************************************************************
  * Color codes for printing to stdout.

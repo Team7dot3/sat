@@ -23,7 +23,7 @@
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
+ *          int                       1 on satisfiable, 0 on unsatisfiable, -1 on error
  */
 int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
