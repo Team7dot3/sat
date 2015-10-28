@@ -37,49 +37,56 @@ int process_or(int* values, int* data, int datalen)
 {
   LOG("process_or CALLED", 2);
   int i;
-  for(i = 0; i < datalen; i++)
+  for (i = 0; i < datalen; i++)
   {
     int val = data[i];
-    if(val < 0)
+    if (val < 0)
     {
       val = -val;
-      val = !values[val-1];
-    }else
-    {
-      val = values[val-1];
+      val = !values[val - 1];
     }
-    if(val)
+    else
     {
-      LOG("process_or RETURNING",2);
+      val = values[val - 1];
+    }
+    if (val)
+    {
+      LOG("process_or RETURNING", 2);
       return 1;
     }
   }
-  LOG("process_or RETURNING",2);
+  LOG("process_or RETURNING", 2);
   return 0;
 }
 
 int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   int i, j;
-  //int input[unin->nbvars];
-  int * input = (int*)malloc(sizeof(int)* unin->nbvars);
-
-  
-  for(i = 0; i < (1<< unin->nbvars); i++)
+  int nbvars = unin->nbvars;
+  int nbclauses = unin->nbclauses;
+  int * input = (int*)malloc(sizeof(int)* nbvars);
+  if (!input)
   {
-	  make_val(input, i, unin->nbvars);
+    return -1;//TODO: look into this
+  }
 
-    for(j = 0; j < unin->nbclauses; j++)
+  for (i = 0; i < (1 << nbvars); i++)
+  {
+    make_val(input, i, nbvars);
+
+    for (j = 0; j < nbclauses; j++)
     {
-      if(process_or(input, unin->data[j], unin->clause_lengths[j]) == 0)
+      if (process_or(input, unin->data[j], unin->clause_lengths[j]) == 0)
+      {
         break;
+      }
     }
 
-	if (j == unin->nbclauses)//If it got to the end of the for loop
-	{
-		free(input);
-		return 1;
-	}
+    if (j == nbclauses)//If it got to the end of the for loop
+    {
+      free(input);
+      return 1;
+    }
   }
   free(input);
   return 0;
@@ -88,15 +95,16 @@ int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 void make_val(int* vals, int input, int num_vals)
 {
   int i;
-  for(i = num_vals - 1; i >= 0; i--)
+  for (i = num_vals - 1; i >= 0; i--)
   {
-    if(input/(1<<i))
+    if (input / (1 << i))
     {
-      input = input - (1<<i);
-      vals[i]=1;
-    }else
+      input = input - (1 << i);
+      vals[i] = 1;
+    }
+    else
     {
-      vals[i]=0;
+      vals[i] = 0;
     }
   }
 }
