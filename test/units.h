@@ -17,11 +17,16 @@ int ACT;
 int RES;
 
 #define DELIM "\n==================================================\n"
+#define NL "\n"
 
-#define RESULT(str, passed) { \
-  if (passed) {               \
+#define RESULT(str, passed)   \
+{                             \
+  if (passed)                 \
+  {                           \
     PASS(str);                \
-  } else {                    \
+  }                           \
+  else                        \
+  {                           \
     FAIL(str);                \
   }                           \
 }
