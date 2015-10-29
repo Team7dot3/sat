@@ -33,6 +33,21 @@ int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   return toReturn;
 }
 
+/*******************************************************************************************
+ * NAME :             process_or
+ *
+ * DESCRIPTION :      <DESCRIPTION STUBB>
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          int*  unin     input
+ *          int*  in       input
+ *          int   datalen   input
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                       1 on satisfiable, 0 on unsatisfiable, -1 on error
+ */
 int process_or(int* values, int* data, int datalen)
 {
   LOG("process_or CALLED", 2);
@@ -59,6 +74,20 @@ int process_or(int* values, int* data, int datalen)
   return 0;
 }
 
+/*******************************************************************************************
+ * NAME :             process_and
+ *
+ * DESCRIPTION :      <DESCRIPTION STUBB>
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          UNMOLESTED_INPUT  *unin   input
+ *          MOLESTED_INPUT    *in     input
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                       1 on satisfiable, 0 on unsatisfiable, -1 on error
+ */
 int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   int i, j;
@@ -92,6 +121,21 @@ int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   return 0;
 }
 
+/*******************************************************************************************
+ * NAME :             make_val
+ *
+ * DESCRIPTION :      <DESCRIPTION STUBB>
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          int*  vals       input
+ *          int   input      input
+ *          int   num_vals   input
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                       1 on satisfiable, 0 on unsatisfiable, -1 on error
+ */
 void make_val(int* vals, int input, int num_vals)
 {
   int i;
