@@ -31,22 +31,39 @@ int main(int argc, char *argv[])
 
   FILE* fp = check_args(argc, argv);
 
-  if(!fp) { LOG("Error while opening/reading file.", 3); printf("ERROR\n"); return 0; }
+  if(!fp) 
+  { 
+  	LOG("Error while opening/reading file.", 3); 
+  	printf("ERROR\n");
+  	input_free(fp, NULL, NULL);
+  	return 0; 
+  }
   
   UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
   MOLESTED_INPUT *in = malloc(sizeof(MOLESTED_INPUT));
   
-  if(input_parser(fp, unin, in) != 1) { printf("ERROR\n"); return 0; }
+  if(input_parser(fp, unin, in) != 1)
+  { 
+  	LOG("Error parsing input from file.", 3); 
+  	printf("ERROR\n"); 
+  	input_free(fp, unin, in);
+  	return 0;
+  }
 
-  int solve_result = solve(unin, in);
-  if(solve_result == 1)
-  { printf("SATISFIABLE\n"); } 
-  else if(solve_result == 0)
-  { printf("UNSATISFIABLE\n"); }
-  else if(solve_result == -1)
-  { printf("ERROR\n"); return 0; }
+  switch(solve(unin, in))
+  {
+  	case 1:
+  	  printf("SATISFIABLE\n");
+  	  break;
+  	case 0:
+  	  printf("UNSATISFIABLE\n");
+  	  break;
+  	case -1:
+  	  printf("ERROR\n");
+  	  break;
+  }
 
-  if (input_free   (fp, unin, in) != 1) { printf("ERROR\n"); return 0; } // TODO fix args
+  input_free(fp, unin, in); 
   
   LOG("EXITING SAT SOLVER", 3);
   
