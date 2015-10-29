@@ -17,6 +17,7 @@ int ACT;
 int RES;
 
 #define DELIM "\n==================================================\n"
+#define NL "\n"
 
 #define RESULT(str, passed) { \
   if (passed) {               \
