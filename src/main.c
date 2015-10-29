@@ -29,13 +29,42 @@ int main(int argc, char *argv[])
 {
   LOG("STARTING SAT SOLVER", 3);
 
-  if (!check_args(argc, argv)) { return 0; }
+  FILE* fp = check_args(argc, argv);
+
+  if (!fp) { LOG("Error while opening/reading file.", 3); printf("ERROR\n"); return 0; }
   
   // TODO: malloc structs
+  UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
+
+  MOLESTED_INPUT *in = malloc(sizeof(MOLESTED_INPUT));
   
-  if (!input_parser (NULL, NULL, NULL)) { printf("ERROR\n"); return 0; } // TODO fix args
-  if (!solve        (NULL, NULL      )) { printf("ERROR\n"); return 0; } // TODO fix args
-  if (!input_free   (NULL, NULL, NULL)) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (!input_parser (fp, unin, in)) { printf("ERROR\n"); return 0; } // TODO fix args
+
+  // OUTPUT TESTING FOR UNMOLESTED_INPUT
+  // for(int i = 0; i < unin->nbclauses; i++)
+  // {
+  //   int* tmp_clause = unin->data[i];
+
+  //   int tmp_clause_length = unin->clause_lengths[i];
+
+  //   printf("Clause #: %d\n", i);
+  //   printf("Clause Length: %d\n", tmp_clause_length);
+
+  //   for(int j = 0; j < tmp_clause_length; j++)
+  //   {
+  //     printf("Value[%d]: %d\n", j, tmp_clause[j]);
+  //   }
+  // }
+
+  // OUTPUT TESTING FOR MOLESTED_INPUT
+  // for(int i = 0; i < in->length; i++)
+  // {
+  //   printf("unit_clause # %d\n", i);
+  //   printf("value: %d\n", in->data[i]);
+  // }
+
+  //if (!solve        (NULL, NULL      )) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (!input_free   (fp, NULL, NULL)) { printf("ERROR\n"); return 0; } // TODO fix args
   
   // TODO: call free
   

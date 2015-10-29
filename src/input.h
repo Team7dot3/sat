@@ -13,6 +13,7 @@
 #define INPUT_H
 
 #include "sat_types.h"
+#include <string.h>
 
 /*******************************************************************************************
  * NAME :             check_args
@@ -45,7 +46,28 @@ FILE* check_args(int argc, char *argv[]);
  *      RETURN :
  *          int                       1 on success, 0 on failure
  */
-FILE* input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+
+/*******************************************************************************************
+ * NAME :             input_string
+ *
+ * DESCRIPTION :      <DESCRIPTION STUBB>
+ *
+ * Method based on solution from 
+ * http://stackoverflow.com/questions/16870485/how-can-i-read-an-input-string-of-unknown-length
+ * Username: BLUEPIXY
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            the pointer to the file
+ *          size_t      size          the number of bytes to read
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                      the string read from the file on success, 
+ *                                     the original string on failure
+ */
+char* input_string(FILE* fp, size_t size);
 
 /*******************************************************************************************
  * NAME :             check_args
