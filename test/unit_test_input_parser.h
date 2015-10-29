@@ -13,12 +13,12 @@
 
 #define GEN_BASIC_INPUT(nbvars, nbclauses)                  \
   TEST_PATH();                                              \
-  FILE *fp = write_basic_sat_file(p1, nbvars, nbclauses);  \
+  FILE *fp = write_basic_sat_file(p1, nbvars, nbclauses);   \
   GEN_STRUCTS();
 
 #define GEN_LADDER_INPUT(nbvars, nbclauses)                 \
   TEST_PATH();                                              \
-  FILE *fp = write_ladder_sat_file(p1, nbvars, nbclauses); \
+  FILE *fp = write_ladder_sat_file(p1, nbvars, nbclauses);  \
   GEN_STRUCTS();
 
 int test_clauses_count(void);
