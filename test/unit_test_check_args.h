@@ -7,5 +7,6 @@ int test_invalid_path_1(void);
 int test_invalid_path_2(void);
 int test_invalid_path_3(void);
 int test_null_path(void);
+int test_valid_args(void);
 
 int test_check_args(void);
