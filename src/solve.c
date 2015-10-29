@@ -90,12 +90,14 @@ int process_or(int* values, int* data, int datalen)
  */
 int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
+  LOG("process_and CALLED", 2);
   int i, j;
   int nbvars = unin->nbvars;
   int nbclauses = unin->nbclauses;
   int * input = (int*)malloc(sizeof(int)* nbvars);
   if (!input)
   {
+    LOG("process_and RETURNING", 2);
     return -1;//TODO: look into this
   }
 
@@ -114,10 +116,12 @@ int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
     if (j == nbclauses)//If it got to the end of the for loop
     {
       free(input);
+      LOG("process_and RETURNING", 2);
       return 1;
     }
   }
   free(input);
+  LOG("process_and RETURNING", 2);
   return 0;
 }
 
