@@ -135,8 +135,8 @@ int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* 
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, -1 on failure/error.
+ *          void
  */
-int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 
 #endif
