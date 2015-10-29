@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   fails += test_solver();
 
   if (fails) {
-    printf(KRED "%s%d tests FAILED! %s", DELIM, fails, DELIM);
+    printf(KRED "%s%d test(s) FAILED! %s", DELIM, fails, DELIM);
   } else {
     printf(KGRN "%sAll tests PASSED! %s" RESET, DELIM, DELIM);
   }
