@@ -31,16 +31,22 @@ int main(int argc, char *argv[])
 
   FILE* fp = check_args(argc, argv);
 
-  if (!fp) { LOG("Error while opening/reading file.", 3); printf("ERROR\n"); return 0; }
+  if(!fp) { LOG("Error while opening/reading file.", 3); printf("ERROR\n"); return 0; }
   
   UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
   MOLESTED_INPUT *in = malloc(sizeof(MOLESTED_INPUT));
   
-  if (input_parser(fp, unin, in) != 1) { printf("ERROR\n"); return 0; }
-  if (solve        (unin, in      )) { printf("ERROR\n"); return 0; } // TODO fix args
-  if (input_free   (fp, unin, in)) { printf("ERROR\n"); return 0; } // TODO fix args
-  
-  // TODO: call free
+  if(input_parser(fp, unin, in) != 1) { printf("ERROR\n"); return 0; }
+
+  int solve_result = solve(unin, in);
+  if(solve_result == 1)
+  { printf("SATISFIABLE\n"); } 
+  else if(solve_result == 0)
+  { printf("UNSATISFIABLE\n"); }
+  else if(solve_result == -1)
+  { printf("ERROR\n"); return 0; }
+
+  if (input_free   (fp, unin, in) != 1) { printf("ERROR\n"); return 0; } // TODO fix args
   
   LOG("EXITING SAT SOLVER", 3);
   
