@@ -1,6 +1,7 @@
 #include "units.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
   int fails = 0;
 
   LOG("\nRUNNING UNIT TESTS...\n", 2);
@@ -9,9 +10,12 @@ int main(int argc, char *argv[]) {
   fails += test_input_parser();
   fails += test_solver();
 
-  if (fails) {
+  if (fails) 
+  {
     printf(KRED "%s%d test(s) FAILED! %s", DELIM, fails, DELIM);
-  } else {
+  } 
+  else 
+  {
     printf(KGRN "%sAll tests PASSED! %s" RESET, DELIM, DELIM);
   }
 

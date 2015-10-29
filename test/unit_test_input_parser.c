@@ -1,7 +1,8 @@
 #include "unit_test_input_parser.h"
 
 // WARNING !!! This test may seg fault if it fails!
-int test_data(void) {
+int test_data(void) 
+{
   int i, j;
   int size = 63;
 
@@ -9,11 +10,14 @@ int test_data(void) {
   PARSE_FILE();
 
   // in.data = (int **)malloc(sizeof(int*) * size);       // SANITY CHECK, THIS FORCES TEST TO PASS
-  for (i = 0; i < size; i++) {
+  for (i = 0; i < size; i++) 
+  {
     // in.data[i] = (int *)malloc(sizeof(int) * (i + 1)); // SANITY CHECK, THIS FORCES TEST TO PASS
-    for (j = 0; j <= i; j++) {
+    for (j = 0; j <= i; j++) 
+    {
       // in.data[i][j] = j + 1;                           // SANITY CHECK, THIS FORCES TEST TO PASS
-      if ((ACT = in.data[i][j]) != (EXP = j + 1)) { 
+      if ((ACT = in.data[i][j]) != (EXP = j + 1)) 
+      { 
         FAIL("test_data")
       }
     }
@@ -22,7 +26,8 @@ int test_data(void) {
 }
 
 // WARNING !!! This test may seg fault if it fails!
-int test_clause_lengths(void) {
+int test_clause_lengths(void) 
+{
   int i;
   int size = 63;
 
@@ -30,9 +35,11 @@ int test_clause_lengths(void) {
   PARSE_FILE();
 
   // in.clause_lengths = (int *)malloc(sizeof(int) * size); // SANITY CHECK, THIS FORCES TEST TO PASS
-  for (i = 0; i < size; i++) {
+  for (i = 0; i < size; i++) 
+  {
     // in.clause_lengths[i] = i + 1;                        // SANITY CHECK, THIS FORCES TEST TO PASS
-    if ((ACT = in.clause_lengths[i]) != (EXP = i + 1)) {
+    if ((ACT = in.clause_lengths[i]) != (EXP = i + 1)) 
+    {
       FAIL("test_clause_lengths");
     }
   }
@@ -98,16 +105,21 @@ int test_input_parser(void) {
   return fails;
 }
 
-void close_sat_file(FILE *fp) {
+void close_sat_file(FILE *fp) 
+{
   LOG("CLOSING FILE", 3);
   fclose(fp);
 }
 
-FILE* open_sat_file(char *path) {
+FILE* open_sat_file(char *path) 
+{
   FILE *fp;
-  if ((fp = fopen(path, "r"))) {
+  if ((fp = fopen(path, "r"))) 
+  {
     return fp;
-  } else {
+  } 
+  else 
+  {
     LOG("ERROR DURING TEST", 3);
     exit(1);
   }
@@ -117,11 +129,14 @@ FILE* write_basic_sat_file(char *path, int nbvar, int nbclauses) {
   int i, j;
   FILE *fp;
 
-  if ((fp = fopen(path, "w"))) {
+  if ((fp = fopen(path, "w"))) 
+  {
     fprintf(fp, "p cnf %d %d\n", nbvar, nbclauses);
 
-    for (i = 0; i < nbclauses; i++) {
-      for (j = 1; j <= nbvar; j++) {
+    for (i = 0; i < nbclauses; i++) 
+    {
+      for (j = 1; j <= nbvar; j++) 
+      {
         fprintf(fp, "%d ", j);
       }
       fprintf(fp, "0\n");
@@ -132,7 +147,9 @@ FILE* write_basic_sat_file(char *path, int nbvar, int nbclauses) {
     //   with what is actually written to disk
     close_sat_file(fp);
     return open_sat_file(path);
-  } else {
+  } 
+  else 
+  {
     LOG("ERROR DURING TEST", 3);
     exit(1);
     
@@ -143,12 +160,15 @@ FILE* write_ladder_sat_file(char *path, int nbvars, int nbclauses) {
   int i, j;
   FILE *fp;
 
-  if ((fp = fopen(path, "w"))) {
+  if ((fp = fopen(path, "w"))) 
+  {
     fprintf(fp, "p cnf %d %d\n", nbvars, nbclauses);
     printf("writing nbvars = %d and nbclauses = %d \n", nbvars, nbclauses);
 
-    for (i = 0; i < nbclauses; i++) {
-      for (j = 1; j <= i + 1 && j <= nbvars; j++) {
+    for (i = 0; i < nbclauses; i++) 
+    {
+      for (j = 1; j <= i + 1 && j <= nbvars; j++) 
+      {
         fprintf(fp, "%d ", j);
       }
       fprintf(fp, "0\n");
@@ -159,7 +179,9 @@ FILE* write_ladder_sat_file(char *path, int nbvars, int nbclauses) {
     //   with what is actually written to disk
     close_sat_file(fp);
     return open_sat_file(path);
-  } else {
+  } 
+  else 
+  {
     LOG("ERROR DURING TEST", 3);
     exit(1);
   }
