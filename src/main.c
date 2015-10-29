@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
   UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
   MOLESTED_INPUT *in = malloc(sizeof(MOLESTED_INPUT));
   
-  if (!input_parser (fp, unin, in)) { printf("ERROR\n"); return 0; }
-  if (!solve        (unin, in      )) { printf("ERROR\n"); return 0; } // TODO fix args
-  if (!input_free   (fp, unin, in)) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (input_parser(fp, unin, in) != 1) { printf("ERROR\n"); return 0; }
+  if (solve        (unin, in      )) { printf("ERROR\n"); return 0; } // TODO fix args
+  if (input_free   (fp, unin, in)) { printf("ERROR\n"); return 0; } // TODO fix args
   
   // TODO: call free
   

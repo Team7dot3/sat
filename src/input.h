@@ -43,7 +43,7 @@ FILE* check_args(int argc, char *argv[]);
  *          MOLESTED_INPUT    *in     input
  *
  * OUTPUTS :
- *      RETURN : 1 on success, 0 on failure
+ *      RETURN : 1 on success, -1 on failure/error
  */
 int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 
@@ -118,7 +118,7 @@ char* read_comments(FILE* fp, int file_size);
  *
  * OUTPUTS :
  *      RETURN :
- *          int*                     1 on success, 0 on failure.
+ *          int*                     1 on success, -1 on failure/error.
  */
 int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
 
@@ -135,7 +135,7 @@ int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* 
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
+ *          int                       1 on success, -1 on failure/error.
  */
 int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 

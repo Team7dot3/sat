@@ -49,7 +49,7 @@ FILE* check_args(int argc, char *argv[])
  *          MOLESTED_INPUT    *in     input
  *
  * OUTPUTS :
- *      RETURN : 1 on success, 0 on failure
+ *      RETURN : 1 on success, -1 on failure/error
  */
 int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
@@ -89,26 +89,34 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
           // "problem" line parse successful.
         }
         else
-        { return 0; }
+        { return -1; }
       }
       else
-      { return 0; }
+      { return -1; }
     }
     else
-    { return 0; }
+    { return -1; }
   }
   else
-  { return 0; }
+  { return -1; }
 
   int** data               = malloc(sizeof(int)*nbclauses*(nbvar - 1));
+  if(!data) { return -1; }
+
   int* clause_lengths      = malloc(4*nbclauses);
+  if(!clause_lengths) { return -1; }
+
   int* unit_clauses        = malloc(nbclauses);
+  if(!unit_clauses) { return -1; }
+
   int* unit_clauses_length = malloc(sizeof(int));
+  if(!unit_clauses_length) { return -1; }
+
   *unit_clauses_length = 0;
 
   // Loops over all clauses. 
   if(!read_clauses(fp, file_size, data, clause_lengths, unit_clauses, unit_clauses_length))
-  { return 0; }
+  { return -1; }
 
   // Load values into structs.
   unin->data = data;
@@ -235,7 +243,7 @@ char* read_comments(FILE* fp, int file_size)
  *
  * OUTPUTS :
  *      RETURN :
- *          int*                     1 on success, 0 on failure.
+ *          int*                     1 on success, -1 on failure/error.
  */
 int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
 {
@@ -317,7 +325,7 @@ int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* 
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
+ *          int                       1 on success, -1 on failure/error.
  */
 int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
@@ -329,5 +337,5 @@ int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   free(in);
 
   LOG("INPUT FREE RETURNING", 1);
-  return 0;
+  return 1;
 }
