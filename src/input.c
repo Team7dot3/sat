@@ -14,7 +14,7 @@
 /*******************************************************************************************
  * NAME :             check_args
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Verifies the validity of the arguments.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -34,17 +34,13 @@ FILE* check_args(int argc, char *argv[])
     return NULL;
   }
 
-  const char* file_path = argv[1];
-
-  FILE *fp = fopen(file_path, "r");
-
-  return fp;
+  return fopen(argv[1], "r");
 }
 
 /*******************************************************************************************
  * NAME :             input_parse
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Parses the input from a file of the cnf sat form.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -60,164 +56,68 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   LOG("INPUT PARSER CALLED", 1);
 
   // Finding the size of the file in bytes.
-  fseek(fp, 0L, SEEK_END);
-  int file_size = ftell(fp);
-  fseek(fp, 0L, SEEK_SET);
-
-  char* result = input_string(fp, file_size);
+  int file_size = get_file_size(fp);
 
   // Pass over comments.
-  while(result != NULL && strcmp(result, ""))
-  {
-    if(result[0] == 'c')
-    {
-      // Ignore comments.
-    }
-    else
-      break; 
+  char* line = read_comments(fp, file_size);
 
-    result = input_string(fp, file_size);
-  }
-
-  int nbvar     = 0; // 
-  int nbclauses = 0; //
+  int nbvar     = 0; // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
+  int nbclauses = 0; // indicates the number of rows (clauses), indicated by the number of zeros
   char* endptr; // For error checking strtol.
 
   // The "problem" line.
-  char* split_string = strtok(result, " ");
+  char* split_problem_line = strtok(line, " ");
 
   // This section performs input validation on the "problem" line
   // aka "p cnf nbvar nbclauses"
-  if(result[0] == 'p')
+  if(line[0] == 'p') // TODO: make this consistent with others.
   {
-    split_string = strtok (NULL, " ");
+    split_problem_line = strtok (NULL, " ");
 
-    if(!strcmp(split_string, "cnf"))
+    if(!strcmp(split_problem_line, "cnf"))
     {
-      split_string = strtok (NULL, " ");
-      nbvar = strtol(split_string, &endptr, 0);
+      split_problem_line = strtok (NULL, " ");
+      nbvar = strtol(split_problem_line, &endptr, 0);
 
       if(*endptr == '\0') // Verify int value.
       {
-        split_string = strtok (NULL, " ");
-        nbclauses = strtol(split_string, &endptr, 0);
+        split_problem_line = strtok (NULL, " ");
+        nbclauses = strtol(split_problem_line, &endptr, 0);
 
-        if(*endptr != '\0') // Verify int value.
+        if(*endptr == '\0') // Verify int value.
         {
-          return 0;
+          // "problem" line parse successful.
         }
+        else
+        { return 0; }
       }
       else
-        return 0;
+      { return 0; }
     }
     else
-      return 0;
-
-    //printf("nbvars: %d\n", nbvar);
-    //printf("nbclauses: %d\n", nbclauses);
+    { return 0; }
   }
   else
-    return 0;
+  { return 0; }
 
-  int** data = malloc(4*nbclauses*(nbvar - 1));
-  int* clause_lengths = malloc(4*nbclauses);
-  int* unit_clauses = malloc(nbclauses);
-  int unit_clauses_length = 0;
-
-  int current_data_index = 0;
-  int current_clause_index = 0;
-  int total_value_count = 0;
-  int clause_length = 0;
-
-  result = input_string(fp, file_size); // Reds the first clause. 
+  int** data               = malloc(sizeof(int)*nbclauses*(nbvar - 1));
+  int* clause_lengths      = malloc(4*nbclauses);
+  int* unit_clauses        = malloc(nbclauses);
+  int* unit_clauses_length = malloc(sizeof(int));
+  *unit_clauses_length = 0;
 
   // Loops over all clauses. 
-  while(result != NULL && strcmp(result, ""))
-  {
-    // Create copy of result because strtok() consumes result during count.
-    char* result_copy = malloc(strlen(result));
-    strncpy(result_copy, result, strlen(result));
+  if(!read_clauses(fp, file_size, data, clause_lengths, unit_clauses, unit_clauses_length))
+  { return 0; }
 
-    char* split_clause = strtok(result, " ");
-
-    // Count the number of values in a clause.
-    while(split_clause != NULL)
-    {
-      clause_length++;
-      split_clause = strtok (NULL, " "); // Increment to next value.
-    }
-
-    clause_length -= 1; // Subtract 1 to account for clause terminating 0.
-    //printf("clause_length: %d\n", clause_length);
-
-    // Sets clause length in clause_lengths array.
-    clause_lengths[current_data_index] = clause_length;
-    total_value_count += clause_length;
-
-    int* clause = (int *)malloc(sizeof(int) * clause_length); // A clause to hold values.//
-
-    // Start to load values. 
-    split_clause = strtok(result_copy, " ");
-
-    // Read clause values from char* and place into clause[].
-    while(split_clause != NULL)
-    {
-      //printf("split_clause: %s\n", split_clause);
-      // Tries to converts char* to int.
-      clause[current_clause_index] = strtol(split_clause, &endptr, 0); 
-      
-      // Currently not working.
-      //if(*endptr != '\0') { printf("here\n"); return 0; }// Verify int value.
-      
-      split_clause = strtok (NULL, " "); // Increment to next value.
-      current_clause_index++; // Increment the clause index.
-    }
-
-    if(clause_length == 1)
-    {
-      unit_clauses[unit_clauses_length] = clause[current_clause_index-2];
-      unit_clauses_length++;
-    }
-
-    data[current_data_index] = clause; // Set clause in data.
-
-    current_data_index++; // Increment the data index.
-    current_clause_index = 0; // Reset the clause index.
-    clause_length = 0;
-
-    result = input_string(fp, file_size);
-  }
-
-  printf("unit_clauses_length: %d\n", unit_clauses_length);
-
-  // for(int i = 0; i < unit_clauses_length; i++)
-  // {
-  //   printf("unit_clause # %d\n", i);
-  //   printf("value: %d\n", unit_clauses[i]);
-  // }
-
-  // for(int i = 0; i < nbclauses; i++)
-  // {
-  //   int* tmp_clause = data[i];
-
-  //   int tmp_clause_length = clause_lengths[i];
-
-  //   printf("Clause #: %d\n", i);
-  //   printf("Clause Length: %d\n", tmp_clause_length);
-
-  //   for(int j = 0; j < tmp_clause_length; j++)
-  //   {
-  //     printf("Value[%d]: %d\n", j, tmp_clause[j]);
-  //   }
-  // }
-
+  // Load values into structs.
   unin->data = data;
   unin->nbclauses = nbclauses; 
   unin->nbvars = nbvar;
   unin->clause_lengths = clause_lengths;
 
   in->data = unit_clauses;
-  in->length = unit_clauses_length;
+  in->length = *unit_clauses_length;
 
   LOG("INPUT PARSER RETURNING", 1);
   return 1;
@@ -226,7 +126,7 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 /*******************************************************************************************
  * NAME :             input_string
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Reads a line of data from a file.
  *
  * Method based on solution from 
  * http://stackoverflow.com/questions/16870485/how-can-i-read-an-input-string-of-unknown-length
@@ -264,9 +164,150 @@ char* input_string(FILE* fp, size_t size)
 }
 
 /*******************************************************************************************
- * NAME :             check_args
+ * NAME :             get_file_size
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Returns the sie of a file.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            the pointer to the file
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                      the size of the file in bytes
+ */
+ int get_file_size(FILE* fp)
+ {
+  fseek(fp, 0L, SEEK_END);
+  int size = ftell(fp);
+  fseek(fp, 0L, SEEK_SET);
+  return size;
+ }
+
+/*******************************************************************************************
+ * NAME :             read_comments
+ *
+ * DESCRIPTION :      Progresses the file pointer past the commentes.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            The pointer to the file.
+ *          int         file size     The size of the file in bytes.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                     The line of the next line ("problem" line).
+ */
+char* read_comments(FILE* fp, int file_size)
+{
+  char* line = input_string(fp, file_size);
+
+  while(line != NULL && strcmp(line, ""))
+  {
+    if(line[0] == 'c')
+    { /* Ignore comments */ }
+    else
+    {
+      return line;
+    }
+    // Read next line. 
+    line = input_string(fp, file_size);
+  }
+  return line;
+}
+
+/*******************************************************************************************
+ * NAME :             read_clauses
+ *
+ * DESCRIPTION :      Progresses the file pointer past the commentes.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp                      The pointer to the file.
+ *          int         file size               The size of the file in bytes.
+ *          int**       data                    The pointer to the set of pointers to the clauses.
+ *          int*        clause_lengths          The array of clause lengths.
+ *          int*        unit_clauses            The array of clauses of 1 value.
+ *          int*        unit_clauses_length     The number of unit clauss.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int*                     1 on success, 0 on failure.
+ */
+int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
+{
+  int current_data_index = 0;
+  int current_clause_index = 0;
+  int clause_length = 0;
+
+  char* endptr; // For error checking strtol.
+
+  char* line = input_string(fp, file_size);
+
+  while(line != NULL && strcmp(line, ""))
+  {
+    // Create copy of line because strtok() consumes line during count.
+    char* line_copy = malloc(strlen(line));
+    strncpy(line_copy, line, strlen(line));
+
+    char* split_clause = strtok(line, " ");
+
+    // Count the number of values in a clause.
+    while(split_clause != NULL)
+    {
+      clause_length++;
+      split_clause = strtok (NULL, " "); // Increment to next value.
+    }
+
+    // Subtract 1 to account for clause terminating 0.
+    clause_length -= 1; 
+
+    // Sets clause length in clause_lengths array.
+    clause_lengths[current_data_index] = clause_length;
+
+    int* clause = (int *)malloc(sizeof(int) * clause_length); // A clause to hold values.//
+
+    // Start to load values. 
+    split_clause = strtok(line_copy, " ");
+
+    // Read clause values from char* and place into clause[].
+    while(split_clause != NULL)
+    {
+      // Tries to converts char* to int.
+      int clause_value = strtol(split_clause, &endptr, 0); 
+      clause[current_clause_index] = clause_value;
+
+      if(*endptr != '\0' && clause_value != 0) { return 0; }// Verify int value.
+      
+      split_clause = strtok (NULL, " "); // Increment to next value.
+      current_clause_index++; // Increment the clause index.
+    }
+
+    // If clause is only length 1, save value to molested intput struct.
+    if(clause_length == 1)
+    {
+      unit_clauses[*unit_clauses_length] = clause[current_clause_index-2];
+      (*unit_clauses_length)++;
+    }
+
+    data[current_data_index] = clause; // Set clause in data.
+
+    current_data_index++; // Increment the data index.
+    current_clause_index = 0; // Reset the clause index.
+    clause_length = 0;
+
+    line = input_string(fp, file_size);
+  }
+  return 1;
+} 
+
+/*******************************************************************************************
+ * NAME :             input_free
+ *
+ * DESCRIPTION :      Free all resources after use.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -282,8 +323,10 @@ int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   LOG("INPUT FREE CALLED", 1);
 
-  // Closing the file pointer.
+  // Free all resources after use.
   fclose(fp);
+  free(unin);
+  free(in);
 
   LOG("INPUT FREE RETURNING", 1);
   return 0;
