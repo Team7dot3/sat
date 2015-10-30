@@ -85,7 +85,7 @@ char* input_string(FILE* fp, size_t size);
  int get_file_size(FILE* fp);
 
 /*******************************************************************************************
- * NAME :             read_comments
+ * NAME :             parse_comments
  *
  * DESCRIPTION :      Progresses the file pointer past the commentes.
  *
@@ -99,10 +99,28 @@ char* input_string(FILE* fp, size_t size);
  *      RETURN :
  *          char*                     The line of the next line ("problem" line).
  */
-char* read_comments(FILE* fp, int file_size);
+char* parse_comments(FILE* fp, int file_size);
 
 /*******************************************************************************************
- * NAME :             read_clauses
+ * NAME :             parse_cnf_header
+ *
+ * DESCRIPTION :      Parses the cnf header ("problem" line) of the file.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          char*       line          The cnf line.
+ *          int*        nbvar         The nbvar variable.
+ *          int*        nbclauses     The nbclauses variable.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                     The line of the next line ("problem" line).
+ */
+int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
+
+/*******************************************************************************************
+ * NAME :             parse_clauses
  *
  * DESCRIPTION :      Progresses the file pointer past the commentes.
  *
@@ -120,7 +138,7 @@ char* read_comments(FILE* fp, int file_size);
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
+int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
 
 /*******************************************************************************************
  * NAME :             input_free

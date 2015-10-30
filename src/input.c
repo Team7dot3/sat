@@ -59,54 +59,26 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   int file_size = get_file_size(fp);
 
   // Pass over comments.
-  char* line = read_comments(fp, file_size);
+  char* line = parse_comments(fp, file_size);
 
-  int nbvar     = 0; // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
-  int nbclauses = 0; // indicates the number of rows (clauses), indicated by the number of zeros
-  char* endptr; // For error checking strtol.
+  int* nbvar = malloc(sizeof(int)); // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
+  if(!nbvar) { return -1; }
+  *nbvar = 0;
 
-  // The "problem" line.
-  char* split_problem_line = strtok(line, " ");
+  int* nbclauses = malloc(sizeof(int)); // indicates the number of rows (clauses), indicated by the number of zeros.
+  if(!nbvar) { return -1; }
+  *nbclauses = 0;
 
-  // This section performs input validation on the "problem" line
-  // aka "p cnf nbvar nbclauses"
-  if(line[0] == 'p') // TODO: make this consistent with others.
-  {
-    split_problem_line = strtok (NULL, " ");
-
-    if(!strcmp(split_problem_line, "cnf"))
-    {
-      split_problem_line = strtok (NULL, " ");
-      nbvar = strtol(split_problem_line, &endptr, 0);
-
-      if(*endptr == '\0') // Verify int value.
-      {
-        split_problem_line = strtok (NULL, " ");
-        nbclauses = strtol(split_problem_line, &endptr, 0);
-
-        if(*endptr == '\0') // Verify int value.
-        {
-          // "problem" line parse successful.
-        }
-        else
-        { return -1; }
-      }
-      else
-      { return -1; }
-    }
-    else
-    { return -1; }
-  }
-  else
+  if(parse_cnf_header(line, nbvar, nbclauses) != 1)
   { return -1; }
 
-  int** data               = malloc(sizeof(int)*nbclauses*(nbvar - 1));
+  int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar - 1));
   if(!data) { return -1; }
 
-  int* clause_lengths      = malloc(4*nbclauses);
+  int* clause_lengths      = malloc(4*(*nbclauses));
   if(!clause_lengths) { return -1; }
 
-  int* unit_clauses        = malloc(nbclauses);
+  int* unit_clauses        = malloc(*nbclauses);
   if(!unit_clauses) { return -1; }
 
   int* unit_clauses_length = malloc(sizeof(int));
@@ -115,17 +87,20 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   *unit_clauses_length = 0;
 
   // Loops over all clauses. 
-  if(!read_clauses(fp, file_size, data, clause_lengths, unit_clauses, unit_clauses_length))
+  if(!parse_clauses(fp, file_size, data, clause_lengths, unit_clauses, unit_clauses_length))
   { return -1; }
 
   // Load values into structs.
   unin->data = data;
-  unin->nbclauses = nbclauses; 
-  unin->nbvars = nbvar;
+  unin->nbclauses = *nbclauses; 
+  unin->nbvars = *nbvar;
   unin->clause_lengths = clause_lengths;
 
   in->data = unit_clauses;
   in->length = *unit_clauses_length;
+
+  free(nbvar);
+  free(nbclauses);
 
   LOG("INPUT PARSER RETURNING", 1);
   return 1;
@@ -194,7 +169,7 @@ char* input_string(FILE* fp, size_t size)
  }
 
 /*******************************************************************************************
- * NAME :             read_comments
+ * NAME :             parse_comments
  *
  * DESCRIPTION :      Progresses the file pointer past the commentes.
  *
@@ -208,14 +183,13 @@ char* input_string(FILE* fp, size_t size)
  *      RETURN :
  *          char*                     The line of the next line ("problem" line).
  */
-char* read_comments(FILE* fp, int file_size)
+char* parse_comments(FILE* fp, int file_size)
 {
   char* line = input_string(fp, file_size);
 
   while(line != NULL && strcmp(line, ""))
   {
-    if(line[0] == 'c')
-    { /* Ignore comments */ }
+    if(line[0] == 'c') { /* Ignore comments */ }
     else
     {
       return line;
@@ -227,7 +201,62 @@ char* read_comments(FILE* fp, int file_size)
 }
 
 /*******************************************************************************************
- * NAME :             read_clauses
+ * NAME :             parse_cnf_header
+ *
+ * DESCRIPTION :      Parses the cnf header ("problem" line) of the file.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          char*       line          The cnf line.
+ *          int*        nbvar         The nbvar variable.
+ *          int*        nbclauses     The nbclauses variable.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                       1 on success, -1 on failure/error.
+ */
+int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
+{
+  char* endptr; // For error checking strtol.
+
+  // The "problem" line.
+  char* split_problem_line = strtok(line, " ");
+
+  // This section performs input validation on the "problem" line
+  // aka "p cnf nbvar nbclauses"
+  if(line[0] == 'p') // TODO: make this consistent with others.
+  {
+    split_problem_line = strtok (NULL, " ");
+
+    if(!strcmp(split_problem_line, "cnf"))
+    {
+      split_problem_line = strtok (NULL, " ");
+      *nbvar = strtol(split_problem_line, &endptr, 0);
+
+      if(*endptr == '\0') // Verify int value.
+      {
+        split_problem_line = strtok (NULL, " ");
+        *nbclauses = strtol(split_problem_line, &endptr, 0);
+
+        if(*endptr == '\0') // Verify int value.
+        { /* "problem" line parse successful. */ }
+        else
+        { return -1; }
+      }
+      else
+      { return -1; }
+    }
+    else
+    { return -1; }
+  }
+  else
+  { return -1; }
+  return 1;
+}
+
+/*******************************************************************************************
+ * NAME :             parse_clauses
  *
  * DESCRIPTION :      Progresses the file pointer past the commentes.
  *
@@ -245,7 +274,7 @@ char* read_comments(FILE* fp, int file_size)
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
+int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
 {
   int current_data_index = 0;
   int current_clause_index = 0;
@@ -288,7 +317,7 @@ int read_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* 
       int clause_value = strtol(split_clause, &endptr, 0); 
       clause[current_clause_index] = clause_value;
 
-      if(*endptr != '\0' && clause_value != 0) { return 0; }// Verify int value.
+      if(*endptr != '\0' && clause_value != 0) { return -1; }// Verify int value.
       
       split_clause = strtok (NULL, " "); // Increment to next value.
       current_clause_index++; // Increment the clause index.
@@ -331,8 +360,14 @@ void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   LOG("INPUT FREE CALLED", 1);
 
+  printf("herehrerere\n");
   // Free all resources after use.
   fclose(fp);
+  for(int i = 0; i < unin->nbclauses; i++)
+  { free(unin->data[i]); }
+  free(unin->data);
+  free(unin->clause_lengths);
+  free(in->data);
   free(unin);
   free(in);
 
