@@ -359,8 +359,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int*
 void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
   LOG("INPUT FREE CALLED", 1);
-
-  printf("herehrerere\n");
+  
   // Free all resources after use.
   fclose(fp);
   for(int i = 0; i < unin->nbclauses; i++)
