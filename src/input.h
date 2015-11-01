@@ -130,6 +130,7 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
  *          FILE*       fp                      The pointer to the file.
  *          int         file size               The size of the file in bytes.
  *          int**       data                    The pointer to the set of pointers to the clauses.
+ *          int*        nbclauses               The number of expected clauses.
  *          int*        clause_lengths          The array of clause lengths.
  *          int*        unit_clauses            The array of clauses of 1 value.
  *          int*        unit_clauses_length     The number of unit clauss.
@@ -138,7 +139,7 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
 
 /*******************************************************************************************
  * NAME :             input_free

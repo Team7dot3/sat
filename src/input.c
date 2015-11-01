@@ -87,7 +87,7 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   *unit_clauses_length = 0;
 
   // Loops over all clauses. 
-  if(!parse_clauses(fp, file_size, data, clause_lengths, unit_clauses, unit_clauses_length))
+  if(parse_clauses(fp, file_size, data, nbclauses, clause_lengths, unit_clauses, unit_clauses_length) != 1)
   { return -1; }
 
   // Load values into structs.
@@ -222,7 +222,7 @@ char* parse_comments(FILE* fp, int file_size)
  */
 int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
 {
-  char* endptr; // For error checking strtol.
+  char* end_ptr; // For error checking strtol.
 
   // The "problem" line.
   char* split_problem_line = strtok(line, " ");
@@ -236,14 +236,14 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
     if(!strcmp(split_problem_line, "cnf"))
     {
       split_problem_line = strtok (NULL, " ");
-      *nbvar = strtol(split_problem_line, &endptr, 0);
+      *nbvar = strtol(split_problem_line, &end_ptr, 0);
 
-      if(*endptr == '\0') // Verify int value.
+      if(*end_ptr == '\0') // Verify int value.
       {
         split_problem_line = strtok (NULL, " ");
-        *nbclauses = strtol(split_problem_line, &endptr, 0);
+        *nbclauses = strtol(split_problem_line, &end_ptr, 0);
 
-        if(*endptr == '\0') // Verify int value.
+        if(*end_ptr == '\0') // Verify int value.
         { free(line);/* "problem" line parse successful. */ }
         else
         { return -1; }
@@ -270,6 +270,7 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
  *          FILE*       fp                      The pointer to the file.
  *          int         file size               The size of the file in bytes.
  *          int**       data                    The pointer to the set of pointers to the clauses.
+ *          int*        nbclauses               The number of expected clauses.
  *          int*        clause_lengths          The array of clause lengths.
  *          int*        unit_clauses            The array of clauses of 1 value.
  *          int*        unit_clauses_length     The number of unit clauss.
@@ -278,18 +279,28 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* unit_clauses, int* unit_clauses_length)
 {
   int current_data_index = 0;
   int current_clause_index = 0;
   int clause_length = 0;
 
-  char* endptr; // For error checking strtol.
+  int actual_clause_count = 0;
+
+  char* end_ptr; // For error checking strtol.
 
   char* line = input_string(fp, file_size);
 
   while(line != NULL && strcmp(line, ""))
   {
+    actual_clause_count++;
+
+    if(actual_clause_count > *nbclauses) // Prevents over writing memory.
+    {
+      LOG("Actual clause count has exceeded expected clause count (nbclauses).", 3); 
+      return -1; 
+    }
+
     // Create copy of line because strtok() consumes line during count.
     char* line_copy = malloc(strlen(line));
     strncpy(line_copy, line, strlen(line));
@@ -318,10 +329,10 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int*
     while(split_clause != NULL)
     {
       // Tries to converts char* to int.
-      int clause_value = strtol(split_clause, &endptr, 0); 
+      int clause_value = strtol(split_clause, &end_ptr, 0); 
       clause[current_clause_index] = clause_value;
 
-      if(*endptr != '\0' && clause_value != 0) { return -1; }// Verify int value.
+      if(*end_ptr != '\0' && clause_value != 0) { return -1; }// Verify int value.
       
       split_clause = strtok (NULL, " "); // Increment to next value.
       current_clause_index++; // Increment the clause index.
@@ -344,6 +355,13 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int*
     free(line);
     line = input_string(fp, file_size);
   }
+
+  if(actual_clause_count != *nbclauses)
+  {
+    LOG("Actual clause count != expected clause count (nbclauses).", 3);
+    return -1;
+  }
+
   free(line);
   return 1;
 } 
