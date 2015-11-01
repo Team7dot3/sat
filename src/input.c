@@ -61,11 +61,11 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   // Pass over comments.
   char* line = parse_comments(fp, file_size);
 
-  int* nbvar = malloc(sizeof(int)); // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
+  int* nbvar               = malloc(sizeof(int)); // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
   if(!nbvar) { return -1; }
   *nbvar = 0;
 
-  int* nbclauses = malloc(sizeof(int)); // indicates the number of rows (clauses), indicated by the number of zeros.
+  int* nbclauses           = malloc(sizeof(int)); // indicates the number of rows (clauses), indicated by the number of zeros.
   if(!nbvar) { return -1; }
   *nbclauses = 0;
 
@@ -101,6 +101,7 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 
   free(nbvar);
   free(nbclauses);
+  free(unit_clauses_length);
 
   LOG("INPUT PARSER RETURNING", 1);
   return 1;
@@ -189,7 +190,10 @@ char* parse_comments(FILE* fp, int file_size)
 
   while(line != NULL && strcmp(line, ""))
   {
-    if(line[0] == 'c') { /* Ignore comments */ }
+    if(line[0] == 'c') 
+    { /* Ignore comments */ 
+      free(line);
+    }
     else
     {
       return line;
@@ -240,7 +244,7 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
         *nbclauses = strtol(split_problem_line, &endptr, 0);
 
         if(*endptr == '\0') // Verify int value.
-        { /* "problem" line parse successful. */ }
+        { free(line);/* "problem" line parse successful. */ }
         else
         { return -1; }
       }
@@ -336,8 +340,11 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* clause_lengths, int*
     current_clause_index = 0; // Reset the clause index.
     clause_length = 0;
 
+    free(line_copy);
+    free(line);
     line = input_string(fp, file_size);
   }
+  free(line);
   return 1;
 } 
 
