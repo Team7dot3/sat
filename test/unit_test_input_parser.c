@@ -22,7 +22,6 @@ int test_data(void)
       }
     }
   }
-  
   PASS("test_data")
 }
 
@@ -44,7 +43,6 @@ int test_clause_lengths(void)
       FAIL("test_clause_lengths");
     }
   }
-    
   PASS("test_clause_lengths");
 }
 
