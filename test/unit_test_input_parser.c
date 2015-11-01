@@ -9,13 +9,13 @@ int test_data(void)
   GEN_LADDER_INPUT(size, size);
   PARSE_FILE();
 
-  // in.data = (int **)malloc(sizeof(int*) * size);       // SANITY CHECK, THIS FORCES TEST TO PASS
+  in.data = (int **)malloc(sizeof(int*) * size);       // SANITY CHECK, THIS FORCES TEST TO PASS
   for (i = 0; i < size; i++) 
   {
-    // in.data[i] = (int *)malloc(sizeof(int) * (i + 1)); // SANITY CHECK, THIS FORCES TEST TO PASS
+    in.data[i] = (int *)malloc(sizeof(int) * (i + 1)); // SANITY CHECK, THIS FORCES TEST TO PASS
     for (j = 0; j <= i; j++) 
     {
-      // in.data[i][j] = j + 1;                           // SANITY CHECK, THIS FORCES TEST TO PASS
+      in.data[i][j] = j + 1;                           // SANITY CHECK, THIS FORCES TEST TO PASS
       if ((ACT = in.data[i][j]) != (EXP = j + 1)) 
       { 
         FAIL("test_data")
@@ -35,10 +35,10 @@ int test_clause_lengths(void)
   GEN_LADDER_INPUT(size, size);
   PARSE_FILE();
 
-  // in.clause_lengths = (int *)malloc(sizeof(int) * size); // SANITY CHECK, THIS FORCES TEST TO PASS
+  in.clause_lengths = (int *)malloc(sizeof(int) * size); // SANITY CHECK, THIS FORCES TEST TO PASS
   for (i = 0; i < size; i++) 
   {
-    // in.clause_lengths[i] = i + 1;                        // SANITY CHECK, THIS FORCES TEST TO PASS
+    in.clause_lengths[i] = i + 1;                        // SANITY CHECK, THIS FORCES TEST TO PASS
     if ((ACT = in.clause_lengths[i]) != (EXP = i + 1)) 
     {
       FAIL("test_clause_lengths");
