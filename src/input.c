@@ -72,18 +72,24 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   if(parse_cnf_header(line, nbvar, nbclauses) != 1)
   { return -1; }
 
-  int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar - 1));
+  // Load values into structs.
+  unin->nbclauses = *nbclauses; 
+  unin->nbvars = *nbvar;
+
+  if(*nbvar == 0)
+  { return 1; }
+
+  int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar));
   if(!data) { return -1; }
 
-  int* clause_lengths      = malloc(4*(*nbclauses));
+  int* clause_lengths      = malloc(sizeof(int)*(*nbclauses));
   if(!clause_lengths) { return -1; }
 
-  int* unit_clauses        = malloc(*nbclauses);
+  int* unit_clauses        = malloc(sizeof(int)*(*nbclauses));
   if(!unit_clauses) { return -1; }
 
   int* unit_clauses_length = malloc(sizeof(int));
   if(!unit_clauses_length) { return -1; }
-
   *unit_clauses_length = 0;
 
   // Loops over all clauses. 
@@ -92,8 +98,6 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 
   // Load values into structs.
   unin->data = data;
-  unin->nbclauses = *nbclauses; 
-  unin->nbvars = *nbvar;
   unin->clause_lengths = clause_lengths;
 
   in->data = unit_clauses;
@@ -315,7 +319,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     }
 
     // Subtract 1 to account for clause terminating 0.
-    clause_length -= 1; 
+    clause_length -= 1;
 
     // Sets clause length in clause_lengths array.
     clause_lengths[current_data_index] = clause_length;
@@ -337,11 +341,12 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
       split_clause = strtok (NULL, " "); // Increment to next value.
       current_clause_index++; // Increment the clause index.
     }
+    current_clause_index--; // Adjust to account for last increment.
 
     // If clause is only length 1, save value to molested intput struct.
     if(clause_length == 1)
     {
-      unit_clauses[*unit_clauses_length] = clause[current_clause_index-2];
+      unit_clauses[*unit_clauses_length] = clause[0];
       (*unit_clauses_length)++;
     }
 
