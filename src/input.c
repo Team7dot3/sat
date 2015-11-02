@@ -72,12 +72,7 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   if(parse_cnf_header(line, nbvar, nbclauses) != 1)
   { return -1; }
 
-  // Load values into structs.
-  unin->nbclauses = *nbclauses; 
-  unin->nbvars = *nbvar;
 
-  if(*nbvar == 0)
-  { return 1; }
 
   int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar));
   if(!data) { return -1; }
@@ -95,6 +90,12 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   // Loops over all clauses. 
   if(parse_clauses(fp, file_size, data, nbclauses, clause_lengths, unit_clauses, unit_clauses_length) != 1)
   { return -1; }
+
+  // Load values into structs.
+  unin->nbclauses = *nbclauses; 
+  unin->nbvars = *nbvar;
+
+  if(*nbvar == 0) { return 1; }
 
   // Load values into structs.
   unin->data = data;
