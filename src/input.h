@@ -13,11 +13,12 @@
 #define INPUT_H
 
 #include "sat_types.h"
+#include <string.h>
 
 /*******************************************************************************************
  * NAME :             check_args
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Verifies the validity of the arguments.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -26,14 +27,14 @@
  *
  * OUTPUTS :
  *      RETURN :
- *          
+ *          FILE*                       Actual FILE* on success, NULL on failure
  */
 FILE* check_args(int argc, char *argv[]);
 
 /*******************************************************************************************
- * NAME :             input_parser
+ * NAME :             input_parse
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Parses the input from a file of the cnf sat form.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -42,15 +43,108 @@ FILE* check_args(int argc, char *argv[]);
  *          MOLESTED_INPUT    *in     input
  *
  * OUTPUTS :
- *      RETURN :
- *          int                       1 on success, 0 on failure
+ *      RETURN : 1 on success, -1 on failure/error
  */
-FILE* input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 
 /*******************************************************************************************
- * NAME :             check_args
+ * NAME :             input_string
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Reads a line of data from a file.
+ *
+ * Method based on solution from 
+ * http://stackoverflow.com/questions/16870485/how-can-i-read-an-input-string-of-unknown-length
+ * Username: BLUEPIXY
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            the pointer to the file
+ *          size_t      size          the number of bytes to read
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                      the string read from the file on success, 
+ *                                     the original string on failure
+ */
+char* input_string(FILE* fp, size_t size);
+
+/*******************************************************************************************
+ * NAME :             get_file_size
+ *
+ * DESCRIPTION :      Returns the sie of a file.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            the pointer to the file
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int                      the size of the file in bytes
+ */
+ int get_file_size(FILE* fp);
+
+/*******************************************************************************************
+ * NAME :             parse_comments
+ *
+ * DESCRIPTION :      Progresses the file pointer past the commentes.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp            The pointer to the file.
+ *          int*        file size     The size of the file in bytes.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                     The line of the next line ("problem" line).
+ */
+char* parse_comments(FILE* fp, int file_size);
+
+/*******************************************************************************************
+ * NAME :             parse_cnf_header
+ *
+ * DESCRIPTION :      Parses the cnf header ("problem" line) of the file.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          char*       line          The cnf line.
+ *          int*        nbvar         The nbvar variable.
+ *          int*        nbclauses     The nbclauses variable.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          char*                     The line of the next line ("problem" line).
+ */
+int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
+
+/*******************************************************************************************
+ * NAME :             parse_clauses
+ *
+ * DESCRIPTION :      Progresses the file pointer past the commentes.
+ *
+ *
+ * INPUTS :
+ *      PARAMETERS :   
+ *          FILE*       fp                      The pointer to the file.
+ *          int         file size               The size of the file in bytes.
+ *          int**       data                    The pointer to the set of pointers to the clauses.
+ *          int*        nbclauses               The number of expected clauses.
+ *          int*        clause_lengths          The array of clause lengths.
+ *          int*        unit_clauses            The array of clauses of 1 value.
+ *          int*        unit_clauses_length     The number of unit clauss.
+ *
+ * OUTPUTS :
+ *      RETURN :
+ *          int*                     1 on success, -1 on failure/error.
+ */
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
+
+/*******************************************************************************************
+ * NAME :             input_free
+ *
+ * DESCRIPTION :      Free all resources after use.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -60,8 +154,8 @@ FILE* input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
  *
  * OUTPUTS :
  *      RETURN :
- *          int                       1 on success, 0 on failure
+ *          void
  */
-int input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 
 #endif
