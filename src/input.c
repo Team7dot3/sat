@@ -72,8 +72,6 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   if(parse_cnf_header(line, nbvar, nbclauses) != 1)
   { return -1; }
 
-  if(*nbvar == 0) { return 1; } // If nbvar is 0, simply return.
-
   int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar));
   if(!data) { return -1; }
 
