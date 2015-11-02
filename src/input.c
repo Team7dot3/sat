@@ -291,7 +291,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
   int actual_clause_count = 0;
 
-  char* end_ptr = malloc(sizeof(char*)); // For error checking strtol.
+  char* end_ptr; // For error checking strtol.
 
   char* line = input_string(fp, file_size);
 
