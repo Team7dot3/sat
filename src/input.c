@@ -312,7 +312,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     char* line_copy = malloc(line_size + 1);
     line_copy[line_size] = '\0';
 
-    memcpy(line_copy, line, strlen(line));
+    memcpy(line_copy, line, line_size);
 
     char* split_clause = strtok(line, " ");
 
