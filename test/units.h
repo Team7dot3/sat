@@ -38,15 +38,15 @@ int RES;
   return (RES = 0);                 \
 }
 
-#define FAIL(str) {              \
-  printf(RESET "  ");            \
-  printf(str);                   \
-  printf(KRED  " FAILED. ");     \
-  printf(RESET "\t Expected: "); \
-  printf(KGRN  "%d", EXP);       \
-  printf(RESET "\t Actual: ");   \
-  printf(KRED  "%d \n", ACT);    \
-  return (RES = 1);              \
+#define FAIL(str) {                 \
+  printf(RESET "  ");               \
+  printf(str);                      \
+  printf(KRED  " FAILED. ");        \
+  printf(RESET "\t Expected: ");    \
+  printf(KGRN  "%d", EXP);          \
+  printf(RESET "\t Actual: ");      \
+  printf(KRED  "%d \n" RESET, ACT); \
+  return (RES = 1);                 \
 }
 
 #endif

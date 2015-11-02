@@ -17,6 +17,10 @@ sat_t:	test/unit_test.c
 test:	clean sat_t
 	bin/unit_test.o
 
+diff_test:
+	make sat
+	python test/diff_test.py
+
 clean:
 	rm -f bin/*.o;
 	rm -f *~;
