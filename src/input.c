@@ -144,10 +144,10 @@ char* input_string(FILE* fp, size_t size)
         if(len==size){
             str = realloc(str, (size+=16));
             if(!str)return str;
+
         }
     }
     str[len++]='\0';
-
     return realloc(str, len);
 }
 
@@ -291,12 +291,13 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
   int actual_clause_count = 0;
 
-  char* end_ptr; // For error checking strtol.
+  char* end_ptr = malloc(sizeof(char*)); // For error checking strtol.
 
   char* line = input_string(fp, file_size);
 
   while(line != NULL && strcmp(line, ""))
   {
+
     actual_clause_count++;
 
     if(actual_clause_count > *nbclauses) // Prevents over writing memory.
@@ -306,8 +307,12 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     }
 
     // Create copy of line because strtok() consumes line during count.
-    char* line_copy = malloc(strlen(line));
-    strncpy(line_copy, line, strlen(line));
+    int line_size = strlen(line);
+
+    char* line_copy = malloc(line_size + 1);
+    line_copy[line_size] = '\0';
+
+    memcpy(line_copy, line, strlen(line));
 
     char* split_clause = strtok(line, " ");
 
@@ -328,16 +333,17 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
     // Start to load values. 
     split_clause = strtok(line_copy, " ");
-
+    
     // Read clause values from char* and place into clause[].
     while(split_clause != NULL)
     {
       // Tries to converts char* to int.
       int clause_value = strtol(split_clause, &end_ptr, 0); 
+      
       clause[current_clause_index] = clause_value;
 
-      if(*end_ptr != '\0' && clause_value != 0) { return -1; }// Verify int value.
-      
+      if(*end_ptr != '\0' && clause_value != 0) { return -1; } // Verify int value.
+
       split_clause = strtok (NULL, " "); // Increment to next value.
       current_clause_index++; // Increment the clause index.
     }
