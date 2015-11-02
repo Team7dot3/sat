@@ -1,4 +1,5 @@
 #include "units.h"
+#include "../src/sat_types.h"
 
 #define PARSE_FILE(void)        \
   input_parser(fp, &in, &m_in); \
@@ -6,10 +7,6 @@
 
 #define TEST_PATH(void)   \
   char p1[] = "txt/test.txt";
-
-#define GEN_STRUCTS(void) \
-  UNMOLESTED_INPUT in;    \
-  MOLESTED_INPUT m_in;
 
 #define GEN_BASIC_INPUT(nbvars, nbclauses)                  \
   TEST_PATH();                                              \

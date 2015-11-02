@@ -51,7 +51,7 @@ int test_valid_path()
   char s1[]   = "program";
   char s2[]   = "txt/basic_sat_input.txt";
   char *arr[] = { s1, s2 };
-  RESULT("test_valid_path", (EXP = 1) == (ACT = (int)check_args(2, arr)));
+  RESULT("test_valid_path", (EXP = 0) != (ACT = (int)check_args(2, arr)));
 }
 
 int test_check_args(void) 
