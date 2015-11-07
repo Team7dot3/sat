@@ -98,6 +98,7 @@ int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   if (!input)
   {
     LOG("process_and RETURNING", 2);
+    free(input);
     return -1;//TODO: look into this
   }
 
