@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
   if (fails) 
   {
-    printf(KRED "%s%d test(s) FAILED! %s", DELIM, fails, DELIM);
+    printf(KRED "%s%d test(s) FAILED! %s" RESET, DELIM, fails, DELIM);
   } 
   else 
   {

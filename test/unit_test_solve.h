@@ -18,6 +18,7 @@
         break;                       \
       case 4:                        \
         setup_sat_4(&in);            \
+        break;                       \
       default:                       \
         NULL;                        \
     }                                \
@@ -31,6 +32,12 @@
         break;                       \
       case 2:                        \
         setup_basic_unsat_2(&in);    \
+        break;                       \
+      case 3:                        \
+        setup_unsat_3(&in);          \
+        break;                       \
+      case 4:                        \
+        setup_unsat_4(&in);          \
         break;                       \
       default:                       \
         NULL;                        \
@@ -52,3 +59,5 @@ void setup_basic_sat_3(UNMOLESTED_INPUT *in);
 void setup_sat_4(UNMOLESTED_INPUT *in);
 void setup_basic_unsat_1(UNMOLESTED_INPUT *in);
 void setup_basic_unsat_2(UNMOLESTED_INPUT *in);
+void setup_unsat_3(UNMOLESTED_INPUT *in);
+void setup_unsat_4(UNMOLESTED_INPUT *in);
