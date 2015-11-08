@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
   } 
   else 
   {
-    printf(KGRN "%sAll tests PASSED! %s" RESET, DELIM, DELIM);
+    printf(KGRN "%sAll tests PASSED! %s, DELIM, DELIM);
   }
 
   LOG("\nTESTING COMPLETE.\n", 2);
