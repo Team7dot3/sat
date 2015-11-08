@@ -16,6 +16,9 @@
       case 3:                        \
         setup_basic_sat_3(&in);      \
         break;                       \
+      case 4:                        \
+        setup_sat_4(&in);            \
+        break;                       \
       default:                       \
         NULL;                        \
     }                                \
@@ -30,6 +33,12 @@
       case 2:                        \
         setup_basic_unsat_2(&in);    \
         break;                       \
+      case 3:                        \
+        setup_unsat_3(&in);          \
+        break;                       \
+      case 4:                        \
+        setup_unsat_4(&in);          \
+        break;                       \
       default:                       \
         NULL;                        \
     }                                \
@@ -40,11 +49,15 @@
 int test_basic_sat_1(void);
 int test_basic_sat_2(void);
 int test_basic_sat_3(void);
+int test_sat_4(void);
 int test_basic_unsat_1(void);
 int test_solver(void);
 
 void setup_basic_sat_1(UNMOLESTED_INPUT *in);
 void setup_basic_sat_2(UNMOLESTED_INPUT *in);
 void setup_basic_sat_3(UNMOLESTED_INPUT *in);
+void setup_sat_4(UNMOLESTED_INPUT *in);
 void setup_basic_unsat_1(UNMOLESTED_INPUT *in);
 void setup_basic_unsat_2(UNMOLESTED_INPUT *in);
+void setup_unsat_3(UNMOLESTED_INPUT *in);
+void setup_unsat_4(UNMOLESTED_INPUT *in);

@@ -39,20 +39,20 @@ int RES;
   }                           \
 }
 
-#define PASS(str) {                 \
-  printf("  ");                     \
-  printf(str);                      \
-  printf(KGRN " PASSED. \n" RESET); \
-  return (RES = 0);                 \
+#define PASS(str) {                   \
+  printf(RESET "  ");                 \
+  printf(str);                        \
+  printf(KGRN "\t PASSED. \n" RESET); \
+  return (RES = 0);                   \
 }
 
 #define FAIL(str) {              \
-  printf(RESET "  ");            \
+  printf(KRED "  ");             \
   printf(str);                   \
-  printf(KRED  " FAILED. ");     \
-  printf(RESET "\t Expected: "); \
+  printf(KRED  "\t FAILED. ");   \
+  printf(RESET "   Expected: "); \
   printf(KGRN  "%d", EXP);       \
-  printf(RESET "\t Actual: ");   \
+  printf(RESET "   Actual: ");   \
   printf(KRED  "%d \n", ACT);    \
   return (RES = 1);              \
 }
