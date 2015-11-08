@@ -11,6 +11,13 @@ from subprocess import Popen, PIPE
 import time
 
 
+INPUT_PATH = 'txt/diff_test.txt'
+LOG_PATH   = 'txt/log_diff_test.txt'
+EXE_PATH   = 'bin/sat_solver.o'
+MINI_PATH  = 'minisat'
+MAX_VARS   = 10 # The maximum number of variables and clauses
+TEST_RUNS  = 10 # The number of tests to run
+
 def exec_process(args):
   """
   Executes a program and passes to it any accompanied arguments.
@@ -71,7 +78,7 @@ class Minisat:
     """
     Returns the output of minisat.
     """
-    return exec_process(['minisat', self.path])
+    return exec_process([MINI_PATH, self.path])
 
 
 class Sat:
@@ -89,7 +96,7 @@ class Sat:
     """
     Returns the output of sat_solver.o.
     """
-    return exec_process(['bin/sat_solver.o', self.path])
+    return exec_process([EXE_PATH, self.path])
 
 
 class RandomTesting:
@@ -123,17 +130,33 @@ class RandomTesting:
       f.write('p cnf ' + str(self.nbvars) + ' ' + str(self.nbclauses) + ' \n')
       
       for i in range(0, self.nbclauses):
+        # Use list to store used variables per clause
+        used_vars = []
+        attempts  = 0
         for j in range(0, random.randint(1, self.nbvars)):
-          if random.randint(0, self.nbvars) % 2 == 0:
-            f.write('-')
-          f.write(str(random.randint(1, self.nbvars)) + ' ')
+          if attempts > 1000:
+            # do waste time trying to generate random values if duplicates keep occuring
+            continue
+          var = random.randint(-self.nbvars, self.nbvars)
+          if var == 0:
+            # only write '0' if terminating the clause
+            continue 
+          elif var in used_vars:
+            # do not write duplicate variables (per clause) to file
+            continue 
+          else:
+            used_vars.append(var)
+            f.write(str(var) + ' ')
+        if len(used_vars) == 0:
+          # make sure there are no empty clauses
+          f.write('1' + ' ') 
         f.write('0 \n')
 
   def run(self):
     """
     Executes the tests. Returns the number of passed tests.
     """
-    log    = Logger('txt/log_diff_test.txt')
+    log    = Logger(LOG_PATH)
     passed = 0
 
     for i in range(0, self.itrs):
@@ -166,10 +189,8 @@ class RandomTesting:
 
 if __name__ == '__main__':
   init_random()
-  max_var   = 100 # <-- The maximum number of variables and clauses
-  test_runs = 100 # <-- The number of tests to run
-  passed    = RandomTesting('txt/diff_test.txt', max_var, test_runs).run()
+  passed = RandomTesting(INPUT_PATH, MAX_VARS, TEST_RUNS).run()
 
   print '\n\n\nDifferential Testing:'
   print '  PASSED: ' + str(passed)
-  print '  FAILED: ' + str(test_runs - passed)
+  print '  FAILED: ' + str(TEST_RUNS - passed)
