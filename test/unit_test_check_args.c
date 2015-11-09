@@ -46,7 +46,7 @@ int test_null_path(void)
   RESULT("test_invalid_path_3   ", (EXP = 0) == (ACT = (int)check_args(2, arr)));
 }
 
-int test_valid_path() 
+int test_valid_path(void) 
 {
   char s1[]   = "program";
   char s2[]   = "txt/basic_sat_input.txt";
