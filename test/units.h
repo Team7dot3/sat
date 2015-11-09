@@ -3,18 +3,26 @@
 
 // C libraries
 #include <stdio.h>
+#include <setjmp.h>
 
 // Unit Tests
 #include "unit_test_check_args.h"
 #include "unit_test_input_parser.h"
 #include "unit_test_solve.h"
 
-// SAT data types and macros
-#include "../src/sat_types.h"
-
 int EXP;
 int ACT;
 int RES;
+
+#define GEN_STRUCTS(void) \
+  UNMOLESTED_INPUT in;    \
+  MOLESTED_INPUT m_in;
+
+#define FREE_STRUCTS(in)   \
+{                          \
+  free(in.data);           \
+  free(in.clause_lengths); \
+}
 
 #define DELIM "\n==================================================\n"
 #define NL "\n"
@@ -31,20 +39,20 @@ int RES;
   }                           \
 }
 
-#define PASS(str) {                 \
-  printf("  ");                     \
-  printf(str);                      \
-  printf(KGRN " PASSED. \n" RESET); \
-  return (RES = 0);                 \
+#define PASS(str) {                   \
+  printf(RESET "  ");                 \
+  printf(str);                        \
+  printf(KGRN "\t PASSED. \n" RESET); \
+  return (RES = 0);                   \
 }
 
 #define FAIL(str) {              \
-  printf(RESET "  ");            \
+  printf(KRED "  ");             \
   printf(str);                   \
-  printf(KRED  " FAILED. ");     \
-  printf(RESET "\t Expected: "); \
+  printf(KRED  "\t FAILED. ");   \
+  printf(RESET "   Expected: "); \
   printf(KGRN  "%d", EXP);       \
-  printf(RESET "\t Actual: ");   \
+  printf(RESET "   Actual: ");   \
   printf(KRED  "%d \n", ACT);    \
   return (RES = 1);              \
 }

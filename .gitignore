@@ -1,5 +1,6 @@
 # Ignore compiled binary
 bin/*.o
+bin/*.dSYM
 
 # Ignored text input files
 txt/*.txt
