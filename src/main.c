@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
   { 
   	LOG("Error while opening/reading file.", 3); 
   	printf("ERROR\n");
-  	input_free(fp, NULL, NULL);
   	return 0; 
   }
   
