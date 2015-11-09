@@ -21,30 +21,30 @@ build:
 !ENDIF
 # \
 !ELSE
-	# Linux Stuff
-	ifdef _TEST
+# Linux Stuff
+ifdef _TEST
 	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/input.c src/solve.c test/unit_test.c test/unit_test_check_args.c test/unit_test_input_parser.c test/unit_test_solve.c -o bin/unit_test.o
-	else
-	ifdef _DEBUG
+else
+ifdef _DEBUG
 	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 -DDEBUG -g src/main.c src/input.c src/solve.c -o bin/sat_solver.o
-	else
+else
 	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/main.c src/input.c src/solve.c -o bin/sat_solver.o
-	endif
-	endif
+endif
+endif
 # \
 !ENDIF
 
 rebuild: clean build
 
-test: deftest clean build
+test: clean
+	make build _TEST=1
 
-debug: defdebug build
+debug: clean
+	make build _DEBUG=1
 
-deftest:
-	_TEST = 1
+#deftest: export TEST = 1
 
-defdebug:
-	_DEBUG = 1
+#defdebug: export DEBUG = 1
 
 all: clean build
 
@@ -55,7 +55,7 @@ solve: clean build
 	bin\sat_solver.exe txt\input.txt
 # \
 !ELSE
-	#Linux Stuff
+#Linux Stuff
 	bin/sat_solver.o txt/input.txt
 #\
 !ENDIF
@@ -78,7 +78,7 @@ diff_test: clean build
 	bin\unit_test.exe
 # \
 !ELSE
-	#Linux Stuff
+#Linux Stuff
 	python test/diff_test.py
 # \
 !ENDIF
@@ -100,7 +100,7 @@ clean:
 	del /f /s *.sdf
 # \
 !ELSE
-	#Linux Stuff
+#Linux Stuff
 	rm -f bin/*.o
 	rm -f *~
 	rm -f .*~
