@@ -7,3 +7,11 @@ txt/*.txt
 
 # Ignore Mac OS X icon files
 .DS_Store
+
+# Ignore Windows specific files
+.exe
+.pdb
+.obj
+.idb
+.ilk
+.sdf
