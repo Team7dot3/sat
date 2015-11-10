@@ -123,31 +123,31 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>nmake _DEBUG=1</NMakeBuildCommandLine>
     <NMakeOutput>bin\sat_solver.exe</NMakeOutput>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _DEBUG=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _DEBUG=1</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>nmake _DEBUG=1</NMakeBuildCommandLine>
     <NMakeOutput>bin\sat_solver.exe</NMakeOutput>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _DEBUG=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _DEBUG=1</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
-    <NMakeBuildCommandLine>nmake build</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>nmake build _TEST=1</NMakeBuildCommandLine>
     <NMakeOutput>bin\unit_test.exe</NMakeOutput>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _TEST=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _TEST=1</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;_TEST;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|ARM'">
-    <NMakeBuildCommandLine>nmake build</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine>nmake build _TEST=1</NMakeBuildCommandLine>
     <NMakeOutput>bin\unit_test.exe</NMakeOutput>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _TEST=1</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _TEST=1</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;_TEST;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -165,9 +165,9 @@
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
-    <NMakeBuildCommandLine>nmake build</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakeBuildCommandLine>nmake build _TEST=1</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _TEST=1</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _TEST=1</NMakeCleanCommandLine>
     <NMakeOutput>bin\unit_test.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;_TEST;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
@@ -179,9 +179,9 @@
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>nmake rebuild</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakeBuildCommandLine>nmake _DEBUG=1</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake rebuild _DEBUG=1</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean _DEBUG=1</NMakeCleanCommandLine>
     <NMakeOutput>bin\sat_solver.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
