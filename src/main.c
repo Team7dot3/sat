@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
   { 
     LOG("Error parsing input from file.", 3); 
     printf("ERROR\n"); 
-    //    input_free(fp, unin, in);
+    input_free(fp, unin, in);
     return 0;
   }
 

@@ -96,9 +96,9 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   in->data = unit_clauses;
   in->length = *unit_clauses_length;
 
-  //free(nbvar);
-  //free(nbclauses);
-  //free(unit_clauses_length);
+  free(nbvar);
+  free(nbclauses);
+  free(unit_clauses_length);
 
   return 1;
 }
@@ -133,19 +133,19 @@ char* input_string(FILE* fp, size_t size)
   {
     return str;
   }
-  while(EOF != (ch = fgetc(fp)) && ch != '\n') // && ch != '\n'
+  while(EOF != (ch = fgetc(fp)) && ch != '\n')
   { 
-    str[len++]=ch;
-    if(len==size)
+    str[len++] = ch;
+    if(len == size)
     {
-      str = realloc(str, (size+=16));
+      str = realloc(str, (size += 16));
       if(!str)
       {
-	return str;
+	      return str;
       }
     }
   }
-  str[len++]='\0';
+  str[len++] = '\0';
 
   return realloc(str, len);
 }
@@ -195,7 +195,7 @@ char* parse_comments(FILE* fp, int file_size)
   {
     if(line[0] == 'c') 
     { /* Ignore comments */ 
-      //free(line);
+      free(line);
     }
     else
     {
@@ -339,8 +339,12 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     {
       // Tries to converts char* to int.
       int clause_value = strtol(split_clause, &end_ptr, 0); 
+
+      if(clause_value != 0)
+      {
+        clause[current_clause_index] = clause_value;
+      }
       
-      clause[current_clause_index] = clause_value;
 
       if(*end_ptr != '\0' && clause_value != 0) { return -1; } // Verify int value.
 
@@ -362,8 +366,8 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     current_clause_index = 0; // Reset the clause index.
     clause_length = 0;
 
-    //    free(line_copy);
-    //    free(line);
+    free(line_copy);
+    free(line);
     
     line = input_string(fp, file_size);
   }
@@ -374,7 +378,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     return -1;
   }
 
-  //  free(line);
+  free(line);
   return 1;
 } 
 
