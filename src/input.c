@@ -248,7 +248,7 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
 
         if(*end_ptr == '\0') // Verify int value.
         { 
-	  //  free(line);/* "problem" line parse successful. */ 
+	      free(line);/* "problem" line parse successful. */ 
 	}
         else
         { return -1; }
