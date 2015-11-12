@@ -53,8 +53,6 @@ FILE* check_args(int argc, char *argv[])
  */
 int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
-  LOG("INPUT PARSER CALLED", 1);
-
   // Finding the size of the file in bytes.
   int file_size = get_file_size(fp);
 
@@ -102,7 +100,6 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
   free(nbclauses);
   free(unit_clauses_length);
 
-  LOG("INPUT PARSER RETURNING", 1);
   return 1;
 }
 
@@ -127,23 +124,30 @@ int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
  */
 char* input_string(FILE* fp, size_t size)
 {
-//The size is extended by the input with the value of the provisional
-    char *str;
-    int ch;
-    size_t len = 0;
-    str = realloc(NULL, size); //size is start size
-    if(!str)return str;
-    while(EOF != (ch = fgetc(fp)) && ch != '\n') // && ch != '\n'
-    { 
-        str[len++]=ch;
-        if(len==size){
-            str = realloc(str, (size+=16));
-            if(!str)return str;
-
-        }
+  //The size is extended by the input with the value of the provisional
+  char *str;
+  int ch;
+  size_t len = 0;
+  str = (char*)malloc(size);
+  if(!str)
+  {
+    return str;
+  }
+  while(EOF != (ch = fgetc(fp)) && ch != '\n')
+  { 
+    str[len++] = ch;
+    if(len == size)
+    {
+      str = realloc(str, (size += 16));
+      if(!str)
+      {
+	      return str;
+      }
     }
-    str[len++]='\0';
-    return realloc(str, len);
+  }
+  str[len++] = '\0';
+
+  return realloc(str, len);
 }
 
 /*******************************************************************************************
@@ -243,7 +247,9 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
         *nbclauses = strtol(split_problem_line, &end_ptr, 0);
 
         if(*end_ptr == '\0') // Verify int value.
-        { free(line);/* "problem" line parse successful. */ }
+        { 
+	      free(line);/* "problem" line parse successful. */ 
+	}
         else
         { return -1; }
       }
@@ -292,7 +298,6 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
   while(line != NULL && strcmp(line, ""))
   {
-
     actual_clause_count++;
 
     if(actual_clause_count > *nbclauses) // Prevents over writing memory.
@@ -315,7 +320,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     while(split_clause != NULL)
     {
       clause_length++;
-      split_clause = strtok (NULL, " "); // Increment to next value.
+      split_clause = strtok(NULL, " "); // Increment to next value.
     }
 
     // Subtract 1 to account for clause terminating 0.
@@ -324,18 +329,22 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     // Sets clause length in clause_lengths array.
     clause_lengths[current_data_index] = clause_length;
 
-    int* clause = (int *)malloc(sizeof(int) * clause_length); // A clause to hold values.//
+    int* clause = (int*)malloc(sizeof(int) * clause_length); // A clause to hold values.//
 
     // Start to load values. 
     split_clause = strtok(line_copy, " ");
-    
+
     // Read clause values from char* and place into clause[].
     while(split_clause != NULL)
     {
       // Tries to converts char* to int.
       int clause_value = strtol(split_clause, &end_ptr, 0); 
+
+      if(clause_value != 0)
+      {
+        clause[current_clause_index] = clause_value;
+      }
       
-      clause[current_clause_index] = clause_value;
 
       if(*end_ptr != '\0' && clause_value != 0) { return -1; } // Verify int value.
 
@@ -359,6 +368,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
     free(line_copy);
     free(line);
+    
     line = input_string(fp, file_size);
   }
 
@@ -389,17 +399,15 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  */
 void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
 {
-  LOG("INPUT FREE CALLED", 1);
-  
   // Free all resources after use.
   fclose(fp);
   for(int i = 0; i < unin->nbclauses; i++)
-  { free(unin->data[i]); }
+  { 
+    free(unin->data[i]);
+  }
   free(unin->data);
   free(unin->clause_lengths);
   free(in->data);
   free(unin);
   free(in);
-
-  LOG("INPUT FREE RETURNING", 1);
 }

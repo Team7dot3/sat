@@ -33,10 +33,9 @@ int main(int argc, char *argv[])
 
   if(!fp) 
   { 
-  	LOG("Error while opening/reading file.", 3); 
-  	printf("ERROR\n");
-  	input_free(fp, NULL, NULL);
-  	return 0; 
+    LOG("Error while opening/reading file.", 3); 
+    printf("ERROR\n");
+    return 0; 
   }
   
   UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
@@ -44,26 +43,25 @@ int main(int argc, char *argv[])
   
   if(input_parser(fp, unin, in) != 1)
   { 
-  	LOG("Error parsing input from file.", 3); 
-  	printf("ERROR\n"); 
-  	input_free(fp, unin, in);
-  	return 0;
+    LOG("Error parsing input from file.", 3); 
+    printf("ERROR\n"); 
+    input_free(fp, unin, in);
+    return 0;
   }
 
   switch(solve(unin, in))
   {
-  	case 1:
-  	  printf("SATISFIABLE\n");
-  	  break;
-  	case 0:
-  	  printf("UNSATISFIABLE\n");
-  	  break;
-  	case -1:
-  	  printf("ERROR\n");
-  	  break;
+    case 1:
+      printf("SATISFIABLE\n");
+      break;
+    case 0:
+      printf("UNSATISFIABLE\n");
+      break;
+    case -1:
+      printf("ERROR\n");
+      break;
   }
-
-  input_free(fp, unin, in); 
+  // input_free(fp, unin, in); 
   
   LOG("EXITING SAT SOLVER", 3);
   
