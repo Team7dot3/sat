@@ -29,27 +29,27 @@ int solve(INPUT *in)
   LOG("solve CALLED", 2);
   int nbvars = in->nbvars;
   //int toReturn = process_and(in);
-  int * counts = (int*)malloc(sizeof(int)* nbvars);
+  //int * counts = (int*)malloc(sizeof(int)* nbvars);
   int * setvals = (int*)malloc(sizeof(int)* nbvars);
   int i;
   for (i = 0; i < nbvars; i++)
   {
-    counts[i] = 0;
+    //counts[i] = 0;
     setvals[i] = -1;
   }
   int toReturn;
-  if (solver(in->data, nbvars, in->nbclauses, in->clause_lengths, counts, setvals, 0))
+  if (solver(in->data, nbvars, in->nbclauses, in->clause_lengths, in->value_sums, setvals, 0, 0))
   {
     toReturn = 1;
   }
   else
   {
     setvals[0] = !setvals[0];
-    toReturn = solver(in->data, nbvars, in->nbclauses, in->clause_lengths, counts, setvals, 0);
+    toReturn = solver(in->data, nbvars, in->nbclauses, in->clause_lengths, in->value_sums, setvals, 0, 1);
   }
 
 
-  free(counts);
+  //free(counts);
   free(setvals);
   LOG("solve RETURNING", 2);
   return toReturn;
@@ -136,23 +136,22 @@ void make_val(int* vals, int input, int num_vals)
   }
 }
 
-int solver(int ** values, int val_count, int num_clauses, int * clause_length, int * counts, int * setvals, int pos)
+int solver(int ** values, int val_count, int num_clauses, int * clause_length, int * counts, int * setvals, int pos, int try_num)
 {
   if (pos >= val_count)
   {
     return 0;
   }
-  if (setvals[pos] < 0)
+
+  if (try_num ^ (counts[pos] >= 0))
   {
-    if (counts[pos] < 0)
-    {
-      setvals[pos] = 0;
-    }
-    else
-    {
-      setvals[pos] = 1;
-    }
+    setvals[pos] = 0;
   }
+  else
+  {
+    setvals[pos] = 1;
+  }
+
 
   int sat_level = 0;
   int i;
@@ -162,6 +161,7 @@ int solver(int ** values, int val_count, int num_clauses, int * clause_length, i
       switch (clause_result)
       {
       case -1:
+        setvals[pos] = -1;
         return 0;
       case 1:
         sat_level++;
@@ -175,15 +175,21 @@ int solver(int ** values, int val_count, int num_clauses, int * clause_length, i
     return 1;
   }
 
-  if (solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1))
+  if (solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1, 0))
   {
     return 1;
   }
   else
   {
-    setvals[pos + 1] = !setvals[pos + 1];
-
-    return solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1);
+    if (solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1, 1))
+    {
+      return 1;
+    }
+    else
+    {
+      setvals[pos] = -1;
+      return 0;
+    }
   }
 }
 
