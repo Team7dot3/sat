@@ -38,7 +38,18 @@ int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in)
     counts[i] = 0;
     setvals[i] = -1;
   }
-  int toReturn = solver(unin->data, nbvars, unin->nbclauses, unin->clause_lengths, counts, setvals, 0);
+  int toReturn;
+  if (solver(unin->data, nbvars, unin->nbclauses, unin->clause_lengths, counts, setvals, 0))
+  {
+    toReturn = 1;
+  }
+  else
+  {
+    setvals[0] = !setvals[0];
+    toReturn = solver(unin->data, nbvars, unin->nbclauses, unin->clause_lengths, counts, setvals, 0);
+  }
+
+
   free(counts);
   free(setvals);
   LOG("solve RETURNING", 2);
@@ -176,6 +187,17 @@ int solver(int ** values, int val_count, int num_clauses, int * clause_length, i
   {
     return 0;
   }
+  if (setvals[pos] < 0)
+  {
+    if (counts[pos] < 0)
+    {
+      setvals[pos] = 0;
+    }
+    else
+    {
+      setvals[pos] = 1;
+    }
+  }
 
   int sat_level = 0;
   int i;
@@ -197,21 +219,14 @@ int solver(int ** values, int val_count, int num_clauses, int * clause_length, i
   {
     return 1;
   }
-  if (counts[pos] < 0)
-  {
-    setvals[pos] = 0;
-  }
-  else
-  {
-    setvals[pos] = 1;
-  }
+
   if (solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1))
   {
     return 1;
   }
   else
   {
-    setvals[pos] = !setvals[pos];
+    setvals[pos + 1] = !setvals[pos + 1];
 
     return solver(values, val_count, num_clauses, clause_length, counts, setvals, pos + 1);
   }
