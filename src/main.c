@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     return 0; 
   }
   
-  UNMOLESTED_INPUT *input = malloc(sizeof(UNMOLESTED_INPUT));
+  INPUT *input = malloc(sizeof(INPUT));
   
   if(input_parser(fp, input) != 1)
   { 

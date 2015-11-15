@@ -55,22 +55,30 @@
   printf(RESET);          \
 }
 #else
-#define LOG(str, color) { /* DO NOTHING */}
+#define LOG(str, color) { /* DO NOTHING */ }
 #endif
 
 /*******************************************************************************************
  * NAME :             INPUT
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      INPUT contains the parsed data values that are ready to be solved.
+ *
+ * CONTENTS :
+ *    int**    data              An array of arrays containing individual clauses of data values.
+ *    int      nbcluases         The number of clauses in the file.
+ *    int*     clause_lengths    An array containing the length of each clause.
+ *    int      nbvars            The maximum and minimum (negated) value in a clause.
+ *    int*     value_sums        The of individual values relative to 0. Ex. input -2, 3, 1 would result in this array [1, -1, 1].
+ *
  */
-typedef struct UNMOLESTED_INPUT
+typedef struct INPUT
 {
   int** data;
   int   nbclauses;
   int*  clause_lengths;
   int   nbvars;
   int*  value_sums;
-} UNMOLESTED_INPUT;
+} INPUT;
 
 #include "input.h"
 #include "solve.h"
