@@ -50,7 +50,7 @@ FILE* check_args(int argc, char *argv[])
  * OUTPUTS :
  *      RETURN : 1 on success, -1 on failure/error
  */
-int input_parser(FILE *fp, UNMOLESTED_INPUT *input)
+int input_parser(FILE *fp, INPUT *input)
 {
   // Finding the size of the file in bytes.
   int file_size = get_file_size(fp);
@@ -386,10 +386,8 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, UNMOLESTED_INPUT *input)
+void input_free(FILE *fp, INPUT *input)
 {
-  LOG("INPUT FREE CALLED", 1);
-  
   // Free all resources after use.
   fclose(fp);
   for(int i = 0; i < input->nbclauses; i++)
@@ -398,6 +396,4 @@ void input_free(FILE *fp, UNMOLESTED_INPUT *input)
   free(input->clause_lengths);
   free(input->value_sums);
   free(input);
-
-  LOG("INPUT FREE RETURNING", 1);
 }

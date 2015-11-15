@@ -44,7 +44,7 @@ FILE* check_args(int argc, char *argv[]);
  * OUTPUTS :
  *      RETURN : 1 on success, -1 on failure/error
  */
-int input_parser(FILE *fp, UNMOLESTED_INPUT *input);
+int input_parser(FILE *fp, INPUT *input);
 
 /*******************************************************************************************
  * NAME :             input_string
@@ -153,6 +153,6 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, UNMOLESTED_INPUT *input);
+void input_free(FILE *fp, INPUT *input);
 
 #endif

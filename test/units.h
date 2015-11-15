@@ -15,8 +15,7 @@ int ACT;
 int RES;
 
 #define GEN_STRUCTS(void) \
-  UNMOLESTED_INPUT in;    \
-  //MOLESTED_INPUT m_in;
+  INPUT in;    \
 
 #define FREE_STRUCTS(in)   \
 {                          \
