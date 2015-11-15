@@ -59,7 +59,7 @@
 #endif
 
 /*******************************************************************************************
- * NAME :             UNMOLESTED_INPUT
+ * NAME :             INPUT
  *
  * DESCRIPTION :      <DESCRIPTION STUBB>
  */
@@ -69,18 +69,8 @@ typedef struct UNMOLESTED_INPUT
   int   nbclauses;
   int*  clause_lengths;
   int   nbvars;
+  int*  value_sums;
 } UNMOLESTED_INPUT;
-
-/*******************************************************************************************
- * NAME :             UNMOLESTED_INPUT
- *
- * DESCRIPTION :      <DESCRIPTION STUBB>
- */
-typedef struct MOLESTED_INPUT
-{
-  int* data;
-  int length;
-} MOLESTED_INPUT;
 
 #include "input.h"
 #include "solve.h"
