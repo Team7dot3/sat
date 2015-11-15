@@ -2,7 +2,7 @@
 #include "../src/sat_types.h"
 
 #define PARSE_FILE(void)        \
-  input_parser(fp, &in, &m_in); \
+  input_parser(fp, &in); \
   close_sat_file(fp);
 
 #define TEST_PATH(void)   \

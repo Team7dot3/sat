@@ -38,18 +38,17 @@ int main(int argc, char *argv[])
     return 0; 
   }
   
-  UNMOLESTED_INPUT *unin = malloc(sizeof(UNMOLESTED_INPUT));
-  MOLESTED_INPUT *in = malloc(sizeof(MOLESTED_INPUT));
+  UNMOLESTED_INPUT *input = malloc(sizeof(UNMOLESTED_INPUT));
   
-  if(input_parser(fp, unin, in) != 1)
+  if(input_parser(fp, input) != 1)
   { 
     LOG("Error parsing input from file.", 3); 
     printf("ERROR\n"); 
-    input_free(fp, unin, in);
+    input_free(fp, input);
     return 0;
   }
 
-  switch(solve(unin, in))
+  switch(solve(input))
   {
     case 1:
       printf("SATISFIABLE\n");
@@ -61,7 +60,8 @@ int main(int argc, char *argv[])
       printf("ERROR\n");
       break;
   }
-  // input_free(fp, unin, in); 
+
+  input_free(fp, input); 
   
   LOG("EXITING SAT SOLVER", 3);
   

@@ -21,16 +21,15 @@
  *
  * INPUTS :
  *      PARAMETERS :   
- *          UNMOLESTED_INPUT  *unin   input
- *          MOLESTED_INPUT    *in     input
+ *          INPUT             *input  input
  *
  * OUTPUTS :
  *      RETURN :
  *          int                       1 on satisfiable, 0 on unsatisfiable, -1 on error
  */
-int solve(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+int solve(UNMOLESTED_INPUT *in);
 int process_or(int* values, int* data, int datalen);
-int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+int process_and(UNMOLESTED_INPUT *in);
 void make_val(int* vals, int input, int num_vals);
 
 #endif

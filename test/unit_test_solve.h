@@ -43,7 +43,7 @@
         NULL;                        \
     }                                \
   }                                  \
-  ACT = solve(&in, &m_in);           \
+  ACT = solve(&in);           \
   FREE_STRUCTS(in);
 
 int test_basic_sat_1(void);
