@@ -34,6 +34,5 @@ int process_and(UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
 void make_val(int* vals, int input, int num_vals);
 int solver(int ** values, int val_count, int num_clauses, int * clause_length, int * counts, int * setvals, int pos);
 int process_clause(int* values, int val_count, int clause_length, int * setvals);
-int printIntArray(int * array, int size);
 
 #endif
