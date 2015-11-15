@@ -43,7 +43,7 @@
         NULL;                        \
     }                                \
   }                                  \
-  ACT = solve(&in, &m_in);           \
+  ACT = solve(&in);           \
   FREE_STRUCTS(in);
 
 int test_basic_sat_1(void);
@@ -53,11 +53,11 @@ int test_sat_4(void);
 int test_basic_unsat_1(void);
 int test_solver(void);
 
-void setup_basic_sat_1(UNMOLESTED_INPUT *in);
-void setup_basic_sat_2(UNMOLESTED_INPUT *in);
-void setup_basic_sat_3(UNMOLESTED_INPUT *in);
-void setup_sat_4(UNMOLESTED_INPUT *in);
-void setup_basic_unsat_1(UNMOLESTED_INPUT *in);
-void setup_basic_unsat_2(UNMOLESTED_INPUT *in);
-void setup_unsat_3(UNMOLESTED_INPUT *in);
-void setup_unsat_4(UNMOLESTED_INPUT *in);
+void setup_basic_sat_1(INPUT *in);
+void setup_basic_sat_2(INPUT *in);
+void setup_basic_sat_3(INPUT *in);
+void setup_sat_4(INPUT *in);
+void setup_basic_unsat_1(INPUT *in);
+void setup_basic_unsat_2(INPUT *in);
+void setup_unsat_3(INPUT *in);
+void setup_unsat_4(INPUT *in);

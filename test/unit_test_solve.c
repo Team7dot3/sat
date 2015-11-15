@@ -66,7 +66,7 @@ int test_solver(void)
   return fails;
 }
 
-void setup_basic_sat_1(UNMOLESTED_INPUT *in) 
+void setup_basic_sat_1(INPUT *in) 
 {
   int nbvars, nbclauses;
 
@@ -88,7 +88,7 @@ void setup_basic_sat_1(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_basic_sat_2(UNMOLESTED_INPUT *in) 
+void setup_basic_sat_2(INPUT *in) 
 {
   int nbvars, nbclauses;
 
@@ -110,7 +110,7 @@ void setup_basic_sat_2(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_basic_sat_3(UNMOLESTED_INPUT *in) 
+void setup_basic_sat_3(INPUT *in) 
 {
   int nbvars, nbclauses;
 
@@ -163,7 +163,7 @@ void setup_basic_sat_3(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_sat_4(UNMOLESTED_INPUT *in)
+void setup_sat_4(INPUT *in)
 {
   int nbvars, nbclauses; 
 
@@ -238,7 +238,7 @@ void setup_sat_4(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_basic_unsat_1(UNMOLESTED_INPUT *in) 
+void setup_basic_unsat_1(INPUT *in) 
 {
   int nbvars, nbclauses;
 
@@ -262,7 +262,7 @@ void setup_basic_unsat_1(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_basic_unsat_2(UNMOLESTED_INPUT *in) 
+void setup_basic_unsat_2(INPUT *in) 
 {
   int nbvars, nbclauses;
   
@@ -320,7 +320,7 @@ void setup_basic_unsat_2(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_unsat_3(UNMOLESTED_INPUT *in)
+void setup_unsat_3(INPUT *in)
 {
   int nbvars, nbclauses; 
 
@@ -395,7 +395,7 @@ void setup_unsat_3(UNMOLESTED_INPUT *in)
   in->nbclauses = nbclauses;
 }
 
-void setup_unsat_4(UNMOLESTED_INPUT *in)
+void setup_unsat_4(INPUT *in)
 {
   int nbvars, nbclauses; 
 

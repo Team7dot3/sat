@@ -39,13 +39,12 @@ FILE* check_args(int argc, char *argv[]);
  * INPUTS :
  *      PARAMETERS :   
  *          FILE              *fp     file
- *          UNMOLESTED_INPUT  *unin   input
- *          MOLESTED_INPUT    *in     input
+ *          INPUT             *input  input
  *
  * OUTPUTS :
  *      RETURN : 1 on success, -1 on failure/error
  */
-int input_parser(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+int input_parser(FILE *fp, INPUT *input);
 
 /*******************************************************************************************
  * NAME :             input_string
@@ -132,14 +131,13 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
  *          int**       data                    The pointer to the set of pointers to the clauses.
  *          int*        nbclauses               The number of expected clauses.
  *          int*        clause_lengths          The array of clause lengths.
- *          int*        unit_clauses            The array of clauses of 1 value.
- *          int*        unit_clauses_length     The number of unit clauss.
+ *          int*        value_sums              The array of values of units sumed. Ex. 1 and -1 would result in 0 in the '1's index.
  *
  * OUTPUTS :
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* unit_clauses, int* unit_clauses_length);
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* value_sums);
 
 /*******************************************************************************************
  * NAME :             input_free
@@ -149,13 +147,12 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  * INPUTS :
  *      PARAMETERS :   
  *          FILE              *fp     file
- *          UNMOLESTED_INPUT  *unin   input
- *          MOLESTED_INPUT    *in     input
+ *          INPUT             *input  input
  *
  * OUTPUTS :
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, UNMOLESTED_INPUT *unin, MOLESTED_INPUT *in);
+void input_free(FILE *fp, INPUT *input);
 
 #endif

@@ -71,7 +71,7 @@ int test_clause_lengths_size(void)
 int test_zero_vars_return(void) 
 {
   GEN_BASIC_INPUT(0, 1);
-  RESULT("test_zero_vars_return   ", (EXP = 1) == (ACT = (int)input_parser(fp, &in, &m_in)));
+  RESULT("test_zero_vars_return   ", (EXP = 1) == (ACT = (int)input_parser(fp, &in)));
 }
 
 int test_zero_vars_count(void) 
@@ -84,7 +84,7 @@ int test_zero_vars_count(void)
 int test_zero_clauses_return(void) 
 {
   GEN_BASIC_INPUT(1, 0);
-  RESULT("test_zero_clauses_return", (EXP = 1) == (ACT = (int)input_parser(fp, &in, &m_in)));
+  RESULT("test_zero_clauses_return", (EXP = 1) == (ACT = (int)input_parser(fp, &in)));
 }
 
 int test_zero_clauses_count(void) 
