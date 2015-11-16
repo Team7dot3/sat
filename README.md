@@ -9,12 +9,14 @@ Inputs are expected to be in the DIMACS format. All other inputs are ignored.
 The Makefile includes various commands for compiling the source code. 
 
 ```
-make        # cleans, compiles, and runs the program with input 'txt/input.txt'
-make debug  # cleans, compiles, and runs the program in DEBUG or LOG mode
-make sat    # compiles source
-make sat_d  # compiles source in DEBUG or LOG mode
-make solve  # runs executable with 'txt/input.txt'
-make clean  # removes executables, and temporary files
+make           # cleans and compiles the source
+make solve     # cleans, compiles, and runs executable with 'txt/input.txt'
+make debug     # cleans, compiles the source with DEBUG/LOG mode
+make test      # cleans and compiles the source with testing code
+make testrun   # cleans, compiles source with tests, and runs the executable against 'bin/unit_txt.0'
+make diff_test # cleans, compiles, and runs executable with generated tests and compares output with minisat
+make rebuild   # cleans and rebuilds the project
+make clean     # removes executables, and temporary files
 ```
 
 # To Run
