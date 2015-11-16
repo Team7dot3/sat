@@ -24,6 +24,10 @@
 #define KRED  "\x1B[31m"
 #define RESET "\033[0m"
 
+#define SATISFIABLE()   { printf("SATISFIABLE\n");   }
+#define UNSATISFIABLE() { printf("UNSATISFIABLE\n"); }
+#define ERROR()         { printf("ERROR\n");         }
+
 /*******************************************************************************************
  * NAME :             LOG
  *
@@ -71,7 +75,7 @@
  *    int*     value_sums        The of individual values relative to 0. Ex. input -2, 3, 1 would result in this array [1, -1, 1].
  *
  */
-typedef struct INPUT
+typedef struct input
 {
   int** data;
   int   nbclauses;

@@ -15,6 +15,11 @@
 #include "sat_types.h"
 #include <string.h>
 
+#define CHECK_PTR(ptr)     \
+{                          \
+  if (!ptr) { return -1; } \
+}                          \
+
 /*******************************************************************************************
  * NAME :             check_args
  *

@@ -1,7 +1,7 @@
 #include "units.h"
 #include "../src/sat_types.h"
 
-#define PARSE_FILE(void)        \
+#define PARSE_FILE(void) \
   input_parser(fp, &in); \
   close_sat_file(fp);
 

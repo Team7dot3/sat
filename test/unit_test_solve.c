@@ -86,6 +86,8 @@ void setup_basic_sat_1(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_basic_sat_2(INPUT *in) 
@@ -108,6 +110,8 @@ void setup_basic_sat_2(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_basic_sat_3(INPUT *in) 
@@ -161,6 +165,8 @@ void setup_basic_sat_3(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_sat_4(INPUT *in)
@@ -236,6 +242,8 @@ void setup_sat_4(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_basic_unsat_1(INPUT *in) 
@@ -260,6 +268,8 @@ void setup_basic_unsat_1(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_basic_unsat_2(INPUT *in) 
@@ -318,6 +328,8 @@ void setup_basic_unsat_2(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_unsat_3(INPUT *in)
@@ -393,6 +405,8 @@ void setup_unsat_3(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
 }
 
 void setup_unsat_4(INPUT *in)
@@ -435,4 +449,17 @@ void setup_unsat_4(INPUT *in)
   // set ints
   in->nbvars = nbvars;
   in->nbclauses = nbclauses;
+
+  setup_value_sums(in);
+}
+
+void setup_value_sums(INPUT *in)
+{
+  int i;
+
+  in->value_sums = malloc(sizeof(int) * in->nbvars);
+  for (i = 0; i < in->nbvars; i++)
+  {
+    in->value_sums[i] = 0;
+  }
 }

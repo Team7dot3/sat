@@ -52,44 +52,46 @@ FILE* check_args(int argc, char *argv[])
  */
 int input_parser(FILE *fp, INPUT *input)
 {
+  int i, file_size, *nbvar, *nbclauses, **data, *clause_lengths, *value_sums;
+  char *line;
+
   // Finding the size of the file in bytes.
-  int file_size = get_file_size(fp);
+  file_size = get_file_size(fp);
 
   // Pass over comments.
-  char* line = parse_comments(fp, file_size);
+  line = parse_comments(fp, file_size);
 
-  int* nbvar               = malloc(sizeof(int)); // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
-  if(!nbvar) { return -1; }
+  nbvar = malloc(sizeof(int)); // ndicates variables will be from [-1, -nbvar] and [1, nbvar].
+  CHECK_PTR(nbvar);
   *nbvar = 0;
 
-  int* nbclauses           = malloc(sizeof(int)); // indicates the number of rows (clauses), indicated by the number of zeros.
-  if(!nbvar) { return -1; }
+  nbclauses = malloc(sizeof(int)); // indicates the number of rows (clauses), indicated by the number of zeros.
+  CHECK_PTR(nbclauses);
   *nbclauses = 0;
 
-  if(parse_cnf_header(line, nbvar, nbclauses) != 1)
-  { return -1; }
+  if (parse_cnf_header(line, nbvar, nbclauses) != 1) { return -1; }
 
-  int** data               = malloc(sizeof(int)*(*nbclauses)*(*nbvar));
-  if(!data) { return -1; }
+  data = malloc(sizeof(int) * (*nbclauses)*(*nbvar));
+  CHECK_PTR(data);
 
-  int* clause_lengths      = malloc(sizeof(int)*(*nbclauses));
-  if(!clause_lengths) { return -1; }
+  clause_lengths = malloc(sizeof(int) * (*nbclauses));
+  CHECK_PTR(clause_lengths);
 
-  int* value_sums          = malloc(sizeof(int)*((*nbvar)));
-  if(!value_sums) { return -1; }
-  for(int i = 0; i < *nbvar; i++) // Load array with 0s.
-  { value_sums[i] = 0; }
+  value_sums = malloc(sizeof(int) * ((*nbvar)));
+  CHECK_PTR(value_sums);
+
+  // Load array with 0s.
+  for (i = 0; i < *nbvar; i++) { value_sums[i] = 0; }
 
   // Loops over all clauses. 
-  if(parse_clauses(fp, file_size, data, nbclauses, clause_lengths, value_sums) != 1)
-  { return -1; }  
+  if (parse_clauses(fp, file_size, data, nbclauses, clause_lengths, value_sums) != 1) { return -1; }  
 
   // Load values into structs.
-  input->data = data;
-  input->nbclauses = *nbclauses; 
-  input->nbvars = *nbvar;
+  input->data           = data;
+  input->nbclauses      = *nbclauses; 
+  input->nbvars         = *nbvar;
   input->clause_lengths = clause_lengths;
-  input->value_sums = value_sums;
+  input->value_sums     = value_sums;
 
   free(nbvar);
   free(nbclauses);
@@ -119,9 +121,10 @@ int input_parser(FILE *fp, INPUT *input)
 char* input_string(FILE* fp, size_t size)
 {
     //The size is extended by the input with the value of the provisional.
-    char *str;
-    int ch;
     size_t len = 0;
+    int    ch;
+    char  *str;
+    
     str = (char*)malloc(size); //size is start size
     if(!str)
     {
@@ -219,10 +222,9 @@ char* parse_comments(FILE* fp, int file_size)
  */
 int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
 {
-  char* end_ptr; // For error checking strtol.
+  char *end_ptr, *split_problem_line;
 
-  // The "problem" line.
-  char* split_problem_line = strtok(line, " ");
+  split_problem_line = strtok(line, " ");
 
   // This section performs input validation on the "problem" line
   // aka "p cnf nbvar nbclauses"
@@ -244,17 +246,13 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
         { 
           free(line);/* "problem" line parse successful. */ 
         }
-        else
-        { return -1; }
+        else { return -1; }
       }
-      else
-      { return -1; }
+      else { return -1; }
     }
-    else
-    { return -1; }
+    else { return -1; }
   }
-  else
-  { return -1; }
+  else { return -1; }
   return 1;
 }
 
@@ -279,38 +277,32 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
  */
 int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* value_sums)
 {
-  int current_data_index = 0;
-  int current_clause_index = 0;
-  int clause_length = 0;
+  int current_data_index, current_clause_index, clause_length, actual_clause_count, line_size, clause_value;
+  char *end_ptr, *line, *line_copy, *split_clause;
 
-  int actual_clause_count = 0;
+  current_data_index = current_clause_index = clause_length = actual_clause_count = line_size = clause_value = 0;
 
-  char* end_ptr; // For error checking strtol.
-
-  char* line = input_string(fp, file_size);
-
-  while(line != NULL && strcmp(line, ""))
+  line = input_string(fp, file_size);
+  while (line != NULL && strcmp(line, ""))
   {
     actual_clause_count++;
 
-    if(actual_clause_count > *nbclauses) // Prevents over writing memory.
+    if (actual_clause_count > *nbclauses) // Prevents over writing memory.
     {
       LOG("Actual clause count has exceeded expected clause count (nbclauses).", 3); 
       return -1; 
     }
 
     // Create copy of line because strtok() consumes line during count.
-    int line_size = strlen(line);
-
-    char* line_copy = malloc(line_size + 1);
+    line_size = strlen(line);\
+    line_copy = malloc(line_size + 1);
     line_copy[line_size] = '\0';
 
     memcpy(line_copy, line, line_size);
-
-    char* split_clause = strtok(line, " ");
+    split_clause = strtok(line, " ");
 
     // Count the number of values in a clause.
-    while(split_clause != NULL)
+    while (split_clause != NULL)
     {
       clause_length++;
       split_clause = strtok (NULL, " "); // Increment to next value.
@@ -321,30 +313,30 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
     // Sets clause length in clause_lengths array.
     clause_lengths[current_data_index] = clause_length;
-
-    int* clause = (int *)malloc(sizeof(int) * clause_length); // A clause to hold values.//
-
-    // Start to load values. 
-    split_clause = strtok(line_copy, " ");
-    
+    int* clause = (int *)malloc(sizeof(int) * clause_length);
+    split_clause = strtok(line_copy, " ");    
 
     // Read clause values from char* and place into clause[].
-    while(split_clause != NULL)
+    while (split_clause != NULL)
     {
       // Tries to converts char* to int.
-      int clause_value = strtol(split_clause, &end_ptr, 0); 
+      clause_value = strtol(split_clause, &end_ptr, 0); 
       
-      if(clause_value != 0)
+      if (clause_value != 0)
       {
         clause[current_clause_index] = clause_value;
 
-        if(clause_value < 0)
-        { value_sums[abs(clause_value) - 1] += -1; }
+        if (clause_value < 0)
+        { 
+          value_sums[abs(clause_value) - 1] += -1; 
+        }
         else
-        { value_sums[abs(clause_value) - 1] +=  1; }
+        { 
+          value_sums[abs(clause_value) - 1] +=  1; 
+        }
       }
 
-      if(*end_ptr != '\0' && clause_value != 0) { return -1; } // Verify int value.
+      if( *end_ptr != '\0' && clause_value != 0) { return -1; } // Verify int value.
 
       split_clause = strtok (NULL, " "); // Increment to next value.
       current_clause_index++; // Increment the clause index.
@@ -390,8 +382,9 @@ void input_free(FILE *fp, INPUT *input)
 {
   // Free all resources after use.
   fclose(fp);
-  for(int i = 0; i < input->nbclauses; i++)
-  { free(input->data[i]); }
+  
+  for (int i = 0; i < input->nbclauses; i++) { free(input->data[i]); }
+  
   free(input->data);
   free(input->clause_lengths);
   free(input->value_sums);
