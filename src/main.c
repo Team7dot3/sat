@@ -14,7 +14,7 @@
 /*******************************************************************************************
  * NAME :             main
  *
- * DESCRIPTION :      <DESCRIPTION STUBB>
+ * DESCRIPTION :      Main entry point for the SAT solver.
  *
  * INPUTS :
  *      PARAMETERS :   
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   if(input_parser(fp, input) != 1)
   { 
     LOG("Error parsing input from file.", 3); 
-    printf("ERROR\n"); 
+    ERROR();
     input_free(fp, input);
     return 0;
   }
@@ -51,13 +51,13 @@ int main(int argc, char *argv[])
   switch(solve(input))
   {
     case 1:
-      printf("SATISFIABLE\n");
+      SATISFIABLE();
       break;
     case 0:
-      printf("UNSATISFIABLE\n");
+      UNSATISFIABLE();
       break;
     case -1:
-      printf("ERROR\n");
+      ERROR();
       break;
   }
 

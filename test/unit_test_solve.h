@@ -43,8 +43,10 @@
         NULL;                        \
     }                                \
   }                                  \
-  ACT = solve(&in);           \
+  ACT = solve(&in);                  \
   FREE_STRUCTS(in);
+
+void setup_value_sums(INPUT *in);
 
 int test_basic_sat_1(void);
 int test_basic_sat_2(void);

@@ -15,7 +15,7 @@ int ACT;
 int RES;
 
 #define GEN_STRUCTS(void) \
-  INPUT in;    \
+  INPUT in;               \
 
 #define FREE_STRUCTS(in)   \
 {                          \

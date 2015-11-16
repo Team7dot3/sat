@@ -18,11 +18,11 @@ int test_data(void)
       // in.data[i][j] = j + 1;                           // SANITY CHECK, THIS FORCES TEST TO PASS
       if ((ACT = in.data[i][j]) != (EXP = j + 1)) 
       { 
-        FAIL("test_data")
+        FAIL("test_data            ")
       }
     }
   }
-  PASS("test_data")
+  PASS("test_data                  ")
 }
 
 // WARNING !!! This test may seg fault if it fails!
@@ -40,10 +40,10 @@ int test_clause_lengths(void)
     // in.clause_lengths[i] = i + 1;                        // SANITY CHECK, THIS FORCES TEST TO PASS
     if ((ACT = in.clause_lengths[i]) != (EXP = i + 1)) 
     {
-      FAIL("test_clause_lengths");
+      FAIL("test_clause_lengths    ");
     }
   }
-  PASS("test_clause_lengths");
+  PASS("test_clause_lengths        ");
 }
 
 int test_clauses_count(void) 
@@ -107,8 +107,8 @@ int test_input_parser(void)
   fails += test_clause_lengths_size();
   fails += test_vars_count();
   fails += test_clauses_count();
-  // fails += test_clause_lengths(); // WARNING !!! This test may seg fault if it fails!
-  // fails += test_data();           // WARNING !!! This test may seg fault if it fails!
+  fails += test_clause_lengths(); // WARNING !!! This test may seg fault if it fails!
+  fails += test_data();           // WARNING !!! This test may seg fault if it fails!
 
   return fails;
 }
@@ -173,7 +173,7 @@ FILE* write_ladder_sat_file(char *path, int nbvars, int nbclauses)
   if ((fp = fopen(path, "w"))) 
   {
     fprintf(fp, "p cnf %d %d\n", nbvars, nbclauses);
-    printf("writing nbvars = %d and nbclauses = %d \n", nbvars, nbclauses);
+    // printf("writing nbvars = %d and nbclauses = %d \n", nbvars, nbclauses);
 
     for (i = 0; i < nbclauses; i++) 
     {

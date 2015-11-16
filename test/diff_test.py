@@ -14,9 +14,9 @@ import time
 INPUT_PATH = 'txt/diff_test.txt'
 LOG_PATH   = 'txt/log_diff_test.txt'
 EXE_PATH   = 'bin/sat_solver.o'
-MINI_PATH  = 'extras/minisat/core/minisat'
-MAX_VARS   = 10 # The maximum number of variables and clauses
-TEST_RUNS  = 1000 # The number of tests to run
+MINI_PATH  = 'minisat'
+MAX_VARS   = 40 # The maximum number of variables and clauses
+TEST_RUNS  = 10000 # The number of tests to run
 
 def exec_process(args):
   """
@@ -161,14 +161,17 @@ class RandomTesting:
 
     for i in range(0, self.itrs):
       self.gen_rand_input()
-      prev_pass = passed
-      passed   += self.test()
+      prev_pass  = passed
+      start_time = time.time()
+      passed    += self.test()
+      end_time   = time.time()
       if prev_pass == passed:
         input_file  = None
         with open(self.path, 'r') as f:
           input_file = f.read()
-        log.write('Test FAILED with input:\n' + input_file)
-
+        log.write('Test FAILED with input:\n' + input_file + '\n  run time = ' + str(end_time - start_time))
+      else:
+        log.write('Test number [' + str(i) + '] PASSED.\n  run time = ' + str(end_time - start_time))
     log.close()
     return passed
 
