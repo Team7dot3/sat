@@ -161,14 +161,17 @@ class RandomTesting:
 
     for i in range(0, self.itrs):
       self.gen_rand_input()
-      prev_pass = passed
-      passed   += self.test()
+      prev_pass  = passed
+      start_time = time.time()
+      passed    += self.test()
+      end_time   = time.time()
       if prev_pass == passed:
         input_file  = None
         with open(self.path, 'r') as f:
           input_file = f.read()
-        log.write('Test FAILED with input:\n' + input_file)
-
+        log.write('Test FAILED with input:\n' + input_file + '\n  run time = ' + str(end_time - start_time))
+      else:
+        log.write('Test number [' + str(i) + '] PASSED.\n  run time = ' + str(end_time - start_time))
     log.close()
     return passed
 
