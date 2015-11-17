@@ -72,7 +72,8 @@
  *    int      nbcluases         The number of clauses in the file.
  *    int*     clause_lengths    An array containing the length of each clause.
  *    int      nbvars            The maximum and minimum (negated) value in a clause.
- *    int*     value_sums        The of individual values relative to 0. Ex. input -2, 3, 1 would result in this array [1, -1, 1].
+ *    int*     pos_val_sums      The number of each variable that is positive
+ *    int*     neg_val_sums      The number of each variable that is negative
  *
  */
 typedef struct input
@@ -81,7 +82,8 @@ typedef struct input
   int   nbclauses;
   int*  clause_lengths;
   int   nbvars;
-  int*  value_sums;
+  int*  pos_val_sums;
+  int*  neg_val_sums;
 } INPUT;
 
 #include "input.h"

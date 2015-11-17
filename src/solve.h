@@ -68,10 +68,10 @@
   val = setvals[variable - 1];                                    \
 }
 
-#define UPDATE_SET_POSITION(setvals, value_sums, pos, try_num)                    \
+#define UPDATE_SET_POSITION(setvals, pos_val_sums, neg_val_sums, pos, try_num)                    \
 {                                                                                 \
   /* exclusive or so that when the try_num changes, we'll try the "other" one. */ \
-  if (try_num ^ (value_sums[pos] >= 0))                                           \
+  if (try_num ^ (pos_val_sums[pos] - neg_val_sums[pos] >= 0))                                           \
   {                                                                               \
     /* this sets the current variable to "false" */                               \
     setvals[pos] = 0;                                                             \

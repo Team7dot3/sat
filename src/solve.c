@@ -154,7 +154,7 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
   i = sat_level = clause_result = 0;
 
   CHECK_BASE_CASE(pos, in->nbvars)
-  UPDATE_SET_POSITION(setvals, in->value_sums, pos, try_num);
+  UPDATE_SET_POSITION(setvals, in->pos_val_sums, in->neg_val_sums, pos, try_num);
 
   for (i = 0; i < in->nbclauses; i++)
   {
