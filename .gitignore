@@ -9,9 +9,13 @@ txt/*.txt
 .DS_Store
 
 # Ignore Windows specific files
-.exe
-.pdb
-.obj
-.idb
-.ilk
-.sdf
+*.exe
+*.pdb
+*.obj
+*.idb
+*.ilk
+*.sdf
+*.opensdf
+*.user
+*.suo
+*.log
