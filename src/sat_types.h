@@ -19,11 +19,18 @@
 /*******************************************************************************************
  * Color codes for printing to stdout.
  */
+#ifndef WIN32
 #define KGRN  "\x1b[32m"
 #define KCYN  "\x1B[36m"
 #define KRED  "\x1B[31m"
 #define RESET "\033[0m"
-
+#else
+//Windows doesn't support ANSI color standards, so I'm basically removing the functionality on Windows
+#define KGRN "DEBUG-GREEN:"
+#define KCYN "DEBUG-CYAN :"
+#define KRED "DEBUG-RED  :"
+#define RESET ""
+#endif
 #define SATISFIABLE()   { printf("SATISFIABLE\n");   }
 #define UNSATISFIABLE() { printf("UNSATISFIABLE\n"); }
 #define ERROR()         { printf("ERROR\n");         }
