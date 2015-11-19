@@ -4,17 +4,17 @@ build:
 # \
 !IFDEF _TEST
 # \
-	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /Zi src\input.c src\solve.c test\unit_test.c test\unit_test_check_args.c test\unit_test_input_parser.c test\unit_test_solve.c /Febin\unit_test.exe /Fdbin\unit_test.pdb
+	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /DWIN32 /Zi src\input.c src\solve.c test\unit_test.c test\unit_test_check_args.c test\unit_test_input_parser.c test\unit_test_solve.c /Febin\unit_test.exe /Fdbin\unit_test.pdb
 # \
 !ELSE
 # \
 !IFDEF _DEBUG
 # \
-	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /Zi src\main.c src\input.c src\solve.c /Febin\sat_solver.exe /Fdbin\sat_solver.pdb
+	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /DWIN32 /Zi src\main.c src\input.c src\solve.c /Febin\sat_solver.exe /Fdbin\sat_solver.pdb
 # \
 !ELSE
 # \
-	cl /Wall /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 src\main.c src\input.c src\solve.c /Febin\sat_solver.exe
+	cl /Wall /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DWIN32 src\main.c src\input.c src\solve.c /Febin\sat_solver.exe
 # \
 !ENDIF
 # \
