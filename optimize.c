@@ -9,7 +9,7 @@
 * PURPOSE :    Written for CS 5959 Writing Solid Code, Fall 2015
 *              University of Utah
 */
-#include "preprocess.h"
+#include "optimize.h"
 
 /*******************************************************************************************
 * NAME :             preprocess
@@ -24,7 +24,7 @@
 *      RETURN :
 *          int                       1 on success, -1 on error
 */
-int preprocess(INPUT *in)
+int optimize(INPUT *in)
 {
   int** data = in->data;
   int nbclauses = in->nbclauses;
@@ -32,14 +32,14 @@ int preprocess(INPUT *in)
   int nbvars = in->nbvars;
   int pos_val_sums = in->pos_val_sums;
   int neg_val_sums = in->neg_val_sums;
-  //Preprocessing types
+  //Optimization types
   //
-  //Preprocessing Unit propigation
+  //Unit propigation
   //
-  //Preprocessing Pure Literals
+  //Pure Literals
   //If a variable exists as only positive, or only negative, all rows it exists on can be removed. (They can always evaluate to true from that one variable)
   //
-  //Preprocessing Pure Clauses
+  //Pure Clauses
   //If a clause contains both positive and negative values for a variable, remove the clause.
   //
   //Increase chance of contradictions early on.
@@ -88,6 +88,11 @@ int unit_propigation(INPUT *in)
 }
 
 int set_variable(INPUT *in, int variable, int set)
+{
+
+}
+
+INPUT* make_copy(INPUT *in)
 {
 
 }

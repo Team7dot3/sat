@@ -36,7 +36,7 @@
     <ClCompile Include="test\unit_test_solve.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="preprocess.c">
+    <ClCompile Include="optimize.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClInclude Include="test\unit_test_solve.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="preprocess.h">
+    <ClInclude Include="optimize.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

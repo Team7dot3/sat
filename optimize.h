@@ -9,15 +9,15 @@
 * PURPOSE :    Written for CS 5959 Writing Solid Code, Fall 2015
 *              University of Utah
 */
-#ifndef PREPROCESS_H
-#define PREPROCESS_H
+#ifndef OPTIMIZE_H
+#define OPTIMIZE_H
 
 #include "sat_types.h"
 
 
 
 /*******************************************************************************************
-* NAME :             preprocess
+* NAME :             optimize
 *
 * DESCRIPTION :      This function rewrites SAT input into an equivilent SAT input that is easier to solve.
 *
@@ -29,7 +29,7 @@
 *      RETURN :
 *          int                       1 on success, -1 on error
 */
-int preprocess(INPUT *in);
+int optimize(INPUT *in);
 
 
 #endif

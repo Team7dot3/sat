@@ -387,11 +387,9 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, INPUT *input)
+void input_free(INPUT *input)
 {
   // Free all resources after use.
-  fclose(fp);
-  
   for (int i = 0; i < input->nbclauses; i++) { free(input->data[i]); }
   
   free(input->data);
@@ -399,4 +397,9 @@ void input_free(FILE *fp, INPUT *input)
   free(input->pos_val_sums);
   free(input->neg_val_sums);
   free(input);
+}
+
+void file_free(FILE *fp)
+{
+	fclose(fp);
 }

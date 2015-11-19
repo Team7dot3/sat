@@ -44,10 +44,11 @@ int main(int argc, char *argv[])
   { 
     LOG("Error parsing input from file.", 3); 
     ERROR();
-    input_free(fp, input);
+	file_free(fp);
+    input_free(input);
     return 0;
   }
-
+  file_free(fp);
   switch(solve(input))
   {
     case 1:
@@ -60,8 +61,7 @@ int main(int argc, char *argv[])
       ERROR();
       break;
   }
-
-  input_free(fp, input); 
+  input_free(input); 
   
   LOG("EXITING SAT SOLVER", 3);
   
