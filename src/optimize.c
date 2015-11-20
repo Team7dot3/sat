@@ -203,6 +203,7 @@ int remove_clause(INPUT *in, int clausenum)
   while (remove_variable(in, clausenum, 0) == 1);//calls the remove variable function on all the variables in the clause to remove them (we ignore the unsatisfiable condition, because we're removing the clause)
   free(in->data[clausenum]);//since we're removing our reference to it, we need to free it.
   in->data[clausenum] = in->data[in->nbclauses - 1];//move the last clause into the position of the clause we're removing
+  in->clause_lengths[clausenum] = in->clause_lengths[in->nbclauses - 1];//and move it's count too.
   in->nbclauses = in->nbclauses - 1;//decrease the length of our clauses
   if (in->nbclauses == 0)
   {
