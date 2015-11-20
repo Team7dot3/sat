@@ -213,5 +213,50 @@ int remove_clause(INPUT *in, int clausenum)
 
 INPUT* input_copy(INPUT *in)
 {
+  INPUT *cp_in = malloc(sizeof(INPUT));
 
+  int   clause, var, **cp_data, *cp_clause_lengths, *cp_pos_val_sums, *cp_neg_val_sums;
+  int** data           = in->data;
+  int   nbclauses      = in->nbclauses;
+  int*  clause_lengths = in->clause_lengths;
+  int   nbvars         = in->nbvars;
+  int*  pos_val_sums   = in->pos_val_sums;
+  int*  neg_val_sums   = in->neg_val_sums;
+
+  cp_data = malloc(sizeof(int) * (*nbclauses)*(*nbvar));
+  CHECK_PTR(cp_data);
+
+  cp_clause_lengths = malloc(sizeof(int) * (*nbclauses));
+  CHECK_PTR(cp_clause_lengths);
+
+  cp_pos_val_sums = malloc(sizeof(int) * ((*nbvar)));
+  CHECK_PTR(cp_pos_val_sums);
+
+  cp_neg_val_sums = malloc(sizeof(int) * ((*nbvar)));
+  CHECK_PTR(cp_neg_val_sums);
+  
+  for (clause = 0; clause < nbclauses; clause++)
+  {
+    cp_clause_lengths[clause] = clause_lengths[clause];
+    
+    for (var = 0; var < clause_lengths[clause]; var++)
+    {
+      cp_data[clause][var] = data[clause][var];
+    }
+  }
+  
+  for (var = 0; var < nbvars; var++)
+  {
+    cp_pos_val_sums[var] = pos_val_sums[var];
+    cp_neg_val_sums[var] = neg_val_sums[var];
+  }
+  
+  cp_in -> data           = cp_data;
+  cp_in -> nbvars         = nbvars;
+  cp_in -> nbclauses      = nbclauses;
+  cp_in -> clause_lengths = cp_clause_lengths;
+  cp_in -> pos_val_sums   = cp_pos_val_sums;
+  cp_in -> neg_val_sums   = cp_neg_val_sums; 
+ 
+  return *cp_in;
 }
