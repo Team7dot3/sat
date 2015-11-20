@@ -77,8 +77,11 @@ int solve(INPUT *in)
 {
   int to_return = -1;
   LOG("SOLVE CALLED", 2);
-  int optisolve;
-  while ((optisolve = optimize(in)) == 1);
+  int optisolve = optimize(in, 0);
+  while (optisolve == 1)
+  {
+    optisolve = optimize(in, 1);
+  }
   if (optisolve == 2)
   {
     to_return = 0;

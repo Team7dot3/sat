@@ -18,26 +18,36 @@
 *
 * INPUTS :
 *      PARAMETERS :
-*          INPUT  *in   input
+*          INPUT  *in        input
+*          int    run_type   0 if it's the first run, 1 afterwards
 *
 * OUTPUTS :
 *      RETURN :
 *          int                       3 on satisfiable, 2 on unsatisfiable/contradiction, 1 on optimized, 0 on couldn't optimize, -1 on error
 */
-int optimize(INPUT *in)
+int optimize(INPUT *in, int run_type)
 {
   LOG("OPTIMIZE CALLED", 2);
   int did_optimize = 0;
-  //int** data = in->data;
-  //int nbclauses = in->nbclauses;
-  //int* clause_lengths = in->clause_lengths;
-  //int nbvars = in->nbvars;
-  //int* pos_val_sums = in->pos_val_sums;
-  //int* neg_val_sums = in->neg_val_sums;
-  //Optimization types
-  //
-  //Unit Propagation
   int var;
+  //Pure Clauses
+  //If a clause contains both positive and negative values for a variable, remove the clause.
+  //We probably only need to do this once ever.
+  if (!run_type)
+  {
+    var = pure_clauses(in);
+    if (var == 1)
+    {
+      did_optimize = 1;
+    }
+    ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
+    if (var == 3)
+    {
+      LOG("OPTIMIZE SOLVED", 2);
+      return 3;
+    }
+  }
+  //Unit Propagation
   while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
   {
     did_optimize = 1;
@@ -64,10 +74,6 @@ int optimize(INPUT *in)
     LOG("OPTIMIZE SOLVED", 2);
     return 3;
   }
-  //Pure Clauses
-  //If a clause contains both positive and negative values for a variable, remove the clause.
-  //We probably only need to do this once ever.
-  //
   //Increase chance of contradictions early on.
   //Reorder rows from smallest to largest
   //
@@ -157,6 +163,56 @@ int pure_literals(INPUT *in)
   return toReturn;
 }
 
+int pure_clauses(INPUT *in)
+{
+  int i;
+  int removed_a_clause = 0;
+  for (i = 0; i < in->nbclauses; i++)
+  {
+    int j;
+    int is_a_pure_clause = 0;
+    int* counts = malloc(sizeof(int) * in->nbvars);
+    for (j = 0; j < in->nbvars; j++)//initialize to 0
+    {
+      counts[j] = 0;
+    }
+    for (j = 0; j < in->clause_lengths[i]; j++)
+    {
+      int var = in->data[i][j];
+      if (var > 0)
+      {
+        counts[var - 1]++;
+        if (!counts[var - 1])
+        {
+          is_a_pure_clause = 1;
+          break;
+        }
+      }
+      else
+      {
+        var = 0 - var;
+        counts[var - 1]--;
+        if (!counts[var - 1])
+        {
+          is_a_pure_clause = 1;
+          break;
+        }
+      }
+    }
+    free(counts);
+    if (is_a_pure_clause)
+    {
+      int var = remove_clause(in, i--);//remove the clause, and go back one so when we increment, we go to the "next" clause
+      if (var == 3)//the case where we've removed all the clauses
+      {
+        return 3;
+      }
+      removed_a_clause = 1;
+    }
+  }
+  return removed_a_clause;
+}
+
 /*******************************************************************************************
 * NAME :             set_variable
 *
@@ -190,14 +246,18 @@ int set_variable(INPUT *in, int variable, int set)
         {
           var = remove_clause(in, i--);//remove the clause, and go back one so when we increment, we go to the "next" clause
           if (var == 3)//the case where we've removed all the clauses
+          {
             return 3;
+          }
           break;//break out of the inner for loop
         }
         else //variable set to false
         {
           var = remove_variable(in, i, j--);//remove the variable, and go back one in the inner loop (we go back one in case there's a variable that is equal and opposite)
           if (var == 2)//the case where we've removed all the variables
+          {
             return 2;
+          }
           continue;
         }
       }
@@ -207,14 +267,18 @@ int set_variable(INPUT *in, int variable, int set)
         {
           var = remove_variable(in, i, j--);//remove the variable, and go back one in the inner loop (we go back one in case there's a variable that is equal and opposite)
           if (var == 2)//the case where we've removed all the variables
+          {
             return 2;
+          }
           continue;
         }
         else
         {
           var = remove_clause(in, i--);//remove the clause, and go back one so when we increment, we go to the "next" clause
           if (var == 3)//the case where we've removed all the clauses
+          {
             return 3;
+          }
           break;//break out of the inner for loop
         }
       }
