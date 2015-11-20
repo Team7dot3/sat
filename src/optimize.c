@@ -178,7 +178,6 @@ int set_variable(INPUT *in, int variable, int set)
 
 int remove_variable(INPUT *in, int clausenum, int varposnum)
 {
-  int i;
   int var = in->data[clausenum][varposnum];
   if (var > 0)
   {
@@ -214,5 +213,5 @@ int remove_clause(INPUT *in, int clausenum)
 
 INPUT* input_copy(INPUT *in)
 {
-
+  return 0;
 }
