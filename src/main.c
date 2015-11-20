@@ -31,39 +31,39 @@ int main(int argc, char *argv[])
 
   FILE* fp = check_args(argc, argv);
 
-  if(!fp) 
-  { 
-    LOG("Error while opening/reading file.", 3); 
+  if (!fp)
+  {
+    LOG("Error while opening/reading file.", 3);
     printf("ERROR\n");
-    return 0; 
+    return 0;
   }
-  
+
   INPUT *input = malloc(sizeof(INPUT));
-  
-  if(input_parser(fp, input) != 1)
-  { 
-    LOG("Error parsing input from file.", 3); 
+
+  if (input_parser(fp, input) != 1)
+  {
+    LOG("Error parsing input from file.", 3);
     ERROR();
-	file_free(fp);
+    file_free(fp);
     input_free(input);
     return 0;
   }
   file_free(fp);
-  switch(solve(input))
+  switch (solve(input))
   {
-    case 1:
-      SATISFIABLE();
-      break;
-    case 0:
-      UNSATISFIABLE();
-      break;
-    case -1:
-      ERROR();
-      break;
+  case 1:
+    SATISFIABLE();
+    break;
+  case 0:
+    UNSATISFIABLE();
+    break;
+  case -1:
+    ERROR();
+    break;
   }
-  input_free(input); 
-  
+  input_free(input);
+
   LOG("EXITING SAT SOLVER", 3);
-  
+
   return 0;
 }
