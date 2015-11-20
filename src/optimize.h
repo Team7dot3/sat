@@ -39,6 +39,7 @@ int optimize(INPUT *in);
 *                      assigning it (to true if positive, or false if negative),
 *                      remove it everywhere it appears by removing the line if it evaluates to true on a given line, or removing it from the line if it evaluates to false
 *                      Keep all numbers correct (removing a variable will decrement several values elsewhere, and removing a line will decrement several variables elsewhere.
+*                      Note: we don't keep the number of variables correct until we rename variables
 *
 * INPUTS :
 *      PARAMETERS :
@@ -49,6 +50,25 @@ int optimize(INPUT *in);
 *          int                       3 on satisfiable, 2 on unsatisfiable, 1 on unit propagated, 0 on nothing propagated, -1 on error
 */
 int unit_propagation(INPUT *in);
+
+/*******************************************************************************************
+* NAME :             pure_literals
+*
+* DESCRIPTION :        If there is a pure_literal (only appears as positive or negative),
+*                      assign it (to true if positive, or false if negative),
+*                      remove it everywhere it appears by removing the lines it appears on
+*                      Keep all numbers correct (removing a variable will decrement several values elsewhere, and removing a line will decrement several variables elsewhere.
+*                      Note: we don't keep the number of variables correct until we rename variables
+*
+* INPUTS :
+*      PARAMETERS :
+*          INPUT  *in   input
+*
+* OUTPUTS :
+*      RETURN :
+*          int                       3 on satisfiable, 1 on variable removed, 0 on nothing removed, -1 on error
+*/
+int pure_literals(INPUT *in);
 
 /*******************************************************************************************
 * NAME :             set_variable

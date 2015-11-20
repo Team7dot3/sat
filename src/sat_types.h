@@ -75,8 +75,10 @@
   printf("\n");           \
   printf(RESET);          \
 }
+#define ASSERT(bool_val) {assert(bool_val);}
 #else
 #define LOG(str, color) { /* DO NOTHING */ }
+#define ASSERT(bool_val) { /* DO NOTHING */ }
 #endif
 
 /*******************************************************************************************
@@ -86,11 +88,11 @@
  *
  * CONTENTS :
  *    int**    data              An array of arrays containing individual clauses of data values.
- *    int      nbcluases         The number of clauses in the file.
  *    int*     clause_lengths    An array containing the length of each clause.
- *    int      nbvars            The maximum and minimum (negated) value in a clause.
  *    int*     pos_val_sums      The number of each variable that is positive
  *    int*     neg_val_sums      The number of each variable that is negative
+ *    int      nbclauses         The number of clauses in the file.
+ *    int      nbvars            The maximum and minimum (negated) value in a clause.
  *
  */
 typedef struct input

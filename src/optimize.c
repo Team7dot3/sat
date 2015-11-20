@@ -32,8 +32,8 @@ int optimize(INPUT *in)
   //int nbclauses = in->nbclauses;
   //int* clause_lengths = in->clause_lengths;
   //int nbvars = in->nbvars;
-  //int pos_val_sums = in->pos_val_sums;
-  //int neg_val_sums = in->neg_val_sums;
+  //int* pos_val_sums = in->pos_val_sums;
+  //int* neg_val_sums = in->neg_val_sums;
   //Optimization types
   //
   //Unit Propagation
@@ -53,10 +53,20 @@ int optimize(INPUT *in)
     return 3;
   }
   //Pure Literals
-  //If a variable exists as only positive, or only negative, all rows it exists on can be removed. (They can always evaluate to true from that one variable)
-  //
+  //If a variable exists as only positive, or only negative, all clauses it exists in can be removed. (They can always evaluate to true from that one variable)
+  while ((var = pure_literals(in)) == 1)//keep propagating units while there are still units to propagate
+  {
+    did_optimize = 1;
+  }
+  ASSERT(var != 2);//removing a pure literal should never make it unsatisfiable
+  if (var == 3)
+  {
+    LOG("OPTIMIZE SOLVED", 2);
+    return 3;
+  }
   //Pure Clauses
   //If a clause contains both positive and negative values for a variable, remove the clause.
+  //We probably only need to do this once ever.
   //
   //Increase chance of contradictions early on.
   //Reorder rows from smallest to largest
@@ -77,6 +87,7 @@ int optimize(INPUT *in)
 *                      assigning it (to true if positive, or false if negative),
 *                      remove it everywhere it appears by removing the line if it evaluates to true on a given line, or removing it from the line if it evaluates to false
 *                      Keep all numbers correct (removing a variable will decrement several values elsewhere, and removing a line will decrement several variables elsewhere.
+*                      Note: we don't keep the number of variables correct until we rename variables
 *
 * INPUTS :
 *      PARAMETERS :
@@ -108,6 +119,42 @@ int unit_propagation(INPUT *in)
     }
   }
   return var;
+}
+
+/*******************************************************************************************
+* NAME :             pure_literals
+*
+* DESCRIPTION :        If there is a pure_literal (only appears as positive or negative),
+*                      assign it (to true if positive, or false if negative),
+*                      remove it everywhere it appears by removing the lines it appears on
+*                      Keep all numbers correct (removing a variable will decrement several values elsewhere, and removing a line will decrement several variables elsewhere.
+*                      Note: we don't keep the number of variables correct until we rename variables
+*
+* INPUTS :
+*      PARAMETERS :
+*          INPUT  *in   input
+*
+* OUTPUTS :
+*      RETURN :
+*          int                       3 on satisfiable, 1 on variable removed, 0 on nothing removed, -1 on error
+*/
+int pure_literals(INPUT *in)
+{
+  int i;
+  int toReturn = 0;
+  for (i = 0; i < in->nbvars; i++)
+  {
+    int pos = in->pos_val_sums[i] > 0;//boolean value that will be 1 if there is at least 1 positive value for the variable
+    int neg = in->neg_val_sums[i] > 0;//boolean value that will be 1 if there is at least 1 negative value for the variable
+    if (pos ^ neg)//checks if there is only positive, or only negative. (We ignore it if it doesn't exist)
+    {
+      //Passes the value of pos as the input for what to set the value as.
+      //This way if there are positive values only, it gets set to 1 or true, but if there are negative values only it will be 0 or false.
+      //we add 1 because we're using 0 based indexing, but set variable uses one based indexing for the variables.
+      toReturn = set_variable(in, i + 1, pos);
+    }
+  }
+  return toReturn;
 }
 
 /*******************************************************************************************
@@ -178,7 +225,6 @@ int set_variable(INPUT *in, int variable, int set)
 
 int remove_variable(INPUT *in, int clausenum, int varposnum)
 {
-  //int i;
   int var = in->data[clausenum][varposnum];
   if (var > 0)
   {
