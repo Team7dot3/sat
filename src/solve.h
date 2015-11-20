@@ -175,7 +175,6 @@ int check_if_satisfied(INPUT *in, int *setvals, int sat_level, int pos);
 * INPUTS :
 *      PARAMETERS :
 *          int* values       The values that constitute the list of variables in the clause.
-*          int val_count     The number of variables.
 *          int clause_length The number of variables in the clause.
 *          int* setvals      The current set value of each variable.
 *
@@ -183,6 +182,6 @@ int check_if_satisfied(INPUT *in, int *setvals, int sat_level, int pos);
 *      RETURN :
 *          int                       1 on satisfied, 0 on unsatisfied, -1 on contradiction
 */
-int process_clause(int* values, int val_count, int clause_length, int * setvals);
+int process_clause(int* values, int clause_length, int * setvals);
 
 #endif

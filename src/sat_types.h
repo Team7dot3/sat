@@ -12,6 +12,17 @@
 #ifndef SAT_TYPES_H
 #define SAT_TYPES_H
 
+#ifdef WIN32
+//disables various informational warnings in Windows to allow /Wall to be useful and to allow /WX (warnings treated as errors) to be used
+//disables deprecation in Windows
+#define _CRT_SECURE_NO_WARNINGS
+//disables function not inlined warnings
+#pragma warning(disable : 4710)
+//disables padding warnings
+#pragma warning(disable : 4820)
+
+#endif
+
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>

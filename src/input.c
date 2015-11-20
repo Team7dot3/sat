@@ -140,7 +140,7 @@ char* input_string(FILE* fp, size_t size)
     }
     while(EOF != (ch = fgetc(fp)) && ch != '\n')
     { 
-      str[len++] = ch;
+      str[len++] = (char)ch;
       if(len == size)
       {
         str = realloc(str, (size += 16));
@@ -303,7 +303,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     }
 
     // Create copy of line because strtok() consumes line during count.
-    line_size = strlen(line);\
+    line_size = (int) strlen(line);\
     line_copy = malloc(line_size + 1);
     line_copy[line_size] = '\0';
 

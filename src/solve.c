@@ -172,7 +172,7 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
   for (i = 0; i < in->nbclauses; i++)
   {
     // check the clause with our current variables
-    clause_result = process_clause(in->data[i], in->nbvars, in->clause_lengths[i], setvals);
+    clause_result = process_clause(in->data[i], in->clause_lengths[i], setvals);
       switch (clause_result)
       {
         case -1: 
@@ -202,7 +202,6 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
 * INPUTS :
 *      PARAMETERS :
 *          int* values       The values that constitute the list of variables in the clause.
-*          int val_count     The number of variables.
 *          int clause_length The number of variables in the clause.
 *          int* setvals      The current set value of each variable. 
 *
@@ -210,7 +209,7 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
 *      RETURN :
 *          int                       1 on satisfied, 0 on unsatisfied, -1 on contradiction
 */
-int process_clause(int* values, int val_count, int clause_length, int * setvals)
+int process_clause(int* values, int clause_length, int * setvals)
 {
   int i, setcount, val;
   i = setcount = val = 0;
