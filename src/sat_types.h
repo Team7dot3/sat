@@ -14,13 +14,12 @@
 
 #ifdef WIN32
 //disables various informational warnings in Windows to allow /Wall to be useful and to allow /WX (warnings treated as errors) to be used
-//disables deprecation in Windows
+//disables deprecation in Windows (recommendations for functions that Windows considers to be insecure)
 #define _CRT_SECURE_NO_WARNINGS
-//disables function not inlined warnings
+//disables function not inlined warnings (informational)
 #pragma warning(disable : 4710)
-//disables padding warnings
-#pragma warning(disable : 4820)
-
+//disables function selected for automatic inline expansion warnings (informational)
+#pragma warning(disable : 4711)
 #endif
 
 #include <stdio.h>
@@ -97,11 +96,11 @@
 typedef struct input
 {
   int** data;
-  int   nbclauses;
   int*  clause_lengths;
-  int   nbvars;
   int*  pos_val_sums;
   int*  neg_val_sums;
+  int   nbclauses;
+  int   nbvars;
 } INPUT;
 
 #include "optimize.h"
@@ -110,3 +109,4 @@ typedef struct input
 
 
 #endif 
+

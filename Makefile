@@ -14,7 +14,7 @@ build:
 # \
 !ELSE
 # \
-	cl /Wall /WX /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DWIN32 src\main.c src\optimize.c src\input.c src\solve.c /Febin\sat_solver.exe
+	cl /Wall /WX /O2 /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DWIN32 src\main.c src\optimize.c src\input.c src\solve.c /Febin\sat_solver.exe
 # \
 !ENDIF
 # \
