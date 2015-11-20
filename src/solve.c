@@ -76,13 +76,14 @@ int solve_helper(INPUT *in, int *setvals)
 int solve(INPUT *in)
 {
   int *setvals, to_return;
-  LOG("solve CALLED", 2);
+  LOG("SOLVE CALLED", 2);
   
   setvals   = pre_init(in->nbvars);
+  while(optimize(in) == 1)
   to_return = solve_helper(in, setvals);
   
   free(setvals);
-  LOG("solve RETURNING", 2);
+  LOG("SOLVE RETURNING", 2);
   
   return to_return;
 }

@@ -93,7 +93,9 @@ typedef struct input
   int*  neg_val_sums;
 } INPUT;
 
+#include "optimize.h"
 #include "input.h"
 #include "solve.h"
+
 
 #endif 

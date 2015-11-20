@@ -30,6 +30,7 @@
 *          int                       1 on success, -1 on error
 */
 int optimize(INPUT *in);
+INPUT make_copy(INPUT *in);
 
 
 #endif

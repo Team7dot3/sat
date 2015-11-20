@@ -231,7 +231,7 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="optimize.c" />
+    <ClCompile Include="src\optimize.c" />
     <ClCompile Include="src\input.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\solve.c" />
@@ -241,7 +241,7 @@
     <ClCompile Include="test\unit_test_solve.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="optimize.h" />
+    <ClInclude Include="src\optimize.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\sat_types.h" />
     <ClInclude Include="src\solve.h" />
