@@ -7,7 +7,7 @@ import random
 import sys
 import re 
 import os
-from subprocess import Popen, PIPE
+from lib.sat_solver.process import Process
 import time
 
 
@@ -15,21 +15,9 @@ INPUT_PATH  = 'txt/diff_test.txt'
 LOG_PATH    = 'txt/log_diff_test.txt'
 EXE_PATH    = 'bin/sat_solver.o'
 MINI_PATH   = 'minisat'
-MAX_VARS    = 1000 # The maximum number of variables
-MAX_CLAUSES = 1000 # The maximum number of clauses
-TEST_RUNS   = 1000 # The number of tests to run
-
-def exec_process(args):
-  """
-  Executes a program and passes to it any accompanied arguments.
-  Input args must be an array with the path to the program executable in the first index.
-  Returns the stdout printout of the program.
-  """
-  ps         = Popen(args, stdout=PIPE)
-  (out, err) = ps.communicate()
-  exit_code  = ps.wait()
-  return out
-
+MAX_VARS    = 10 # The maximum number of variables
+MAX_CLAUSES = 10 # The maximum number of clauses
+TEST_RUNS   = 10 # The number of tests to run
 
 def init_random():
   """
@@ -79,7 +67,7 @@ class Minisat:
     """
     Returns the output of minisat.
     """
-    return exec_process([MINI_PATH, self.path])
+    return Process().run([MINI_PATH, self.path])
 
 
 class Sat:
@@ -97,7 +85,7 @@ class Sat:
     """
     Returns the output of sat_solver.o.
     """
-    return exec_process([EXE_PATH, self.path])
+    return Process().run([EXE_PATH, self.path])
 
 
 class RandomTesting:

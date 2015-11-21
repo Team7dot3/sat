@@ -1,18 +1,7 @@
 import os
-from subprocess import Popen, PIPE
+from lib.sat_solver.process import Process
 
 ROOT_PATH = ''
-
-def exec_process(args):
-  """
-  Executes a program and passes to it any accompanied arguments.
-  Input args must be an array with the path to the program executable in the first index.
-  Returns the stdout printout of the program.
-  """
-  ps         = Popen(args, stdout=PIPE)
-  (out, err) = ps.communicate()
-  exit_code  = ps.wait()
-  return out
 
 class bcolors:
   # http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
@@ -35,18 +24,18 @@ class Opponent:
   def build(self):
     print bcolors.OKBLUE + 'BUILDING' + bcolors.ENDC
     os.chdir(self.clone_path)
-    ret = exec_process(['make'])
+    ret = Process().run(['make'])
     os.chdir(ROOT_PATH)
     return ret
 
   def clone(self):
     print bcolors.OKBLUE + 'CLONING' + bcolors.ENDC
-    return exec_process(['git', 'clone', self.repo_url, self.clone_path])
+    return Process().run(['git', 'clone', self.repo_url, self.clone_path])
 
   def fetch(self):
     print bcolors.OKBLUE + 'FETCHING' + bcolors.ENDC
     os.chdir(self.clone_path)
-    ret = exec_process(['git', 'fetch'])
+    ret = Process().run(['git', 'fetch'])
     os.chdir(ROOT_PATH)
     return ret
 
@@ -56,7 +45,7 @@ class Opponent:
   def pull(self):
     print bcolors.OKBLUE + 'PULLING' + bcolors.ENDC
     os.chdir(self.clone_path)
-    ret = exec_process(['git', 'pull'])
+    ret = Process().run(['git', 'pull'])
     os.chdir(ROOT_PATH)
     return ret
 
@@ -64,7 +53,7 @@ class Opponent:
     print bcolors.OKBLUE + 'RUNNING' + bcolors.ENDC
     executable = self.clone_path + self.exe_path
     if os.path.isfile(executable):
-      return exec_process([self.clone_path + self.exe_path, input_path])
+      return Process().run([self.clone_path + self.exe_path, input_path])
     else:
       return 'EXECUTABLE NOT FOUND\n'
 

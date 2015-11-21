@@ -1,20 +1,9 @@
 import os
+from lib.sat_solver.process import Process
 from subprocess import Popen, PIPE
 import time
 
 ROOT_PATH = ''
-MINI_PATH = 'minisat'
-
-def exec_process(args):
-  """
-  Executes a program and passes to it any accompanied arguments.
-  Input args must be an array with the path to the program executable in the first index.
-  Returns the stdout printout of the program.
-  """
-  ps         = Popen(args, stdout=PIPE)
-  (out, err) = ps.communicate()
-  exit_code  = ps.wait()
-  return out
 
 class Logger:
   """
@@ -67,8 +56,8 @@ def get_minisat_benchmarks():
   lines = None
   with open('txt/log_minisat_benchmarks.txt') as f:
     lines = f.read().split('\n')
-      # print lines[1]
-      # print (lines[1].split())[2] + '<<<'
+    print lines[1]
+    print (lines[1].split())[2] + '<<<'
   return lines
 
 def run_satsolver_benchmarks(inputs):
@@ -77,7 +66,6 @@ def run_satsolver_benchmarks(inputs):
   for input in inputs:
     print 'RUNNING TEST ON ' + input
     start_time = time.time()
-    # TODO: fix later the input path
     t7_out     = (exec_process(['bin/sat_solver.o', input]).split('\n'))[0]
     end_time   = time.time()
     log.write('team7 \t ' + t7_out + ' \t ' + str(end_time - start_time) + ' \t ' + input + '\n')
@@ -86,10 +74,11 @@ def run_satsolver_benchmarks(inputs):
 if __name__ == '__main__':
   ROOT_PATH = os.getcwd()
   print ROOT_PATH
-  inputs = get_files('benchmarks')
+  # inputs = get_files('benchmarks')
   # run_minisat_benchmarks(inputs)
 
 
   # get_minisat_benchmarks()
+  Process().run(['ls'])
 
-  run_satsolver_benchmarks(inputs)
+  # run_satsolver_benchmarks(inputs)
