@@ -33,31 +33,31 @@ int optimize(INPUT *in, int run_type)
   //Pure Clauses
   //If a clause contains both positive and negative values for a variable, remove the clause.
   //We probably only need to do this once ever.
-  if (!run_type)
-  {
-    var = pure_clauses(in);
-    if (var == 1)
-    {
-      did_optimize = 1;
-    }
-    ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
-    if (var == 3){return 3;}
-  }
+  //if (!run_type)
+  //{
+  //  var = pure_clauses(in);
+  //  if (var == 1)
+  //  {
+  //    did_optimize = 1;
+  //  }
+  //  ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
+  //  if (var == 3){return 3;}
+  //}
   //Unit Propagation
-  while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
-  {
-    did_optimize = 1;
-  }
-  if (var == 2){return 2;}
-  if (var == 3){return 3;}
+  //while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
+  //{
+  //  did_optimize = 1;
+  //}
+  //if (var == 2){return 2;}
+  //if (var == 3){return 3;}
   //Pure Literals
   //If a variable exists as only positive, or only negative, all clauses it exists in can be removed. (They can always evaluate to true from that one variable)
-  while ((var = pure_literals(in)) == 1)//keep removing pure literals while there are still pure literals to remove.
-  {
-    did_optimize = 1;
-  }
-  ASSERT(var != 2);//removing a pure literal should never make it unsatisfiable
-  if (var == 3){return 3;}
+  //while ((var = pure_literals(in)) == 1)//keep removing pure literals while there are still pure literals to remove.
+  //{
+  //  did_optimize = 1;
+  //}
+  //ASSERT(var != 2);//removing a pure literal should never make it unsatisfiable
+  //if (var == 3){return 3;}
   //Increase chance of contradictions early on.
   //Reorder rows from smallest to largest
   reorder_rows(in, 0, in->nbclauses - 1);
