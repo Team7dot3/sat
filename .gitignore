@@ -22,3 +22,6 @@ txt/*.txt
 
 # do not include our opponents' src code
 opponents
+
+# ignore python compiled files
+*.pyc
