@@ -123,17 +123,17 @@ void rename_variables(INPUT *in)
   }
   int* new_pos_val_sums = malloc(sizeof(int) * (current_var - 1));
   int* new_neg_val_sums = malloc(sizeof(int) * (current_var - 1));
-  for (i = 0; i < current_var - 1; i++)
+  for (i = 0; i < in->nbvars; i++)
   {
+    if (swaplist[i] == 0) { continue; }
     new_pos_val_sums[swaplist[i] - 1] = in->pos_val_sums[i];
     new_neg_val_sums[swaplist[i] - 1] = in->neg_val_sums[i];
   }
-  int* old_pos_val_sums = in->pos_val_sums;
-  int* old_neg_val_sums = in->neg_val_sums;
+  free(in->neg_val_sums);
+  free(in->pos_val_sums);
   in->pos_val_sums = new_pos_val_sums;
   in->neg_val_sums = new_neg_val_sums;
-  free(old_pos_val_sums);
-  free(old_neg_val_sums);
+
   free(swaplist);
   in->nbvars = current_var - 1;
 }
@@ -388,11 +388,13 @@ int remove_variable(INPUT *in, int clausenum, int varposnum)
   if (var > 0)
   {
     in->pos_val_sums[var - 1] = in->pos_val_sums[var - 1] - 1;//remove it's count from the sum array
+    ASSERT(in->pos_val_sums[var - 1] >= 0);
   }
   else
   {
     var = 0 - var;//make it positive
     in->neg_val_sums[var - 1] = in->neg_val_sums[var - 1] - 1;//remove it's count from the sum array
+    ASSERT(in->neg_val_sums[var - 1] >= 0);
   }
   in->data[clausenum][varposnum] = in->data[clausenum][in->clause_lengths[clausenum] - 1];//move the object at the end of the array to the position we're removing
   in->clause_lengths[clausenum] = in->clause_lengths[clausenum] - 1;//reduce the size of the array

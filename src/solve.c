@@ -107,14 +107,21 @@ int solve(INPUT *in)
 int solve_two(INPUT *in)
 {
   int tryposfirst = (in->pos_val_sums[0] - in->neg_val_sums[0]) >= 0;
-  INPUT *in_two = input_copy(in);//like a malloc
+  INPUT *in_two = malloc(sizeof(INPUT));
+  input_copy(in, in_two);
+  int var;
   if (tryposfirst)
   {
-    set_variable(in_two, 0, 1);
+    var = set_variable(in_two, 1, 1);
   }
   else
   {
-    set_variable(in_two, 0, 0);
+    var = set_variable(in_two, 1, 0);
+  }
+  if (var == 2 || var ==3)
+  {
+    input_free(in);
+    return var;
   }
   int optisolve;
   while ((optisolve = optimize(in_two, 1)) == 1);
@@ -127,12 +134,13 @@ int solve_two(INPUT *in)
   {
     if (tryposfirst)
     {
-      set_variable(in, 0, 0);
+      var = set_variable(in, 1, 0);
     }
     else
     {
-      set_variable(in, 0, 1);
+      var = set_variable(in, 1, 1);
     }
+    if (var == 2 || var == 3) { return var; }
     while ((optisolve = optimize(in, 1)) == 1);
     if (optisolve == 0)//Unsatisfied
     {
