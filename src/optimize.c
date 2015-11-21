@@ -41,7 +41,7 @@ void print_clauses(INPUT *in)
 */
 int optimize(INPUT *in, int run_type)
 {
-  LOG("OPTIMIZE CALLED", 2);
+  //LOG("OPTIMIZE CALLED", 2);
   int did_optimize = 0;
   int var;
   
@@ -85,7 +85,7 @@ int optimize(INPUT *in, int run_type)
   //Remove all variables that don't appear (decrement the counter)
   rename_variables(in);
   //print_clauses(in);
-  LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
+  //LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
   return did_optimize;
 }
 

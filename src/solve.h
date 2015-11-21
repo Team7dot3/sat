@@ -99,7 +99,7 @@
  */
 int solve(INPUT *in);
 
-int solve_two(INPUT *in);
+int solve_two(INPUT *in,int depth);
 
 /*******************************************************************************************
  * NAME :             solve_helper

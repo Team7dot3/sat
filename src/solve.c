@@ -92,7 +92,7 @@ int solve(INPUT *in)
   }
   if (to_return == -1)
   {
-    to_return = solve_two(in) - 2;
+    to_return = solve_two(in, 0) - 2;
     //int *setvals;
     //setvals = pre_init(in->nbvars);
     //to_return = solve_helper(in, setvals);
@@ -104,8 +104,11 @@ int solve(INPUT *in)
   return to_return;
 }
 
-int solve_two(INPUT *in)
+int solve_two(INPUT *in, int depth)
 {
+  printf("Vars left:%d - ", in->nbvars);
+  printf("Clauses left:%d\n", in->nbclauses);
+  depth++;
   int tryposfirst = (in->pos_val_sums[0] - in->neg_val_sums[0]) >= 0;
   INPUT *in_two = malloc(sizeof(INPUT));
   input_copy(in, in_two);
@@ -120,6 +123,7 @@ int solve_two(INPUT *in)
   }
   if (var == 2 || var ==3)
   {
+    //printf("%d:SOLUTION OR CONTRADICTION FOUND", depth);
     input_free(in);
     return var;
   }
@@ -127,8 +131,10 @@ int solve_two(INPUT *in)
   while ((optisolve = optimize(in_two, 1)) == 1);
   if (optisolve == 0)//Unsatisfied
   {
-    optisolve = solve_two(in_two);//should only return 2 or 3
+    //printf("%d:GOING DOWN FIRST CHOICE\n", depth);
+    optisolve = solve_two(in_two, depth);//should only return 2 or 3
   }
+  ASSERT(optisolve == 2 || optisolve == 3);
   input_free(in_two);//like a free
   if (optisolve == 2)//Contradiction
   {
@@ -140,13 +146,25 @@ int solve_two(INPUT *in)
     {
       var = set_variable(in, 1, 1);
     }
-    if (var == 2 || var == 3) { return var; }
+    if (var == 2 || var == 3)
+    {
+      //printf("%d:SOLUTION OR CONTRADICTION FOUND\n", depth);
+      return var;
+    }
+    if (optisolve == 3)
+    {
+      return 3;
+    }
+    ASSERT(optisolve == 2);
     while ((optisolve = optimize(in, 1)) == 1);
     if (optisolve == 0)//Unsatisfied
     {
-      optisolve = solve_two(in);//should only return 2 or 3
+      //printf("%d:GOING DOWN SECOND CHOICE\n", depth);
+      optisolve = solve_two(in, depth);//should only return 2 or 3
     }
   }
+  ASSERT(optisolve == 2 || optisolve == 3);
+  //printf("%d:SOLUTION OR CONTRADICTION FOUND\n", depth);
   return optisolve;
 }
 
