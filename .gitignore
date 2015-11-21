@@ -19,3 +19,6 @@ txt/*.txt
 *.user
 *.suo
 *.log
+
+# do not include our opponents' src code
+opponents

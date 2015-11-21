@@ -11,12 +11,13 @@ from subprocess import Popen, PIPE
 import time
 
 
-INPUT_PATH = 'txt/diff_test.txt'
-LOG_PATH   = 'txt/log_diff_test.txt'
-EXE_PATH   = 'bin/sat_solver.o'
-MINI_PATH  = 'minisat'
-MAX_VARS   = 40 # The maximum number of variables and clauses
-TEST_RUNS  = 10000 # The number of tests to run
+INPUT_PATH  = 'txt/diff_test.txt'
+LOG_PATH    = 'txt/log_diff_test.txt'
+EXE_PATH    = 'bin/sat_solver.o'
+MINI_PATH   = 'minisat'
+MAX_VARS    = 40  # The maximum number of variables
+MAX_CLAUSES = 100 # The maximum number of clauses
+TEST_RUNS   = 100 # The number of tests to run
 
 def exec_process(args):
   """
@@ -106,7 +107,7 @@ class RandomTesting:
   minisat. If the outputs do not match, the test fails.
   """
 
-  def __init__(self, path, max_num, itrs):
+  def __init__(self, path, max_vars, max_clauses, itrs):
     """
     Initializes the random testing.
 
@@ -115,16 +116,17 @@ class RandomTesting:
     itrs -- the number of tests to run
 
     """
-    self.path = path
-    self.max  = max_num
-    self.itrs = itrs
+    self.path        = path
+    self.max_vars    = max_vars
+    self.max_clauses = max_clauses
+    self.itrs        = itrs
 
   def gen_rand_input(self):
     """
     Generates a random input file for testing.
     """
-    self.nbvars    = random.randint(1, self.max)
-    self.nbclauses = random.randint(1, self.max)
+    self.nbvars    = random.randint(1, self.max_vars)
+    self.nbclauses = random.randint(1, self.max_clauses)
 
     with open(self.path, 'wb') as f:
       f.write('p cnf ' + str(self.nbvars) + ' ' + str(self.nbclauses) + ' \n')
@@ -171,7 +173,7 @@ class RandomTesting:
           input_file = f.read()
         log.write('Test FAILED with input:\n' + input_file + '\n  run time = ' + str(end_time - start_time))
       else:
-        log.write('Test number [' + str(i) + '] PASSED.\n  run time = ' + str(end_time - start_time))
+        log.write('Test number [' + str(i) + '] PASSED.\n  nbvars    = ' + str(self.nbvars) + '\n  nbclauses = ' + str(self.nbclauses) + '\n  run time  = ' + str(end_time - start_time))
     log.close()
     return passed
 
@@ -192,7 +194,7 @@ class RandomTesting:
 
 if __name__ == '__main__':
   init_random()
-  passed = RandomTesting(INPUT_PATH, MAX_VARS, TEST_RUNS).run()
+  passed = RandomTesting(INPUT_PATH, MAX_VARS, MAX_CLAUSES, TEST_RUNS).run()
 
   print '\n\n\nDifferential Testing:'
   print '  PASSED: ' + str(passed)
