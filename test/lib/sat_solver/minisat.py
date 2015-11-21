@@ -1,5 +1,5 @@
 import os
-import exec_process
+from process import Process
 
 class Minisat:
   """
@@ -22,13 +22,19 @@ class Minisat:
     """
     Executes minisat and saves the result and cpu_time.
     """
-    out           = exec_process([self.path, input_path])
+    out           = Process().run([self.path, input_path]).split('\n')
     self.cpu_time = ((out[len(out) - 4]).split())[3]
     self.result   = out[len(out) - 2]
 
   def get_result(self):
+    """
+    Returns the minisat result.
+    """
     return self.result
 
   def get_cpu_time(self):
+    """
+    Returns the minisat cpu time.
+    """
     return self.cpu_time
 
