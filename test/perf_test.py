@@ -66,7 +66,7 @@ class Opponent:
     if os.path.isfile(executable):
       return exec_process([self.clone_path + self.exe_path, input_path])
     else:
-      return 'EXECUTABLE NOT FOUND'
+      return 'EXECUTABLE NOT FOUND\n'
 
 def setup_opponents():
   opponents = [];
@@ -92,7 +92,7 @@ def setup_opponents():
     )
   )
   opponents.append(Opponent(
-      'SegmentationFaults', 
+      'Toianoke', 
       'https://github.com/Toianoke/SAT.git',
       'opponents/taianoke',
       '/sat'
