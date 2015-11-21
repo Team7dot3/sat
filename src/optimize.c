@@ -436,10 +436,10 @@ int input_copy(INPUT *in, INPUT *cp_in)
   cp_clause_lengths = malloc(sizeof(int) * (nbclauses));
   if (!cp_clause_lengths) { return -1; }
   
-  cp_pos_val_sums = malloc(sizeof(int) * ((nbclauses)));
+  cp_pos_val_sums = malloc(sizeof(int) * ((nbvars)));
   if (!cp_pos_val_sums) { return -1; }
 
-  cp_neg_val_sums = malloc(sizeof(int) * ((nbclauses)));
+  cp_neg_val_sums = malloc(sizeof(int) * ((nbvars)));
   if (!cp_neg_val_sums) { return -1; }
   
   for (clause = 0; clause < nbclauses; clause++)
