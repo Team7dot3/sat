@@ -92,54 +92,15 @@ int solve(INPUT *in)
   }
   if (to_return == -1)
   {
-    to_return = solve_two(in) - 2;
-    //int *setvals;
-    //setvals = pre_init(in->nbvars);
-    //to_return = solve_helper(in, setvals);
-    //free(setvals);
+    int *setvals;
+    setvals = pre_init(in->nbvars);
+    to_return = solve_helper(in, setvals);
+    free(setvals);
   }
   
   LOG("SOLVE RETURNING", 2);
   
   return to_return;
-}
-
-int solve_two(INPUT *in)
-{
-  int tryposfirst = (in->pos_val_sums[0] - in->neg_val_sums[0]) >= 0;
-  INPUT *in_two = input_copy(in);//like a malloc
-  if (tryposfirst)
-  {
-    set_variable(in_two, 0, 1);
-  }
-  else
-  {
-    set_variable(in_two, 0, 0);
-  }
-  int optisolve;
-  while ((optisolve = optimize(in_two, 1)) == 1);
-  if (optisolve == 0)//Unsatisfied
-  {
-    optisolve = solve_two(in_two);//should only return 2 or 3
-  }
-  input_free(in_two);//like a free
-  if (optisolve == 2)//Contradiction
-  {
-    if (tryposfirst)
-    {
-      set_variable(in, 0, 0);
-    }
-    else
-    {
-      set_variable(in, 0, 1);
-    }
-    while ((optisolve = optimize(in, 1)) == 1);
-    if (optisolve == 0)//Unsatisfied
-    {
-      optisolve = solve_two(in);//should only return 2 or 3
-    }
-  }
-  return optisolve;
 }
 
 /*******************************************************************************************

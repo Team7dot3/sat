@@ -104,19 +104,6 @@ void rename_variables(INPUT *in)
     }
     if (in->nbvars < current_var) { break; }
   }
-  int* new_pos_val_sums = malloc(sizeof(int) * (current_var - 1));
-  int* new_neg_val_sums = malloc(sizeof(int) * (current_var - 1));
-  for (i = 0; i < current_var - 1; i++)
-  {
-    new_pos_val_sums[swaplist[i] - 1] = in->pos_val_sums[i];
-    new_neg_val_sums[swaplist[i] - 1] = in->neg_val_sums[i];
-  }
-  int* old_pos_val_sums = in->pos_val_sums;
-  int* old_neg_val_sums = in->neg_val_sums;
-  in->pos_val_sums = new_pos_val_sums;
-  in->neg_val_sums = new_neg_val_sums;
-  free(old_pos_val_sums);
-  free(old_neg_val_sums);
   free(swaplist);
   in->nbvars = current_var - 1;
 }
