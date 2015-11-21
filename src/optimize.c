@@ -10,7 +10,21 @@
 *              University of Utah
 */
 #include "optimize.h"
-
+void print_clauses(INPUT *in)
+{
+  printf("p cnf %d %d",in->nbvars, in->nbclauses);
+  int i;
+  for (i = 0; i < in->nbclauses; i++)
+  {
+    int j;
+    for (j = 0; j < in->clause_lengths[i]; j++)
+    {
+      printf("%d ", in->data[i][j]);
+    }
+    printf("0\n");
+  }
+  printf("\n");
+}
 /*******************************************************************************************
 * NAME :             optimize
 *
@@ -30,6 +44,7 @@ int optimize(INPUT *in, int run_type)
   LOG("OPTIMIZE CALLED", 2);
   int did_optimize = 0;
   int var;
+  
   //Pure Clauses
   //If a clause contains both positive and negative values for a variable, remove the clause.
   //We probably only need to do this once ever.
@@ -43,6 +58,7 @@ int optimize(INPUT *in, int run_type)
     ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
     if (var == 3){return 3;}
   }
+  //print_clauses(in);
   //Unit Propagation
   while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
   {
@@ -50,6 +66,7 @@ int optimize(INPUT *in, int run_type)
   }
   if (var == 2){return 2;}
   if (var == 3){return 3;}
+  //print_clauses(in);
   //Pure Literals
   //If a variable exists as only positive, or only negative, all clauses it exists in can be removed. (They can always evaluate to true from that one variable)
   while ((var = pure_literals(in)) == 1)//keep removing pure literals while there are still pure literals to remove.
@@ -58,13 +75,16 @@ int optimize(INPUT *in, int run_type)
   }
   ASSERT(var != 2);//removing a pure literal should never make it unsatisfiable
   if (var == 3){return 3;}
+  //print_clauses(in);
   //Increase chance of contradictions early on.
   //Reorder rows from smallest to largest
   reorder_rows(in, 0, in->nbclauses - 1);
+  //print_clauses(in);
   //Rename variables
   //Rename the variables in the order you find them after reordering
   //Remove all variables that don't appear (decrement the counter)
   rename_variables(in);
+  //print_clauses(in);
   LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
   return did_optimize;
 }
@@ -99,10 +119,7 @@ void rename_variables(INPUT *in)
       {
         in->data[i][j] = swaplist[absvar - 1];
       }
-      if (in->nbvars < current_var) { break; }
-
     }
-    if (in->nbvars < current_var) { break; }
   }
   free(swaplist);
   in->nbvars = current_var - 1;
@@ -322,19 +339,13 @@ int set_variable(INPUT *in, int variable, int set)
         if (set)//variable set to true
         {
           var = remove_clause(in, i--);//remove the clause, and go back one so when we increment, we go to the "next" clause
-          if (var == 3)//the case where we've removed all the clauses
-          {
-            return 3;
-          }
+          if (var == 3) {return 3;}//the case where we've removed all the clauses
           break;//break out of the inner for loop
         }
         else //variable set to false
         {
           var = remove_variable(in, i, j--);//remove the variable, and go back one in the inner loop (we go back one in case there's a variable that is equal and opposite)
-          if (var == 2)//the case where we've removed all the variables
-          {
-            return 2;
-          }
+          if (var == 2) {return 2;}//the case where we've removed all the variables
           continue;
         }
       }
@@ -343,19 +354,13 @@ int set_variable(INPUT *in, int variable, int set)
         if (set)//variable set to true
         {
           var = remove_variable(in, i, j--);//remove the variable, and go back one in the inner loop (we go back one in case there's a variable that is equal and opposite)
-          if (var == 2)//the case where we've removed all the variables
-          {
-            return 2;
-          }
+          if (var == 2) {return 2;}//the case where we've removed all the variables
           continue;
         }
         else
         {
           var = remove_clause(in, i--);//remove the clause, and go back one so when we increment, we go to the "next" clause
-          if (var == 3)//the case where we've removed all the clauses
-          {
-            return 3;
-          }
+          if (var == 3) {return 3;}//the case where we've removed all the clauses
           break;//break out of the inner for loop
         }
       }
