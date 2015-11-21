@@ -2,6 +2,7 @@ import os
 from lib.sat_solver.process import Process
 from lib.sat_solver.opponent import Opponent
 from lib.sat_solver.colors import Colors
+from lib.sat_solver.minisat import Minisat
 
 if __name__ == '__main__':
   root_path = os.getcwd()
@@ -14,4 +15,3 @@ if __name__ == '__main__':
     team.pull()
     team.build()
     print Colors.OKGREEN + Colors.BOLD + team.run('txt/input.txt') + Colors.ENDC
-

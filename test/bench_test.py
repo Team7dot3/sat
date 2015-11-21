@@ -1,35 +1,11 @@
 import os
-from lib.sat_solver.process import Process
+from lib.sat_solver.process import *
+from lib.sat_solver.logger import *
+from lib.sat_solver.sat import *
 from subprocess import Popen, PIPE
 import time
 
 ROOT_PATH = ''
-
-class Logger:
-  """
-  Logger is a wrapper for a file writer. 
-  """
-
-  def __init__(self, path):
-    """
-    Initializes the Logger with the input path.
-    The input path represents the file to write log messages to.
-    """
-    self.log_file = open(path, 'wb')
-
-  def write(self, str):
-    """
-    Writes the input string to the log file.
-    """
-    
-    self.log_file.write(str)
-    
-    
-  def close(self):
-    """
-    Closes the log file. Do not call write() after calling close()!
-    """
-    self.log_file.close()
 
 def get_files(path):
   os.chdir(path)
@@ -38,19 +14,15 @@ def get_files(path):
   return files
 
 def run_minisat_benchmarks(inputs):
-  log = Logger('txt/log_minisat_benchmarks.txt')
+  ms  = Minisat()
+  log = Logger('txt/log_minisat_benchmarks.txt', False)
   log.write('program \t result \t cpu_time \t input_file \n')
   for input in inputs:
     if input == 'minisat-results.txt':
       continue
     print 'RUNNING TEST ON ' + input
-    
-    ms_out    = exec_process([MINI_PATH, 'benchmarks/' + input]).split('\n')
-    ms_time   = ((ms_out[len(ms_out) - 4]).split())[3]
-    ms_result = ms_out[len(ms_out) - 2]
-
-    print ms_time
-    log.write('minisat \t ' + ms_result + ' \t ' + ms_time + ' \t ' + input + '\n')
+    ms.run('benchmarks/' + input)
+    log.write('minisat \t ' + ms.get_result() + ' \t ' + ms.get_cpu_time() + ' \t ' + input + '\n')
 
 def get_minisat_benchmarks():
   lines = None
@@ -74,11 +46,9 @@ def run_satsolver_benchmarks(inputs):
 if __name__ == '__main__':
   ROOT_PATH = os.getcwd()
   print ROOT_PATH
-  # inputs = get_files('benchmarks')
-  # run_minisat_benchmarks(inputs)
+  inputs = get_files('benchmarks')
+  run_minisat_benchmarks(inputs)
 
 
   # get_minisat_benchmarks()
-  print Process().run(['ls'])
-
   # run_satsolver_benchmarks(inputs)

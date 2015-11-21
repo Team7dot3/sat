@@ -1,7 +1,21 @@
 import os
 from process import Process
+import time
 
-class Minisat:
+class Sat:
+  def get_result(self):
+    """
+    Returns the result.
+    """
+    return self.result
+
+  def get_cpu_time(self):
+    """
+    Returns the cpu time.
+    """
+    return self.cpu_time
+
+class Minisat(Sat):
   """
   Provides an easy mechanism for calling minisat with an input file.
   """
@@ -26,15 +40,19 @@ class Minisat:
     self.cpu_time = ((out[len(out) - 4]).split())[3]
     self.result   = out[len(out) - 2]
 
-  def get_result(self):
-    """
-    Returns the minisat result.
-    """
-    return self.result
+class T7_sat(Sat):
+  """
+  Provides an easy mechanism for calling sat_solver with an input file.
+  """
+  def __init__(self):
+    self.path = 'bin/sat_solver.o'
 
-  def get_cpu_time(self):
+  def run(self, input_path):
     """
-    Returns the minisat cpu time.
+    Executes sat_solver and saves the result and cpu_time.
     """
-    return self.cpu_time
-
+    start_time    = time.time()
+    out           = Process().run([self.path, input_path]).split('\n')
+    end_time      = time.time()
+    self.cpu_time = out[0]
+    self.result   = str(end_time - start_time)
