@@ -136,13 +136,14 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses);
  *          int**       data                    The pointer to the set of pointers to the clauses.
  *          int*        nbclauses               The number of expected clauses.
  *          int*        clause_lengths          The array of clause lengths.
- *          int*        value_sums              The array of values of units sumed. Ex. 1 and -1 would result in 0 in the '1's index.
+ *          int*        pos_val_sums            The array of values of units that are positive.
+ *          int*        neg_val_sums            The array of values of units that are negative.
  *
  * OUTPUTS :
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* value_sums);
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* pos_val_sums, int* neg_val_sums);
 
 /*******************************************************************************************
  * NAME :             input_free
@@ -158,6 +159,8 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, INPUT *input);
+void input_free(INPUT *input);
+
+void file_free(FILE *fp);
 
 #endif

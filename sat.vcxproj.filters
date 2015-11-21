@@ -36,6 +36,9 @@
     <ClCompile Include="test\unit_test_solve.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\optimize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\input.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="test\unit_test_solve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\optimize.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

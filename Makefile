@@ -4,17 +4,17 @@ build:
 # \
 !IFDEF _TEST
 # \
-	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /ZI src\input.c src\solve.c test\unit_test.c test\unit_test_check_args.c test\unit_test_input_parser.c test\unit_test_solve.c /Febin\unit_test.exe /Fdbin\unit_test.pdb
+	cl /Wall /WX /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /DWIN32 /Zi src\optimize.c src\input.c src\solve.c test\unit_test.c test\unit_test_check_args.c test\unit_test_input_parser.c test\unit_test_solve.c /Febin\unit_test.exe /Fdbin\unit_test.pdb
 # \
 !ELSE
 # \
 !IFDEF _DEBUG
 # \
-	cl /Wall /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /ZI src\main.c src\input.c src\solve.c /Febin\sat_solver.exe /Fdbin\sat_solver.pdb
+	cl /Wall /WX /DDEBUG /D_DEBUG /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DEBUG /DWIN32 /Zi src\main.c src\optimize.c src\input.c src\solve.c /Febin\sat_solver.exe /Fdbin\sat_solver.pdb
 # \
 !ELSE
 # \
-	cl /Wall /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 src\main.c src\input.c src\solve.c /Febin\sat_solver.exe
+	cl /Wall /WX /O2 /D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1 /DWIN32 src\main.c src\optimize.c src\input.c src\solve.c /Febin\sat_solver.exe
 # \
 !ENDIF
 # \
@@ -23,12 +23,12 @@ build:
 !ELSE
 # Linux Stuff
 ifdef _TEST
-	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/input.c src/solve.c test/unit_test.c test/unit_test_check_args.c test/unit_test_input_parser.c test/unit_test_solve.c -o bin/unit_test.o
+	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/optimize.c src/input.c src/solve.c test/unit_test.c test/unit_test_check_args.c test/unit_test_input_parser.c test/unit_test_solve.c -o bin/unit_test.o
 else
 ifdef _DEBUG
-	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 -DDEBUG -g src/main.c src/input.c src/solve.c -o bin/sat_solver.o
+	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 -DDEBUG -g src/main.c src/optimize.c src/input.c src/solve.c -o bin/sat_solver.o
 else
-	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/main.c src/input.c src/solve.c -o bin/sat_solver.o
+	gcc -fmessage-length=0 -pedantic-errors -std=gnu99 -Werror -Wall -Wextra -Wwrite-strings -Winit-self -Wcast-align -Wcast-qual -Wpointer-arith -Wstrict-aliasing -Wformat=2 -Wmissing-include-dirs -Wno-unused-parameter -Wshadow -Wuninitialized -Wold-style-definition -m32 src/main.c src/optimize.c src/input.c src/solve.c -o bin/sat_solver.o
 endif
 endif
 # \

@@ -52,7 +52,7 @@ FILE* check_args(int argc, char *argv[])
  */
 int input_parser(FILE *fp, INPUT *input)
 {
-  int i, file_size, *nbvar, *nbclauses, **data, *clause_lengths, *value_sums;
+  int i, file_size, *nbvar, *nbclauses, **data, *clause_lengths, *pos_val_sums, *neg_val_sums;
   char *line;
 
   // Finding the size of the file in bytes.
@@ -77,21 +77,29 @@ int input_parser(FILE *fp, INPUT *input)
   clause_lengths = malloc(sizeof(int) * (*nbclauses));
   CHECK_PTR(clause_lengths);
 
-  value_sums = malloc(sizeof(int) * ((*nbvar)));
-  CHECK_PTR(value_sums);
+  pos_val_sums = malloc(sizeof(int) * ((*nbvar)));
+  CHECK_PTR(pos_val_sums);
+
+  neg_val_sums = malloc(sizeof(int) * ((*nbvar)));
+  CHECK_PTR(neg_val_sums);
 
   // Load array with 0s.
-  for (i = 0; i < *nbvar; i++) { value_sums[i] = 0; }
+  for (i = 0; i < *nbvar; i++)
+  {
+    pos_val_sums[i] = 0;
+    neg_val_sums[i] = 0;
+  }
 
   // Loops over all clauses. 
-  if (parse_clauses(fp, file_size, data, nbclauses, clause_lengths, value_sums) != 1) { return -1; }  
+  if (parse_clauses(fp, file_size, data, nbclauses, clause_lengths, pos_val_sums, neg_val_sums) != 1) { return -1; }  
 
   // Load values into structs.
   input->data           = data;
   input->nbclauses      = *nbclauses; 
   input->nbvars         = *nbvar;
   input->clause_lengths = clause_lengths;
-  input->value_sums     = value_sums;
+  input->pos_val_sums   = pos_val_sums;
+  input->neg_val_sums   = neg_val_sums;
 
   free(nbvar);
   free(nbclauses);
@@ -132,7 +140,7 @@ char* input_string(FILE* fp, size_t size)
     }
     while(EOF != (ch = fgetc(fp)) && ch != '\n')
     { 
-      str[len++] = ch;
+      str[len++] = (char)ch;
       if(len == size)
       {
         str = realloc(str, (size += 16));
@@ -269,13 +277,14 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
  *          int**       data                    The pointer to the set of pointers to the clauses.
  *          int*        nbclauses               The number of expected clauses.
  *          int*        clause_lengths          The array of clause lengths.
- *          int*        value_sums            The array of values of units sumed. Ex. 1 and -1 would result in 0 in the '1's index.
+ *          int*        pos_val_sums            The array of values of units that are positive.
+ *          int*        neg_val_sums            The array of values of units that are negative.
  *
  * OUTPUTS :
  *      RETURN :
  *          int*                     1 on success, -1 on failure/error.
  */
-int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* value_sums)
+int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clause_lengths, int* pos_val_sums, int* neg_val_sums)
 {
   int current_data_index, current_clause_index, clause_length, actual_clause_count, line_size, clause_value;
   char *end_ptr, *line, *line_copy, *split_clause;
@@ -294,7 +303,7 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
     }
 
     // Create copy of line because strtok() consumes line during count.
-    line_size = strlen(line);\
+    line_size = (int) strlen(line);\
     line_copy = malloc(line_size + 1);
     line_copy[line_size] = '\0';
 
@@ -328,11 +337,11 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
 
         if (clause_value < 0)
         { 
-          value_sums[abs(clause_value) - 1] += -1; 
+          neg_val_sums[abs(clause_value) - 1] += 1; 
         }
         else
         { 
-          value_sums[abs(clause_value) - 1] +=  1; 
+          pos_val_sums[abs(clause_value) - 1] += 1; 
         }
       }
 
@@ -378,15 +387,19 @@ int parse_clauses(FILE* fp, int file_size, int** data, int* nbclauses, int* clau
  *      RETURN :
  *          void
  */
-void input_free(FILE *fp, INPUT *input)
+void input_free(INPUT *input)
 {
   // Free all resources after use.
-  fclose(fp);
-  
   for (int i = 0; i < input->nbclauses; i++) { free(input->data[i]); }
   
   free(input->data);
   free(input->clause_lengths);
-  free(input->value_sums);
+  free(input->pos_val_sums);
+  free(input->neg_val_sums);
   free(input);
+}
+
+void file_free(FILE *fp)
+{
+	fclose(fp);
 }

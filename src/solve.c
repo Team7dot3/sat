@@ -75,14 +75,30 @@ int solve_helper(INPUT *in, int *setvals)
  */
 int solve(INPUT *in)
 {
-  int *setvals, to_return;
-  LOG("solve CALLED", 2);
+  int to_return = -1;
+  LOG("SOLVE CALLED", 2);
+  int optisolve = optimize(in, 0);
+  while (optisolve == 1)
+  {
+    optisolve = optimize(in, 1);
+  }
+  if (optisolve == 2)
+  {
+    to_return = 0;
+  }
+  if (optisolve == 3)
+  {
+    to_return = 1;
+  }
+  if (to_return == -1)
+  {
+    int *setvals;
+    setvals = pre_init(in->nbvars);
+    to_return = solve_helper(in, setvals);
+    free(setvals);
+  }
   
-  setvals   = pre_init(in->nbvars);
-  to_return = solve_helper(in, setvals);
-  
-  free(setvals);
-  LOG("solve RETURNING", 2);
+  LOG("SOLVE RETURNING", 2);
   
   return to_return;
 }
@@ -154,12 +170,12 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
   i = sat_level = clause_result = 0;
 
   CHECK_BASE_CASE(pos, in->nbvars)
-  UPDATE_SET_POSITION(setvals, in->value_sums, pos, try_num);
+  UPDATE_SET_POSITION(setvals, in->pos_val_sums, in->neg_val_sums, pos, try_num);
 
   for (i = 0; i < in->nbclauses; i++)
   {
     // check the clause with our current variables
-    clause_result = process_clause(in->data[i], in->nbvars, in->clause_lengths[i], setvals);
+    clause_result = process_clause(in->data[i], in->clause_lengths[i], setvals);
       switch (clause_result)
       {
         case -1: 
@@ -189,7 +205,6 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
 * INPUTS :
 *      PARAMETERS :
 *          int* values       The values that constitute the list of variables in the clause.
-*          int val_count     The number of variables.
 *          int clause_length The number of variables in the clause.
 *          int* setvals      The current set value of each variable. 
 *
@@ -197,7 +212,7 @@ int solver(INPUT *in, int *setvals, int pos, int try_num)
 *      RETURN :
 *          int                       1 on satisfied, 0 on unsatisfied, -1 on contradiction
 */
-int process_clause(int* values, int val_count, int clause_length, int * setvals)
+int process_clause(int* values, int clause_length, int * setvals)
 {
   int i, setcount, val;
   i = setcount = val = 0;
