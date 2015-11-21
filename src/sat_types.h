@@ -25,7 +25,16 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
-
+#ifdef WIN32
+//disables warnings in time.h that we can't fix anyway.
+#pragma warning(push)
+#pragma warning(disable : 4820)
+#endif
+#include <time.h>
+#ifdef WIN32
+//disables warnings in time.h that we can't fix anyway.
+#pragma warning(pop)
+#endif
 /*******************************************************************************************
  * Color codes for printing to stdout.
  */

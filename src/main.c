@@ -28,7 +28,7 @@
 int main(int argc, char *argv[])
 {
   LOG("STARTING SAT SOLVER", 3);
-
+  srand((unsigned int)time(NULL));//seed random with the time (used in quicksort)
   FILE* fp = check_args(argc, argv);
 
   if (!fp)

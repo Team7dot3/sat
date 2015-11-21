@@ -41,49 +41,70 @@ int optimize(INPUT *in, int run_type)
       did_optimize = 1;
     }
     ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
-    if (var == 3)
-    {
-      LOG("OPTIMIZE SOLVED", 2);
-      return 3;
-    }
+    if (var == 3){return 3;}
   }
   //Unit Propagation
   while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
   {
     did_optimize = 1;
   }
-  if (var == 2)
-  {
-    LOG("OPTIMIZE SOLVED", 2);
-    return 2;
-  }
-  if (var == 3)
-  {
-    LOG("OPTIMIZE SOLVED", 2);
-    return 3;
-  }
+  if (var == 2){return 2;}
+  if (var == 3){return 3;}
   //Pure Literals
   //If a variable exists as only positive, or only negative, all clauses it exists in can be removed. (They can always evaluate to true from that one variable)
-  while ((var = pure_literals(in)) == 1)//keep propagating units while there are still units to propagate
+  while ((var = pure_literals(in)) == 1)//keep removing pure literals while there are still pure literals to remove.
   {
     did_optimize = 1;
   }
   ASSERT(var != 2);//removing a pure literal should never make it unsatisfiable
-  if (var == 3)
-  {
-    LOG("OPTIMIZE SOLVED", 2);
-    return 3;
-  }
+  if (var == 3){return 3;}
   //Increase chance of contradictions early on.
   //Reorder rows from smallest to largest
-  //
+  reorder_rows(in, 0, in->nbclauses - 1);
   //Rename variables
   //Rename the variables in the order you find them after reordering
   //Remove all variables that don't appear (decrement the counter)
-  LOG("OPTIMIZE RETURNING", 2);
+  LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
   return did_optimize;
 }
 
+void reorder_rows(INPUT *in, int start, int end)
+{
+  //implementation of Quicksort from http://rosettacode.org/wiki/Sorting_algorithms/Quicksort
+  int size = (end - start) + 1;
+  if (size > 1)
+  {
+    int left = start;
+    int right = end;
+    int pivot = in->clause_lengths[(rand() % size) + left];
+    while (left <= right)
+    {
+      while(in->clause_lengths[left] < pivot)
+      {
+        left++;
+      }
+      while (in->clause_lengths[right] > pivot)
+      {
+        right--;
+      }
+      if (left <= right)
+      {
+        //swap
+        int* temp = in->data[left];
+        in->data[left] = in->data[right];
+        in->data[right] = temp;
+        int tmplen = in->clause_lengths[left];
+        in->clause_lengths[left] = in->clause_lengths[right];
+        in->clause_lengths[right] = tmplen;
+
+        left++;
+        right--;
+      }
+    }
+    reorder_rows(in, start, right);
+    reorder_rows(in, left, end);
+  }
+}
 
 /*******************************************************************************************
 * NAME :             unit_propagation
@@ -163,6 +184,21 @@ int pure_literals(INPUT *in)
   return toReturn;
 }
 
+/*******************************************************************************************
+* NAME :             pure_clauses
+*
+* DESCRIPTION :        If there is a pure_clause (contains a positive and negative of the same value),
+*                      remove it while keeping all numbers correct (removing a line will decrement several variables elsewhere.)
+*                      Note: we don't keep the number of variables correct until we rename variables
+*
+* INPUTS :
+*      PARAMETERS :
+*          INPUT  *in   input
+*
+* OUTPUTS :
+*      RETURN :
+*          int                       3 on satisfiable, 1 on clause removed, 0 on nothing removed, -1 on error
+*/
 int pure_clauses(INPUT *in)
 {
   int i;
