@@ -52,6 +52,8 @@ def run_minisat_benchmarks(inputs):
   log = Logger('txt/log_minisat_benchmarks.txt')
   log.write('program \t result \t cpu_time \t input_file \n')
   for input in inputs:
+    if input == 'minisat-results.txt':
+      continue
     print 'RUNNING TEST ON ' + input
     
     ms_out    = exec_process([MINI_PATH, 'benchmarks/' + input]).split('\n')
@@ -76,7 +78,7 @@ def run_satsolver_benchmarks(inputs):
     print 'RUNNING TEST ON ' + input
     start_time = time.time()
     # TODO: fix later the input path
-    t7_out     = (exec_process(['bin/sat_solver.o', 'txt/input.txt']).split('\n'))[0]
+    t7_out     = (exec_process(['bin/sat_solver.o', input]).split('\n'))[0]
     end_time   = time.time()
     log.write('team7 \t ' + t7_out + ' \t ' + str(end_time - start_time) + ' \t ' + input + '\n')
 
@@ -85,9 +87,9 @@ if __name__ == '__main__':
   ROOT_PATH = os.getcwd()
   print ROOT_PATH
   inputs = get_files('benchmarks')
-  run_minisat_benchmarks(inputs)
+  # run_minisat_benchmarks(inputs)
 
 
   # get_minisat_benchmarks()
 
-  # run_satsolver_benchmarks(inputs)
+  run_satsolver_benchmarks(inputs)
