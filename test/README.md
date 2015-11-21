@@ -29,6 +29,7 @@ make diff_test
 Please note, in order to run the RDT you must be able to run MINISAT with one of the following:
 
 ```
-> minisat txt/some_input_file.txt
-> extras/minisat/core/minisat txt/some_input_file.txt
+minisat txt/some_input_file.txt
+
+extras/minisat/core/minisat txt/some_input_file.txt
 ```

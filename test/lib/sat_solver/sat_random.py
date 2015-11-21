@@ -3,6 +3,7 @@ import time
 from process import *
 from logger import *
 from sat import *
+from colors import *
 
 INPUT_PATH = 'txt/diff_test.txt'
 LOG_PASS   = 'txt/log_diff_pass.txt'
@@ -85,19 +86,21 @@ class RandomTesting:
     pass_log = Logger(LOG_PASS, False)
     fail_log = Logger(LOG_FAIL, True)
     passed   = 0
-
     pass_log.write('# \tV \tC \tTime \n')
 
     for i in range(0, self.itrs):
       self.gen_rand_input()
       prev_pass  = passed
+      print Colors.OKBLUE + '  Test # [' + Colors.ENDC + Colors.BOLD + str(i + 1) + Colors.ENDC + Colors.OKBLUE + ']\tnbvars = ' + Colors.ENDC + Colors.BOLD + str(self.nbvars) + Colors.ENDC + Colors.OKBLUE + '\tnbclauses = ' + Colors.ENDC + Colors.BOLD + str(self.nbclauses) + Colors.ENDC,
       passed    += self.test()
       if prev_pass == passed:
+        print Colors.FAIL + '  \t F' + Colors.ENDC
         input_file  = None
         with open(self.path, 'r') as f:
           input_file = f.read()
         fail_log.write('Test FAILED with input:\n' + input_file)
       else:
+        print Colors.OKGREEN + '  \t P' + Colors.ENDC
         pass_log.write(str(i) + '\t' + str(self.nbvars) + '\t' + str(self.nbclauses) + '\t' + self.t7.get_cpu_time() + '\n')
     pass_log.close()
     fail_log.close()
