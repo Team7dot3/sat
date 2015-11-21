@@ -7,7 +7,9 @@ import random
 import sys
 import re 
 import os
-from lib.sat_solver.process import Process
+from lib.sat_solver.process import *
+from lib.sat_solver.logger import *
+from lib.sat_solver.sat import *
 import time
 
 
@@ -25,67 +27,67 @@ def init_random():
   """
   random.seed(time.time())
 
-class Logger:
-  """
-  Logger is a wrapper for a file writer. 
-  """
+# class Logger:
+#   """
+#   Logger is a wrapper for a file writer. 
+#   """
 
-  def __init__(self, path):
-    """
-    Initializes the Logger with the input path.
-    The input path represents the file to write log messages to.
-    """
-    self.log_file = open(path, 'wb')
+#   def __init__(self, path):
+#     """
+#     Initializes the Logger with the input path.
+#     The input path represents the file to write log messages to.
+#     """
+#     self.log_file = open(path, 'wb')
 
-  def write(self, str):
-    """
-    Writes the input string to the log file.
-    """
-    self.log_file.write('==============================\n\n')
-    self.log_file.write(str)
-    self.log_file.write('\n==============================\n')
+#   def write(self, str):
+#     """
+#     Writes the input string to the log file.
+#     """
+#     self.log_file.write('==============================\n\n')
+#     self.log_file.write(str)
+#     self.log_file.write('\n==============================\n')
     
-  def close(self):
-    """
-    Closes the log file. Do not call write() after calling close()!
-    """
-    self.log_file.close()
+#   def close(self):
+#     """
+#     Closes the log file. Do not call write() after calling close()!
+#     """
+#     self.log_file.close()
 
 
-class Minisat:
-  """
-  Provides an easy mechanism for calling minisat with an input file.
-  """
+# class Minisat:
+#   """
+#   Provides an easy mechanism for calling minisat with an input file.
+#   """
 
-  def __init__(self, path):
-    """
-    Sets the input file to be passed to minisat.
-    """
-    self.path = path
+#   def __init__(self, path):
+#     """
+#     Sets the input file to be passed to minisat.
+#     """
+#     self.path = path
 
-  def run(self):
-    """
-    Returns the output of minisat.
-    """
-    return Process().run([MINI_PATH, self.path])
+#   def run(self):
+#     """
+#     Returns the output of minisat.
+#     """
+#     return Process().run([MINI_PATH, self.path])
 
 
-class Sat:
-  """
-  Provides an easy machnism for call sat_solve.o with an input file.
-  """
+# class Sat:
+#   """
+#   Provides an easy machnism for call sat_solve.o with an input file.
+#   """
 
-  def __init__(self, path):
-    """
-    Sets the input file to be passed to sat_solver.o.
-    """
-    self.path = path
+#   def __init__(self, path):
+#     """
+#     Sets the input file to be passed to sat_solver.o.
+#     """
+#     self.path = path
 
-  def run(self):
-    """
-    Returns the output of sat_solver.o.
-    """
-    return Process().run([EXE_PATH, self.path])
+#   def run(self):
+#     """
+#     Returns the output of sat_solver.o.
+#     """
+#     return Process().run([EXE_PATH, self.path])
 
 
 class RandomTesting:
@@ -146,7 +148,7 @@ class RandomTesting:
     """
     Executes the tests. Returns the number of passed tests.
     """
-    log    = Logger(LOG_PATH)
+    log    = Logger(LOG_PATH, True)
     passed = 0
 
     for i in range(0, self.itrs):
@@ -170,14 +172,24 @@ class RandomTesting:
     Represents an individual test. Compares the output of
     minisat to sat_solver.o.
     """
-    ms_out    = Minisat(self.path).run().split('\n')
-    ms_result = ms_out[len(ms_out) - 2] + '\n'
-    t7_out    = Sat(self.path).run()
+    ms = Minisat()
+    ms.run(self.path)
+    t7 = T7_sat()
+    t7.run(self.path)
     
-    if ms_result == t7_out:
+    if ms.get_result() == t7.get_result():
       return 1
     else:
       return 0
+
+    # ms_out    = Minisat(self.path).run().split('\n')
+    # ms_result = ms_out[len(ms_out) - 2] + '\n'
+    # t7_out    = Sat(self.path).run()
+    
+    # if ms_result == t7_out:
+    #   return 1
+    # else:
+    #   return 0
 
 
 if __name__ == '__main__':

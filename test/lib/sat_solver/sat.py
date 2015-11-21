@@ -44,6 +44,7 @@ class T7_sat(Sat):
   """
   Provides an easy mechanism for calling sat_solver with an input file.
   """
+
   def __init__(self):
     self.path = 'bin/sat_solver.o'
 
@@ -54,5 +55,5 @@ class T7_sat(Sat):
     start_time    = time.time()
     out           = Process().run([self.path, input_path]).split('\n')
     end_time      = time.time()
-    self.cpu_time = out[0]
-    self.result   = str(end_time - start_time)
+    self.result   = out[0]
+    self.cpu_time = str(end_time - start_time)
