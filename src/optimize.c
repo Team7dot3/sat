@@ -86,18 +86,18 @@ void rename_variables(INPUT *in)
       int var = in->data[i][j];
       int absvar = var;
       if (var < 0) { absvar = 0 - var; }
-      if (swaplist[absvar] == 0)
+      if (swaplist[absvar - 1] == 0)
       {
-        swaplist[absvar] = current_var;
+        swaplist[absvar - 1] = current_var;
         current_var++;
       }
       if (var < absvar)
       {
-        in->data[i][j] = 0 - swaplist[absvar];
+        in->data[i][j] = 0 - swaplist[absvar - 1];
       }
       else
       {
-        in->data[i][j] = swaplist[absvar];
+        in->data[i][j] = swaplist[absvar - 1];
       }
       if (in->nbvars < current_var) { break; }
 
