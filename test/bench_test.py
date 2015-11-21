@@ -79,6 +79,6 @@ if __name__ == '__main__':
 
 
   # get_minisat_benchmarks()
-  Process().run(['ls'])
+  print Process().run(['ls'])
 
   # run_satsolver_benchmarks(inputs)
