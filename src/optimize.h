@@ -117,7 +117,7 @@ int remove_variable(INPUT *in, int clausenum, int varposnum);
 
 int remove_clause(INPUT *in, int clausenum);
 
-INPUT* input_copy(INPUT *in);
+int input_copy(INPUT *in, INPUT *cp_in);
 
 
 #endif
