@@ -71,7 +71,7 @@ int input_parser(FILE *fp, INPUT *input)
 
   if (parse_cnf_header(line, nbvar, nbclauses) != 1) { return -1; }
 
-  data = malloc(sizeof(int) * (*nbclauses)*(*nbvar));
+  data = malloc(sizeof(int*) * (*nbclauses));
   CHECK_PTR(data);
 
   clause_lengths = malloc(sizeof(int) * (*nbclauses));
