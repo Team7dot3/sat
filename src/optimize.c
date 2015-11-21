@@ -64,9 +64,50 @@ int optimize(INPUT *in, int run_type)
   //Rename variables
   //Rename the variables in the order you find them after reordering
   //Remove all variables that don't appear (decrement the counter)
+  rename_variables(in);
   LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
   return did_optimize;
 }
+
+void rename_variables(INPUT *in)
+{
+  int current_var = 1;
+  int i;
+  int* swaplist = malloc(sizeof(int) * in->nbvars);
+  for (i = 0; i < in->nbvars; i++)
+  {
+    swaplist[i] = 0;
+  }
+  for (i = 0; i < in->nbclauses; i++)
+  {
+    int j;
+    for (j = 0; j < in->clause_lengths[i]; i++)
+    {
+      int var = in->data[i][j];
+      int absvar = var;
+      if (var < 0) { absvar = 0 - var; }
+      if (swaplist[absvar] == 0)
+      {
+        swaplist[absvar] = current_var;
+        current_var++;
+      }
+      if (var < absvar)
+      {
+        in->data[i][j] = 0 - swaplist[absvar];
+      }
+      else
+      {
+        in->data[i][j] = swaplist[absvar];
+      }
+      if (in->nbvars < current_var) { break; }
+
+    }
+    if (in->nbvars < current_var) { break; }
+  }
+  free(swaplist);
+  in->nbvars = current_var - 1;
+}
+
 
 void reorder_rows(INPUT *in, int start, int end)
 {

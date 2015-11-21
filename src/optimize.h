@@ -32,6 +32,8 @@
 */
 int optimize(INPUT *in, int run_type);
 
+void rename_variables(INPUT *in);
+
 void reorder_rows(INPUT *in, int start, int end);
 
 /*******************************************************************************************
