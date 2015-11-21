@@ -15,9 +15,9 @@ INPUT_PATH  = 'txt/diff_test.txt'
 LOG_PATH    = 'txt/log_diff_test.txt'
 EXE_PATH    = 'bin/sat_solver.o'
 MINI_PATH   = 'minisat'
-MAX_VARS    = 40  # The maximum number of variables
-MAX_CLAUSES = 100 # The maximum number of clauses
-TEST_RUNS   = 100 # The number of tests to run
+MAX_VARS    = 1000 # The maximum number of variables
+MAX_CLAUSES = 1000 # The maximum number of clauses
+TEST_RUNS   = 1000 # The number of tests to run
 
 def exec_process(args):
   """
