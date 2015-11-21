@@ -3,6 +3,7 @@ from subprocess import Popen, PIPE
 import time
 
 ROOT_PATH = ''
+MINI_PATH = 'minisat'
 
 def exec_process(args):
   """
@@ -53,7 +54,7 @@ def run_minisat_benchmarks(inputs):
   for input in inputs:
     print 'RUNNING TEST ON ' + input
     
-    ms_out    = exec_process([program, 'benchmarks/' + input]).split('\n')
+    ms_out    = exec_process([MINI_PATH, 'benchmarks/' + input]).split('\n')
     ms_time   = ((ms_out[len(ms_out) - 4]).split())[3]
     ms_result = ms_out[len(ms_out) - 2]
 
@@ -74,6 +75,7 @@ def run_satsolver_benchmarks(inputs):
   for input in inputs:
     print 'RUNNING TEST ON ' + input
     start_time = time.time()
+    # TODO: fix later the input path
     t7_out     = (exec_process(['bin/sat_solver.o', 'txt/input.txt']).split('\n'))[0]
     end_time   = time.time()
     log.write('team7 \t ' + t7_out + ' \t ' + str(end_time - start_time) + ' \t ' + input + '\n')
