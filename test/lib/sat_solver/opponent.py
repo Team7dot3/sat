@@ -2,6 +2,9 @@ import os
 from process import Process
 from colors import Colors
 
+TIMEOUT_OPP = 500
+TIMEOUT_GIT = 30
+
 class Opponent:
   def __init__(self, root_path, team_name, repo_url, clone_path, exe_path):
     self.root_path  = root_path
@@ -13,24 +16,21 @@ class Opponent:
   def build(self):
     print Colors.OKBLUE + Colors.BOLD + 'BUILDING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    # ret = Process().run(['make'])
-    ps = Process(['make'], 30)
+    ps = Process(['make'], TIMEOUT_GIT)
     ps.Run()
     os.chdir(self.root_path)
     return ps.output()
 
   def clone(self):
     print Colors.OKBLUE + Colors.BOLD + 'CLONING \t ' + self.name + Colors.ENDC
-    # return Process().run(['git', 'clone', self.repo_url, self.clone_path])
-    ps = Process(['git', 'clone', self.repo_url, self.clone_path], 60)
+    ps = Process(['git', 'clone', self.repo_url, self.clone_path], TIMEOUT_GIT)
     ps.Run()
     return ps.output()
 
   def fetch(self):
     print Colors.OKBLUE + Colors.BOLD + 'FETCHING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    # ret = Process().run(['git', 'fetch'])
-    ps = Process(['git', 'fetch'], 30)
+    ps = Process(['git', 'fetch'], TIMEOUT_GIT)
     ps.Run()
     os.chdir(self.root_path)
     return ps.output()
@@ -38,8 +38,7 @@ class Opponent:
   def pull(self):
     print Colors.OKBLUE + Colors.BOLD + 'PULLING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    # ret = Process().run(['git', 'pull'])
-    ps = Process(['git', 'pull'], 60)
+    ps = Process(['git', 'pull'], TIMEOUT_GIT)
     ps.Run()
     os.chdir(self.root_path)
     return ps.output()
@@ -48,8 +47,7 @@ class Opponent:
     print Colors.OKBLUE + Colors.BOLD + 'RUNNING \t ' + self.name + Colors.ENDC
     executable = self.clone_path + self.exe_path
     if os.path.isfile(executable):
-      # return (Process().run([self.clone_path + self.exe_path, input_path]).split('\n'))[0]
-      ps = Process([self.clone_path + self.exe_path, input_path], 30)
+      ps = Process([self.clone_path + self.exe_path, input_path], TIMEOUT_OPP)
       ps.Run()
       return ps.output().split('\n')[0]
     else:

@@ -2,6 +2,9 @@ import os
 from process import Process
 import time
 
+TIMEOUT_MS = 180
+TIMEOUT_T7 = 500
+
 class Sat:
   def get_result(self):
     """
@@ -36,7 +39,7 @@ class Minisat(Sat):
     """
     Executes minisat and saves the result and cpu_time.
     """
-    ps            = Process([self.path, input_path], 30)
+    ps            = Process([self.path, input_path], TIMEOUT_MS)
     ps.Run()
     out           = ps.output().split('\n')
     try:
@@ -59,7 +62,7 @@ class T7_sat(Sat):
     """
     Executes sat_solver and saves the result and cpu_time.
     """
-    ps            = Process([self.path, input_path], 60)
+    ps            = Process([self.path, input_path], TIMEOUT_T7)
     start_time    = time.time()
     ps.Run()
     end_time      = time.time()
