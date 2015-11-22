@@ -48,6 +48,7 @@ int optimize(INPUT *in, int run_type)
   //Pure Clauses
   //If a clause contains both positive and negative values for a variable, remove the clause.
   //We probably only need to do this once ever.
+  LOG("OPTIMIZE CALLED", 2);
   if (!run_type)
   {
     var = pure_clauses(in);
@@ -58,6 +59,15 @@ int optimize(INPUT *in, int run_type)
     ASSERT(var != 2);//removing a pure clause should never make it unsatisfiable
     if (var == 3){return 3;}
   }
+  
+  LOG("OPTIMIZE CALLED", 2);
+  var = similar_clauses(in);
+  if (var == 1)
+  {
+    did_optimize = 1;
+  }
+  if (var == 3){return 3;}
+  
   //print_clauses(in);
   //Unit Propagation
   while ((var = unit_propagation(in)) == 1)//keep propagating units while there are still units to propagate
@@ -228,10 +238,11 @@ int similar_clauses(INPUT *in)
 {
   int i, j, k, l;
   int to_return = 0;
+  LOG("similar clause called",2)
     
-  for (i = 0; i < in->nbvars; i++) // loop once through all the clauses.
+  for (i = 0; i < in->nbclauses; i++) // loop once through all the clauses.
   {
-    for (j = 0; j < in->nbvars; j++) // compare that clause to all others.
+    for (j = 0; j < in->nbclauses; j++) // compare that clause to all others.
     {
       if (in->clause_lengths[i] <= in->clause_lengths[j] && i != j) // only compare if the clause is smaller or equal to the others.
       {
@@ -242,6 +253,7 @@ int similar_clauses(INPUT *in)
         {
           if (matches_found == in->clause_lengths[i]) // We found a similar clause. 
           {
+            LOG("remove clause",2)
             int var = remove_clause(in, j--); // Remove it and go back one so when we increment, we go to the "next" clause
             if (var == 3)//the case where we've removed all the clauses
             {
@@ -259,6 +271,7 @@ int similar_clauses(INPUT *in)
           {
             if (in->data[i][k] == in->data[j][l])
             {
+              LOG("Matches Found",2)
               matches_found++;
               break; //break out of the loop we found it.
             }
