@@ -36,9 +36,16 @@ class Minisat(Sat):
     """
     Executes minisat and saves the result and cpu_time.
     """
-    out           = Process().run([self.path, input_path]).split('\n')
-    self.cpu_time = ((out[len(out) - 4]).split())[3]
-    self.result   = out[len(out) - 2]
+    ps            = Process([self.path, input_path], 30)
+    ps.Run()
+    out           = ps.output().split('\n')
+    try:
+      self.cpu_time = ((out[len(out) - 4]).split())[3]
+      self.result   = out[len(out) - 2]
+    except (IndexError):
+      print Colors.FAIL + Colors.BOLD + 'UNEXPECTED ERROR!\n' + Colors.ENDC
+      self.cpu_time = -1
+      self.result   = 'UNKNOWN'
 
 class T7_sat(Sat):
   """
@@ -52,8 +59,10 @@ class T7_sat(Sat):
     """
     Executes sat_solver and saves the result and cpu_time.
     """
+    ps            = Process([self.path, input_path], 60)
     start_time    = time.time()
-    out           = Process().run([self.path, input_path]).split('\n')
+    ps.Run()
     end_time      = time.time()
+    out           = ps.output().split('\n')
     self.result   = out[0]
     self.cpu_time = str(end_time - start_time)

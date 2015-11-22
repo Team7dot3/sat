@@ -5,44 +5,53 @@ from colors import Colors
 class Opponent:
   def __init__(self, root_path, team_name, repo_url, clone_path, exe_path):
     self.root_path  = root_path
-    self.team_name  = team_name
+    self.name       = team_name
     self.repo_url   = repo_url
     self.clone_path = clone_path
     self.exe_path   = exe_path
 
   def build(self):
-    print Colors.OKBLUE + 'BUILDING' + Colors.ENDC
+    print Colors.OKBLUE + Colors.BOLD + 'BUILDING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    ret = Process().run(['make'])
+    # ret = Process().run(['make'])
+    ps = Process(['make'], 30)
+    ps.Run()
     os.chdir(self.root_path)
-    return ret
+    return ps.output()
 
   def clone(self):
-    print Colors.OKBLUE + 'CLONING' + Colors.ENDC
-    return Process().run(['git', 'clone', self.repo_url, self.clone_path])
+    print Colors.OKBLUE + Colors.BOLD + 'CLONING \t ' + self.name + Colors.ENDC
+    # return Process().run(['git', 'clone', self.repo_url, self.clone_path])
+    ps = Process(['git', 'clone', self.repo_url, self.clone_path], 60)
+    ps.Run()
+    return ps.output()
 
   def fetch(self):
-    print Colors.OKBLUE + 'FETCHING' + Colors.ENDC
+    print Colors.OKBLUE + Colors.BOLD + 'FETCHING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    ret = Process().run(['git', 'fetch'])
+    # ret = Process().run(['git', 'fetch'])
+    ps = Process(['git', 'fetch'], 30)
+    ps.Run()
     os.chdir(self.root_path)
-    return ret
-
-  def name(self):
-    return self.team_name
+    return ps.output()
 
   def pull(self):
-    print Colors.OKBLUE + 'PULLING' + Colors.ENDC
+    print Colors.OKBLUE + Colors.BOLD + 'PULLING \t ' + self.name + Colors.ENDC
     os.chdir(self.clone_path)
-    ret = Process().run(['git', 'pull'])
+    # ret = Process().run(['git', 'pull'])
+    ps = Process(['git', 'pull'], 60)
+    ps.Run()
     os.chdir(self.root_path)
-    return ret
+    return ps.output()
 
   def run(self, input_path):
-    print Colors.OKBLUE + 'RUNNING' + Colors.ENDC
+    print Colors.OKBLUE + Colors.BOLD + 'RUNNING \t ' + self.name + Colors.ENDC
     executable = self.clone_path + self.exe_path
     if os.path.isfile(executable):
-      return Process().run([self.clone_path + self.exe_path, input_path])
+      # return (Process().run([self.clone_path + self.exe_path, input_path]).split('\n'))[0]
+      ps = Process([self.clone_path + self.exe_path, input_path], 30)
+      ps.Run()
+      return ps.output().split('\n')[0]
     else:
       return 'EXECUTABLE NOT FOUND\n'
 
