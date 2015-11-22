@@ -3,7 +3,7 @@ from process import Process
 from colors import Colors
 
 TIMEOUT_OPP = 500
-TIMEOUT_GIT = 30
+TIMEOUT_GIT = 90
 
 class Opponent:
   def __init__(self, root_path, team_name, repo_url, clone_path, exe_path):
