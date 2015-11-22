@@ -5,7 +5,6 @@ from logger import *
 from sat import *
 from colors import *
 
-INPUT_PATH = 'txt/diff_test.txt'
 LOG_PASS   = 'txt/log_diff_pass.txt'
 LOG_FAIL   = 'txt/log_diff_fail.txt'
 
@@ -25,7 +24,7 @@ class RandomTesting:
     itrs -- the number of tests to run
 
     """
-    self.path        = path
+    self.input_path  = path
     self.max_vars    = max_vars
     self.max_clauses = max_clauses
     self.max_pures   = max_clauses * max_pures
@@ -48,7 +47,7 @@ class RandomTesting:
     self.nbclauses = random.randint(1, self.max_clauses)
     pures_found    = 0
 
-    with open(self.path, 'wb') as f:
+    with open(self.input_path, 'wb') as f:
       f.write('p cnf ' + str(self.nbvars) + ' ' + str(self.nbclauses) + ' \n')
       
       for i in range(0, self.nbclauses):
@@ -96,7 +95,7 @@ class RandomTesting:
       if prev_pass == passed:
         print Colors.FAIL + '  \t F' + Colors.ENDC
         input_file  = None
-        with open(self.path, 'r') as f:
+        with open(self.input_path, 'r') as f:
           input_file = f.read()
         fail_log.write('Test FAILED with input:\n' + input_file)
       else:
@@ -111,8 +110,8 @@ class RandomTesting:
     Represents an individual test. Compares the output of
     minisat to sat_solver.o.
     """
-    self.ms.run(self.path)
-    self.t7.run(self.path)
+    self.ms.run(self.input_path)
+    self.t7.run(self.input_path)
 
     if self.ms.get_result() == self.t7.get_result():
       return 1

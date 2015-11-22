@@ -2,6 +2,9 @@ import os
 from process import Process
 import time
 
+TIMEOUT_MS = 180
+TIMEOUT_T7 = 500
+
 class Sat:
   def get_result(self):
     """
@@ -36,9 +39,16 @@ class Minisat(Sat):
     """
     Executes minisat and saves the result and cpu_time.
     """
-    out           = Process().run([self.path, input_path]).split('\n')
-    self.cpu_time = ((out[len(out) - 4]).split())[3]
-    self.result   = out[len(out) - 2]
+    ps            = Process([self.path, input_path], TIMEOUT_MS)
+    ps.Run()
+    out           = ps.output().split('\n')
+    try:
+      self.cpu_time = ((out[len(out) - 4]).split())[3]
+      self.result   = out[len(out) - 2]
+    except (IndexError):
+      print Colors.FAIL + Colors.BOLD + 'UNEXPECTED ERROR!\n' + Colors.ENDC
+      self.cpu_time = -1
+      self.result   = 'UNKNOWN'
 
 class T7_sat(Sat):
   """
@@ -52,8 +62,10 @@ class T7_sat(Sat):
     """
     Executes sat_solver and saves the result and cpu_time.
     """
+    ps            = Process([self.path, input_path], TIMEOUT_T7)
     start_time    = time.time()
-    out           = Process().run([self.path, input_path]).split('\n')
+    ps.Run()
     end_time      = time.time()
+    out           = ps.output().split('\n')
     self.result   = out[0]
     self.cpu_time = str(end_time - start_time)

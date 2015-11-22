@@ -5,6 +5,7 @@ This performs differential testing between Minisat 2.2.0 and Team7dot3's SAT sol
 from lib.sat_solver.sat_random import *
 from lib.sat_solver.colors import *
 
+INPUT_PATH  = 'txt/diff_test.txt'
 MAX_VARS    = 150  # The maximum number of variables
 MAX_CLAUSES = 1000 # The maximum number of clauses
 MAX_PURES   = 0.20 # The maximum ration of pure clauses to clauses
