@@ -76,6 +76,24 @@ int pure_clauses(INPUT *in);
 int unit_propagation(INPUT *in);
 
 /*******************************************************************************************
+* NAME :             similar_clauses
+*
+* DESCRIPTION :        If there is a similar_clauses, remove it. An example of this would be 
+*                      if we had the clause (1,-3) and the similar clause (1, -3, 4, 5) we 
+*                      could get rid of the longer clause because IFF the shorter clause is 
+*                      true then the longer clause must be true also.
+*
+* INPUTS :
+*      PARAMETERS :
+*          INPUT  *in   input
+*
+* OUTPUTS :
+*      RETURN :
+*          int                       3 on satisfiable, 1 on variable removed, 0 on nothing removed, -1 on error
+*/
+int similar_clauses(INPUT *in);
+
+/*******************************************************************************************
 * NAME :             pure_literals
 *
 * DESCRIPTION :        If there is a pure_literal (only appears as positive or negative),

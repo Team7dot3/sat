@@ -41,7 +41,7 @@ void print_clauses(INPUT *in)
 */
 int optimize(INPUT *in, int run_type)
 {
-  //LOG("OPTIMIZE CALLED", 2);
+  LOG("OPTIMIZE CALLED", 2);
   int did_optimize = 0;
   int var;
   
@@ -85,9 +85,11 @@ int optimize(INPUT *in, int run_type)
   //Remove all variables that don't appear (decrement the counter)
   rename_variables(in);
   //print_clauses(in);
-  //LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
+  LOG("OPTIMIZATION RETURNING PARTIAL SOLUTION", 2);
   return did_optimize;
 }
+
+
 
 void rename_variables(INPUT *in)
 {
@@ -121,19 +123,6 @@ void rename_variables(INPUT *in)
       }
     }
   }
-  int* new_pos_val_sums = malloc(sizeof(int) * (current_var - 1));
-  int* new_neg_val_sums = malloc(sizeof(int) * (current_var - 1));
-  for (i = 0; i < in->nbvars; i++)
-  {
-    if (swaplist[i] == 0) { continue; }
-    new_pos_val_sums[swaplist[i] - 1] = in->pos_val_sums[i];
-    new_neg_val_sums[swaplist[i] - 1] = in->neg_val_sums[i];
-  }
-  free(in->neg_val_sums);
-  free(in->pos_val_sums);
-  in->pos_val_sums = new_pos_val_sums;
-  in->neg_val_sums = new_neg_val_sums;
-
   free(swaplist);
   in->nbvars = current_var - 1;
 }
@@ -217,6 +206,70 @@ int unit_propagation(INPUT *in)
     }
   }
   return var;
+}
+
+/*******************************************************************************************
+* NAME :             similar_clauses
+*
+* DESCRIPTION :        If there is a similar_clauses, remove it. An example of this would be 
+*                      if we had the clause (1,-3) and the similar clause (1, -3, 4, 5) we 
+*                      could get rid of the longer clause because IFF the shorter clause is 
+*                      true then the longer clause must be true also.
+*
+* INPUTS :
+*      PARAMETERS :
+*          INPUT  *in   input
+*
+* OUTPUTS :
+*      RETURN :
+*          int                       3 on satisfiable, 1 on variable removed, 0 on nothing removed, -1 on error
+*/
+int similar_clauses(INPUT *in)
+{
+  int i, j, k, l;
+  int to_return = 0;
+    
+  for (i = 0; i < in->nbvars; i++) // loop once through all the clauses.
+  {
+    for (j = 0; j < in->nbvars; j++) // compare that clause to all others.
+    {
+      if (in->clause_lengths[i] <= in->clause_lengths[j] && i != j) // only compare if the clause is smaller or equal to the others.
+      {
+        int matches_found = 0;
+        int clause_length = in->clause_lengths[j]; 
+                                              
+        for (k = 0; k < in->clause_lengths[i]; k++) // loop through variables of the clause
+        {
+          if (matches_found == in->clause_lengths[i]) // We found a similar clause. 
+          {
+            int var = remove_clause(in, j--); // Remove it and go back one so when we increment, we go to the "next" clause
+            if (var == 3)//the case where we've removed all the clauses
+            {
+              return 3;
+            }
+            to_return = 1;
+            break; 
+          }
+          
+          if(clause_length < in->clause_lengths[i]) // break loop if incorrect to much
+          {
+            break;
+          }
+          for (l = 0; l < in->clause_lengths[j]; l++)
+          {
+            if (in->data[i][k] == in->data[j][l])
+            {
+              matches_found++;
+              break; //break out of the loop we found it.
+            }
+            clause_length--; // we did not find it
+          }
+        }
+      }
+    }
+  }
+  
+  return to_return;
 }
 
 /*******************************************************************************************
@@ -388,13 +441,11 @@ int remove_variable(INPUT *in, int clausenum, int varposnum)
   if (var > 0)
   {
     in->pos_val_sums[var - 1] = in->pos_val_sums[var - 1] - 1;//remove it's count from the sum array
-    ASSERT(in->pos_val_sums[var - 1] >= 0);
   }
   else
   {
     var = 0 - var;//make it positive
     in->neg_val_sums[var - 1] = in->neg_val_sums[var - 1] - 1;//remove it's count from the sum array
-    ASSERT(in->neg_val_sums[var - 1] >= 0);
   }
   in->data[clausenum][varposnum] = in->data[clausenum][in->clause_lengths[clausenum] - 1];//move the object at the end of the array to the position we're removing
   in->clause_lengths[clausenum] = in->clause_lengths[clausenum] - 1;//reduce the size of the array
@@ -436,10 +487,10 @@ int input_copy(INPUT *in, INPUT *cp_in)
   cp_clause_lengths = malloc(sizeof(int) * (nbclauses));
   if (!cp_clause_lengths) { return -1; }
   
-  cp_pos_val_sums = malloc(sizeof(int) * ((nbvars)));
+  cp_pos_val_sums = malloc(sizeof(int) * ((nbclauses)));
   if (!cp_pos_val_sums) { return -1; }
 
-  cp_neg_val_sums = malloc(sizeof(int) * ((nbvars)));
+  cp_neg_val_sums = malloc(sizeof(int) * ((nbclauses)));
   if (!cp_neg_val_sums) { return -1; }
   
   for (clause = 0; clause < nbclauses; clause++)
