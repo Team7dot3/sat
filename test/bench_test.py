@@ -55,7 +55,6 @@ def run_opponents_benchmarks(inputs):
   t7   = T7_sat()
   log  = Logger('txt/log_opponents_benchmarks.txt', False)
   opps = Opponent.setup_opponents(os.getcwd())
-  # log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
   for op in opps:
     print Colors.BOLD + op.name + Colors.ENDC
     if '--b' in sys.argv:
@@ -66,11 +65,16 @@ def run_opponents_benchmarks(inputs):
       op.build()
 
   if inputs:
-    # TODO: finish this
     log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t benchmark \n')
     ms_results = get_minisat_benchmarks()
     for m in ms_results:
-      t7.run(m[-1])
+      tokens = m.split()
+      if tokens[-1] == 'input_file':
+        # skip column header
+        continue
+
+      print Colors.BOLD + 'benchmarks/' + tokens[-1]
+      t7.run('benchmarks/' + m[-1])
 
       # Save results to lists
       results     = []
@@ -78,27 +82,27 @@ def run_opponents_benchmarks(inputs):
       to_log_file = []
       for op in opps:
         start_time = time.time()
-        res        = op.run(m[-1])
+        res        = op.run('benchmarks/' + tokens[-1])
         end_time   = time.time()
         results.append(res)
         times.append(end_time - start_time)
       
       # Check Opponents' results
       for i in range(0, len(opps)):
-        if m[1] == results[i]:
+        if tokens[1] == results[i]:
           to_log_file.append(times[i])
         else:
           to_log_file.append('FAILED')
 
       # Check Team7's sat_solver results
-      if m[1] == t7.get_result():
+      if tokens[1] == t7.get_result():
         to_log_file.append(t7.get_cpu_time())
       else:
         to_log_file.append('FAILED')
 
-      to_log_file.append(m[-1])
+      to_log_file.append(tokens[-1])
       print to_log_file
-      log.write(ms.get_result() + ' \t ' + m[2] + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) + '\n')
+      log.write(tokens[1] + ' \t ' + tokens[2] + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) + '\n')
 
   else:
     log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
