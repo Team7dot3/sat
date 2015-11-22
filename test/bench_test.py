@@ -55,7 +55,7 @@ def run_opponents_benchmarks(inputs):
   t7   = T7_sat()
   log  = Logger('txt/log_opponents_benchmarks.txt', False)
   opps = Opponent.setup_opponents(os.getcwd())
-  log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
+  # log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
   for op in opps:
     print Colors.BOLD + op.name + Colors.ENDC
     if '--b' in sys.argv:
@@ -67,6 +67,7 @@ def run_opponents_benchmarks(inputs):
 
   if inputs:
     # TODO: finish this
+    log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t benchmark \n')
     ms_results = get_minisat_benchmarks()
     for m in ms_results:
       t7.run(m[-1])
@@ -95,12 +96,12 @@ def run_opponents_benchmarks(inputs):
       else:
         to_log_file.append('FAILED')
 
-      to_log_file.append(rt.nbvars)
-      to_log_file.append(rt.nbclauses)
+      to_log_file.append(m[-1])
       print to_log_file
-      log.write(ms.get_result() + ' \t ' + m[2] + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) +' \t ' + str(to_log_file[6]) + '\n')
+      log.write(ms.get_result() + ' \t ' + m[2] + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) + '\n')
 
   else:
+    log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
     rt = RandomTesting(INPUT_PATH, MAX_VARS, MAX_CLAUSES, MAX_PURES, TEST_RUNS)
     for i in range(0, TEST_RUNS):
       rt.gen_rand_input()
