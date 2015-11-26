@@ -261,6 +261,13 @@ int parse_cnf_header(char* line, int* nbvar, int* nbclauses)
     else { return -1; }
   }
   else { return -1; }
+
+  // Inputs with nbvar or nbclauses of 2^16 are not allowed
+  if (*nbvar >= 65536 || *nbclauses >= 65536)
+  {
+    return -1;
+  }
+
   return 1;
 }
 
