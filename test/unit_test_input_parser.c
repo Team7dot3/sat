@@ -98,42 +98,28 @@ int test_var_bounds_1(void)
 {
   GEN_BASIC_INPUT(65536, 1);
   PARSE_FILE();
-  RESULT("test_var_bounds_1       ", (EXP = 65536) != (ACT = (in.nbvars)));
+  RESULT("test_var_bounds_1       ", (EXP = 0) == (ACT = (in.nbvars)));
 }
 
 int test_var_bounds_2(void)
 {
-  GEN_BASIC_INPUT(-1, 1);
-  PARSE_FILE();
-  RESULT("test_var_bounds_2       ", (EXP = -1) != (ACT = (in.nbvars)));
-}
-
-int test_var_bounds_3(void)
-{
   GEN_BASIC_INPUT(65535, 1);
   PARSE_FILE();
-  RESULT("test_var_bounds_3       ", (EXP = 65535) == (ACT = (in.nbvars)));
+  RESULT("test_var_bounds_2       ", (EXP = 65535) == (ACT = (in.nbvars)));
 }
 
 int test_clause_bounds_1(void)
 {
   GEN_BASIC_INPUT(1, 65536);
   PARSE_FILE();
-  RESULT("test_clause_bounds_1    ", (EXP = 65536) != (ACT = (in.nbclauses)));
+  RESULT("test_clause_bounds_1    ", (EXP = 0) == (ACT = (in.nbclauses)));
 }
 
 int test_clause_bounds_2(void)
 {
-  GEN_BASIC_INPUT(1, -1);
-  PARSE_FILE();
-  RESULT("test_clause_bounds_2    ", (EXP = -1) != (ACT = (in.nbclauses)));
-}
-
-int test_clause_bounds_3(void)
-{
   GEN_BASIC_INPUT(1, 65535);
   PARSE_FILE();
-  RESULT("test_clause_bounds_3    ", (EXP = 65535) == (ACT = (in.nbclauses)));
+  RESULT("test_clause_bounds_2    ", (EXP = 65535) == (ACT = (in.nbclauses)));
 }
 
 int test_input_parser(void) 
@@ -153,10 +139,8 @@ int test_input_parser(void)
   fails += test_data();           // WARNING !!! This test may seg fault if it fails!
   fails += test_var_bounds_1();
   fails += test_var_bounds_2();
-  fails += test_var_bounds_3();
   fails += test_clause_bounds_1();
   fails += test_clause_bounds_2();
-  fails += test_clause_bounds_3();
 
 
   return fails;

@@ -1,0 +1,12 @@
+c Use the txt directory to generate your .txt input files.
+c 
+c # c:         a comment; files can, but are not required to, start with comments
+c # p:         indicates the start of the problem
+c # cnf:       indicates the input is in 'conjunctive normal form'
+c # nbvar:     indicates variables will be from [-1, -nbvar] and [1, nbvar]
+c # nbclauses: indicates the number of rows (clauses), indicated by the number of zeros
+c
+p cnf 5 3
+1 -5 4 0
+-1 5 3 4 0
+-3 -4 0

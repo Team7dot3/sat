@@ -1,5 +1,7 @@
 #include "units.h"
 
+#define VALID_PATH "txt/basic_sat_input.cnf"
+
 int test_not_enough_args_1(void);
 int test_not_enough_args_2(void);
 int test_too_many_args(void);
