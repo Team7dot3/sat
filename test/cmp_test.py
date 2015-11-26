@@ -19,7 +19,7 @@ if __name__ == '__main__':
     if re.search('.txt', arg) or re.search('.cnf', arg):
       input_path = str(arg[2:])
     if input_path is None:
-      input_path = 'txt/input.txt'
+      input_path = 'txt/basic_sat_input.cnf'
 
   # execute and print results of Minisat
   print '\n'
