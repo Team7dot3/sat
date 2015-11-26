@@ -27,6 +27,12 @@ int test_zero_clauses_return(void);
 int test_zero_clauses_count(void);
 int test_clause_lengths(void);
 int test_data(void);
+int test_var_bounds_1(void);
+int test_var_bounds_2(void);
+int test_var_bounds_3(void);
+int test_clause_bounds_1(void);
+int test_clause_bounds_2(void);
+int test_clause_bounds_3(void);
 
 int test_input_parser(void);
 FILE* write_basic_sat_file(char *path, int nbvar, int nbclauses);
