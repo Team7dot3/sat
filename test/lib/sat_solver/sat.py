@@ -1,9 +1,7 @@
 import os
 from process import Process
 import time
-
-TIMEOUT_MS = 180
-TIMEOUT_T7 = 500
+from colors import *
 
 class Sat:
   def get_result(self):
@@ -23,7 +21,7 @@ class Minisat(Sat):
   Provides an easy mechanism for calling minisat with an input file.
   """
 
-  def __init__(self):
+  def __init__(self, timeout):
     """
     This first checks if minisat was compiled in the extras folder.
     If so, the compiled executable is used.
@@ -35,11 +33,13 @@ class Minisat(Sat):
     else:
       self.path = 'minisat'
 
+    self.timeout = timeout
+
   def run(self, input_path):
     """
     Executes minisat and saves the result and cpu_time.
     """
-    ps            = Process([self.path, input_path], TIMEOUT_MS)
+    ps            = Process([self.path, input_path], self.timeout)
     ps.Run()
     out           = ps.output().split('\n')
     try:
@@ -55,14 +55,15 @@ class T7_sat(Sat):
   Provides an easy mechanism for calling sat_solver with an input file.
   """
 
-  def __init__(self):
-    self.path = 'bin/sat_solver.o'
+  def __init__(self, timeout):
+    self.path    = 'bin/sat_solver.o'
+    self.timeout = timeout
 
   def run(self, input_path):
     """
     Executes sat_solver and saves the result and cpu_time.
     """
-    ps            = Process([self.path, input_path], TIMEOUT_T7)
+    ps            = Process([self.path, input_path], self.timeout)
     start_time    = time.time()
     ps.Run()
     end_time      = time.time()

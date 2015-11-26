@@ -15,7 +15,7 @@ class RandomTesting:
   minisat. If the outputs do not match, the test fails.
   """
 
-  def __init__(self, path, max_vars, max_clauses, max_pures, itrs):
+  def __init__(self, path, max_vars, max_clauses, max_pures, itrs, ms_timeout=180, t7_timeout=300):
     """
     Initializes the random testing.
 
@@ -29,8 +29,8 @@ class RandomTesting:
     self.max_clauses = max_clauses
     self.max_pures   = max_clauses * max_pures
     self.itrs        = itrs
-    self.ms          = Minisat()
-    self.t7          = T7_sat()
+    self.ms          = Minisat(ms_timeout)
+    self.t7          = T7_sat(t7_timeout)
     self.init_random()
 
   def init_random(self):

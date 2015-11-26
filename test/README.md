@@ -122,3 +122,8 @@ minisat txt/some_input_file.txt
 
 extras/minisat/core/minisat txt/some_input_file.txt
 ```
+
+Log Files
+=====================================
+
+Various tests produce log files saved in the txt directory located in the project's root directory.
