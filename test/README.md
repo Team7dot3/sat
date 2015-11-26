@@ -1,15 +1,14 @@
-Testing with C
-=====================================
-
-# UNIT Tests
+# C UNIT Tests
 
 These Unit Tests, written in C, test basic functionality of the SAT Solver. The tests are separated into 3 groups:
+
 - Argument Checking
 - Input Parsing
 - Solver (Algorithm Output)
+
 The Unit Tests do not cover End to End tests, that was saved for the Randomized Differential Tests.
 
-# To Run UNIT Tests
+## To Run C UNIT Tests
 
 From the project's root directory, execute:
 
@@ -17,18 +16,15 @@ From the project's root directory, execute:
 make testrun
 ```
 
-Testing with Python
-=====================================
-
 # Python Randomized Differential Tests
 
-The tests created with Python expose the End to End functionality of the SAT Solver. The output of each test is compared to the output of MINISAT. If the output results vary, the test fails.
+The tests created with Python expose the End to End functionality of the SAT Solver. The output of each test is compared to the output of `MINISAT`. If the output results vary, the test fails.
 
-The primary tests we run are from `diff_test.py`. Diff test produces random inputs with variable and clause values capped by variables MAX_VARS and MAX_CLAUSES respectively. The number of inputs and tests executed by Diff test is capped by the variable TEST_RUNS. You can modify these variables to customize the size of each test input.
+The primary tests we run are from `diff_test.py`. Diff test produces random inputs with variable and clause values capped by variables `MAX_VARS` and `MAX_CLAUSES` respectively. The number of inputs and tests executed by Diff test is capped by the variable `TEST_RUNS`. You can modify these variables to customize the size of each test input.
 
 IMPORTANT: All Python tests are expected to be executed from the project's root directory!
 
-# To Run Diff Tests
+## To Run Diff Tests
 
 From the project's root directory, execute:
 
@@ -40,9 +36,9 @@ or
 make diff_tests
 ```
 
-# Diff Test Output
+## Diff Test Output
 
-The output prints the number how many variables and clauses were produced for each test, and whether the test passed or failed. Diff Test does not save the input of failed tests. Only the last test input file is saved (and written over on each test run)
+The output prints the number of how many variables and clauses were produced for each test, and whether the test passed or failed. Diff Test does not save the input of failed tests. Only the last test input file is saved (and written over on each test run)
 
 A typical output looks like this:
 ```
@@ -65,10 +61,7 @@ Differential Testing:
   FAILED: 0
 ```
 
-Testing for CS 5959 Course Competition
-=====================================
-
-# Competition Testing
+# Testing for CS 5959 Course Competition
 
 We wanted to see, throughout development, where each team ranked in our class competition. To do so, the `cmp_test.py` and `bench_test.py` were designed to run each teams solution and measure the cpu time required to obtain each output. There are 2 ways to compare outputs between each team:
 
@@ -123,7 +116,6 @@ minisat txt/some_input_file.txt
 extras/minisat/core/minisat txt/some_input_file.txt
 ```
 
-Log Files
-=====================================
+# Log Files
 
 Various tests produce log files saved in the txt directory located in the project's root directory.
