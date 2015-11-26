@@ -49,7 +49,7 @@ int test_null_path(void)
 int test_valid_path(void) 
 {
   char s1[]   = "program";
-  char s2[]   = "txt/basic_sat_input.txt";
+  char s2[]   = VALID_PATH;
   char *arr[] = { s1, s2 };
   RESULT("test_valid_path       ", (EXP = 0) != (ACT = (int)check_args(2, arr)));
 }

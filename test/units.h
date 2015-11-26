@@ -16,6 +16,8 @@ int RES;
 
 #define GEN_STRUCTS(void) \
   INPUT in;               \
+  in.nbvars    = 0;       \
+  in.nbclauses = 0;
 
 #define FREE_STRUCTS(in)   \
 {                          \
