@@ -11,10 +11,14 @@ import sys
 
 ROOT_PATH   = ''
 INPUT_PATH  = 'txt/diff_test.txt'
-MAX_VARS    = 100   # The maximum number of variables
-MAX_CLAUSES = 1000 # The maximum number of clauses
+MAX_VARS    = 2000   # The maximum number of variables
+MAX_CLAUSES = 2000 # The maximum number of clauses
 MAX_PURES   = 0.20 # The maximum ration of pure clauses to clauses
 TEST_RUNS   = 1000 # The number of tests to run
+
+MS_TIMEOUT = 180
+T7_TIMEOUT = 1
+OP_TIMEOUT = 1
 
 def get_files(path):
   os.chdir(path)
@@ -23,7 +27,7 @@ def get_files(path):
   return files
 
 def run_minisat_benchmarks(inputs):
-  ms  = Minisat()
+  ms  = Minisat(MS_TIMEOUT)
   log = Logger('txt/log_minisat_benchmarks.txt', False)
   log.write('program \t result \t cpu_time \t input_file \n')
   for input in inputs:
@@ -42,7 +46,7 @@ def get_minisat_benchmarks():
   return lines
 
 def run_satsolver_benchmarks(inputs):
-  t7  = T7_sat()
+  t7  = T7_sat(T7_TIMEOUT)
   log = Logger('txt/log_satsolver_benchmarks.txt', False)
   log.write('program \t result \t cpu_time \t input_file \n')
   for input in inputs:
@@ -51,10 +55,10 @@ def run_satsolver_benchmarks(inputs):
     log.write('team7 \t ' + t7.get_result() + ' \t ' + t7.get_cpu_time() + ' \t ' + input + '\n')
 
 def run_opponents_benchmarks(inputs):
-  ms   = Minisat()
-  t7   = T7_sat()
+  ms   = Minisat(MS_TIMEOUT)
+  t7   = T7_sat(T7_TIMEOUT)
   log  = Logger('txt/log_opponents_benchmarks.txt', False)
-  opps = Opponent.setup_opponents(os.getcwd())
+  opps = Opponent.setup_opponents(os.getcwd(), OP_TIMEOUT)
   for op in opps:
     print Colors.BOLD + op.name + Colors.ENDC
     if '--b' in sys.argv:
@@ -74,7 +78,7 @@ def run_opponents_benchmarks(inputs):
         continue
 
       print Colors.BOLD + 'benchmarks/' + tokens[-1]
-      t7.run('benchmarks/' + m[-1])
+      t7.run('benchmarks/' + tokens[-1])
 
       # Save results to lists
       results     = []
@@ -91,22 +95,28 @@ def run_opponents_benchmarks(inputs):
       for i in range(0, len(opps)):
         if tokens[1] == results[i]:
           to_log_file.append(times[i])
+        elif 'ERROR' not in results[i]:
+          to_log_file.append('TIMEDOUT')
         else:
           to_log_file.append('FAILED')
 
       # Check Team7's sat_solver results
       if tokens[1] == t7.get_result():
         to_log_file.append(t7.get_cpu_time())
+      elif 'ERROR' not in t7.get_result():
+        to_log_file.append('TIMEDOUT')
       else:
+        print t7.get_result()
         to_log_file.append('FAILED')
 
       to_log_file.append(tokens[-1])
+      print Colors.BOLD + tokens[2] + Colors.ENDC
       print to_log_file
       log.write(tokens[1] + ' \t ' + tokens[2] + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) + '\n')
 
   else:
     log.write('ms_result \t ms_cpu_time \t ' + opps[0].name + ' \t ' + opps[1].name + ' \t ' + opps[2].name + ' \t ' + opps[3].name + ' \t ' + 'Team7' + ' \t nbvars \t nbclauses \n')
-    rt = RandomTesting(INPUT_PATH, MAX_VARS, MAX_CLAUSES, MAX_PURES, TEST_RUNS)
+    rt = RandomTesting(INPUT_PATH, MAX_VARS, MAX_CLAUSES, MAX_PURES, TEST_RUNS, MS_TIMEOUT, T7_TIMEOUT)
     for i in range(0, TEST_RUNS):
       rt.gen_rand_input()
       ms.run(INPUT_PATH)
@@ -127,17 +137,22 @@ def run_opponents_benchmarks(inputs):
       for i in range(0, len(opps)):
         if ms.get_result() == results[i]:
           to_log_file.append(times[i])
+        elif 'ERROR' not in results[i]:
+          to_log_file.append('TIMEDOUT')
         else:
           to_log_file.append('FAILED')
 
       # Check Team7's sat_solver results
       if ms.get_result() == t7.get_result():
         to_log_file.append(t7.get_cpu_time())
+      elif 'ERROR' not in t7.get_result():
+        to_log_file.append('TIMEDOUT')
       else:
         to_log_file.append('FAILED')
 
       to_log_file.append(rt.nbvars)
       to_log_file.append(rt.nbclauses)
+      print Colors.BOLD + ms.get_cpu_time() + Colors.ENDC
       print to_log_file
       log.write(ms.get_result() + ' \t ' + ms.get_cpu_time() + ' \t ' + str(to_log_file[0]) + ' \t ' + str(to_log_file[1]) + ' \t ' + str(to_log_file[2]) + ' \t' + str(to_log_file[3]) + ' \t ' + str(to_log_file[4]) +' \t ' + str(to_log_file[5]) +' \t ' + str(to_log_file[6]) + '\n')
 
